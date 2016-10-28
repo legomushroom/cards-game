@@ -1,0 +1,15 @@
+
+@import '../assets/globals.postcss.css';
+
+.scores {
+  &__text {
+    font-size:      20*$PX;
+    letter-spacing: .5*$PX;
+    em {
+      font-size:    24*$PX;
+      font-style:   normal;
+      color:        $c-red;
+      font-weight:  bold;
+    }
+  }
+}

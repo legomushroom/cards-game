@@ -1,0 +1,27 @@
+
+@import '../assets/globals.postcss.css';
+
+$rightSize: 320;
+.game {
+  perspective:      800*$PX;
+  text-align:       center;
+  font-family:      Arial, sans-serif;
+  &__inner {
+    display:        inline-block;
+    padding-right:  $rightSize*$PX;
+    position:       relative;
+  }
+  &__left {
+    max-width:      550*$PX;
+    display:        flex;
+    flex-wrap:      wrap;
+    align-content:  center;
+  }
+  &__right {
+    position:       absolute;
+    right:          0;
+    top:            0;
+    bottom:         0;
+    width:          $rightSize*$PX;
+  }
+}
