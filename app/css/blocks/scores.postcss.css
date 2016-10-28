@@ -3,6 +3,8 @@
 
 .scores {
   &__text {
+    position:       relative;
+    display:        inline-block;
     font-size:      20*$PX;
     letter-spacing: .5*$PX;
     em {
