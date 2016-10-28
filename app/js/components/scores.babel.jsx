@@ -10,6 +10,9 @@ class Scores extends Component {
     const {cards} = state;
 
     return  <div className={CLASSES.scores} data-component="scores">
+              <div className={CLASSES.scores__ghost}>
+                
+              </div>
               <div className={CLASSES.scores__text}>
                 <TryStagger state={state} />
                 <em> {cards.tries} </em> { (cards.tries === 1) ? 'try' : 'tries' }

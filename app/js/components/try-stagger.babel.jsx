@@ -36,7 +36,10 @@ class TryStagger extends Component {
       isShowEnd:  false
     });
 
-    this._tries = 0;
+    const {store} = this.context;
+    const {cards} = store.getState();
+
+    this._tries = cards.tries;
   }
 }
 

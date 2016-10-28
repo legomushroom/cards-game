@@ -2,6 +2,7 @@ import { h, Component } from 'preact';
 import Icons from './icons';
 import Card from './card';
 import Scores from './scores';
+import ResetButton from './reset-button';
 
 const CLASSES = require('../../css/blocks/game.postcss.css.json');
 require('../../css/blocks/game');
@@ -21,6 +22,7 @@ class Game extends Component {
                 </div>
                 <div className={CLASSES.game__right}>
                   <Scores state={state} />
+                  <ResetButton state={state} />
                 </div>
               </div>
             </div>;

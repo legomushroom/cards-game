@@ -18,6 +18,10 @@
   transition:       all .2s ease-out;
   transform-style:  preserve-3d;
   
+  &:hover {
+    transform: rotateY(170deg);
+  }
+  
   &.is-open {
     transform: rotateY(0deg);
   }

@@ -2,6 +2,7 @@ import { h, Component } from 'preact';
 import C from '../constants';
 import Hammer from 'hammerjs';
 import Icon from './icon';
+import checkOpenCards from '../actions/check-open-cards';
 
 const CLASSES = require('../../css/blocks/card.postcss.css.json');
 require('../../css/blocks/card');
@@ -14,15 +15,12 @@ class Card extends Component {
     mc.add(new Hammer.Tap);
 
     mc.on('tap', (e) => {
-      if (p.isOpen) { return; }
-      clearTimeout(this._tm);
-
       store.dispatch({ type: 'OPEN_CARD', data: p.id });
+      store.dispatch({ type: 'RESET_CONFIRM' });
+
+      store.dispatch(checkOpenCards);
 
       store.dispatch({ type: 'CHECK_EQUAL_CARDS' });
-      this._tm = setTimeout(()=> {
-        store.dispatch({ type: 'CHECK_OPEN_CARDS' });
-      }, C.OPEN_DELAY);
     });
   }
 

@@ -5,6 +5,6 @@ const CARD_TYPES = [ 'pan', //'spider', 'poison',
 
 export default {
   CARD_TYPES,
-  OPEN_DELAY: 750,
-  CARDS_AMOUNT: 24
+  OPEN_DELAY:     400,
+  CARDS_AMOUNT:   24
 };
