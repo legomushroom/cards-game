@@ -4,9 +4,12 @@ require('../../css/blocks/icon');
 
 class Icon extends Component {
   render () {
-    const {shape} = this.props;
+    const p = this.props;
+    const {shape} = p;
     const markup = `<svg viewBox="0 0 32 32"><use xlink:href="#${shape}-shape" /></svg>`;
-    return  <div  className={CLASSES.icon}
+
+    const className = `${CLASSES.icon} ${p.className || ''}`;
+    return  <div  className={className}
                   data-component="icon"
                   dangerouslySetInnerHTML={{ __html: markup }}>
                 

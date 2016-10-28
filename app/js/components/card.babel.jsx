@@ -17,9 +17,7 @@ class Card extends Component {
     mc.on('tap', (e) => {
       store.dispatch({ type: 'OPEN_CARD', data: p.id });
       store.dispatch({ type: 'RESET_CONFIRM' });
-
       store.dispatch(checkOpenCards);
-
       store.dispatch({ type: 'CHECK_EQUAL_CARDS' });
     });
   }

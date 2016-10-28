@@ -1,11 +1,13 @@
 
 @import '../assets/globals.postcss.css';
 
-$rightSize: 320;
+$rightSize: 200;
 .game {
-  perspective:      800*$PX;
-  text-align:       center;
+  margin-top:       30*$PX;
   font-family:      Arial, sans-serif;
+  text-align:       center;
+  perspective:      800*$PX;
+  
   &__inner {
     display:        inline-block;
     padding-right:  $rightSize*$PX;
@@ -23,5 +25,13 @@ $rightSize: 320;
     top:            0;
     bottom:         0;
     width:          $rightSize*$PX;
+    padding-top:    140*$PX;
+    
+    /*[data-component="scores"] {
+      position:     absolute;
+      left:         50%;
+      top:          50%;
+      transform:    translate(-50%, -50%);
+    }*/
   }
 }

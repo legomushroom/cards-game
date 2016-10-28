@@ -14,10 +14,12 @@ class ResetButton extends Component {
     const openClass = (controls.isConfirm) ? CLS['is-confirm'] : '';
     const className = `${CLS['reset-button']} ${openClass}`;
 
-    return  <div className={className} data-component="reset-button">
+    return  <div  className={className} data-component="reset-button">
               <button className={CLS['reset-button__main']}
+                      role="reset"
                       ref={(el)=> { this._main = el; }}>reset</button>
               <button className={CLS['reset-button__confirm']}
+                      role="confirm reset"
                       ref={(el)=> { this._confirm = el; }}>sure?</button>
             </div>;
   }

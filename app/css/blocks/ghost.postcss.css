@@ -1,0 +1,84 @@
+
+@import '../assets/globals.postcss.css';
+
+
+$width:  64;
+$height: 60;
+.ghost {
+  position:   relative;
+  width:      $width*$PX;
+  height:     $height*$PX;
+  
+  &__inner {
+    position:   relative;
+    z-index:    1;
+    width:      $width*$PX;
+    height:     $height*$PX;
+    animation:  floating 3s ease-in-out infinite; 
+  }
+  
+  [data-component="icon"] {
+    position: absolute;
+    width:    100%;
+    height:   100%;
+    fill:     $c-blue;
+    cursor:   default;
+    
+    &.ghost__left,
+    &.ghost__right {
+      opacity:   .75;
+    }
+
+    &.ghost__left {
+      fill:      cyan;
+      transform: translateX(-2*$PX);   
+    }
+
+    &.ghost__right {
+      fill:      hotpink;
+      transform: translateX(2*$PX);   
+    }
+  }
+
+  $shadowSize: 60;
+  &__shadow {
+    position:       absolute;
+    width:          calc($shadowSize)%;
+    left:           calc((100-$shadowSize)/2)%;
+    height:         7*$PX;
+    bottom:        -10*$PX;
+    background:     rgba(44,64,90,.15);
+    border-radius:  50%;
+    animation:      floatingShadow 3s ease-in-out infinite; 
+  }
+}
+
+@keyframes floating {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  45% {
+    transform: translate3d(0, -10%, 0);
+  }
+  55% {
+    transform: translate3d(0, -10%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes floatingShadow {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(0.85);
+  }
+  55% {
+    transform: scale(0.85);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
