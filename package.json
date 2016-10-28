@@ -19,7 +19,7 @@
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/legomushroom/guarantee-rate-game.git"
   },
   "author": {
     "name": "Oleg Solomka",
@@ -29,7 +29,7 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": ""
+    "url": "https://github.com/legomushroom/guarantee-rate-game/issues"
   },
   "homepage": "",
   "dependencies": {
