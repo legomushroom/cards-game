@@ -37,6 +37,7 @@
     "preact": "^5.6.0",
     "propagating-hammerjs": "^1.4.6",
     "redux": "^3.5.2",
+    "redux-localstorage": "^0.4.1",
     "redux-recycle": "^1.2.0",
     "redux-undo": "^0.6.1"
   },

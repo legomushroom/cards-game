@@ -30,7 +30,7 @@ class TryStagger extends Component {
       y:          [ { [-2]: 3 }, -4, { [-7]: 2 } ],
       x:          [ { [-5]: -10 }, { 0: -2 }, { 2: -3 } ],
       radius:     'rand(8, 10)',
-      fill:       ['#222222', '#f5f5f5'],
+      fill:       ['#222222', 'hotpink'],
       duration:   150,
       delay:      [ 150, 15, 50, 0 ],
       isShowEnd:  false

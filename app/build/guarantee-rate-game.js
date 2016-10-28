@@ -7547,7 +7547,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            cards.tries,
 	            ' '
 	          ),
-	          ' tries'
+	          ' ',
+	          cards.tries === 1 ? 'try' : 'tries'
 	        )
 	      );
 	    }
@@ -7650,7 +7651,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        y: [(0, _defineProperty3.default)({}, -2, 3), -4, (0, _defineProperty3.default)({}, -7, 2)],
 	        x: [(0, _defineProperty3.default)({}, -5, -10), { 0: -2 }, { 2: -3 }],
 	        radius: 'rand(8, 10)',
-	        fill: ['#222222', '#f5f5f5'],
+	        fill: ['#222222', 'hotpink'],
 	        duration: 150,
 	        delay: [150, 15, 50, 0],
 	        isShowEnd: false
@@ -19362,10 +19363,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _indexReducer2 = _interopRequireDefault(_indexReducer);
 
+	var _reduxLocalstorage = __webpack_require__(162);
+
+	var _reduxLocalstorage2 = _interopRequireDefault(_reduxLocalstorage);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var enhancer = (0, _redux.compose)((0, _reduxLocalstorage2.default)());
+
 	var initStore = function initStore() {
-	  return (0, _redux.createStore)(_indexReducer2.default);
+	  return (0, _redux.createStore)(_indexReducer2.default, enhancer);
 	};
 
 	exports.default = initStore;
@@ -20307,6 +20314,243 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}
 	// /redux-recycle
+
+/***/ },
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports['default'] = persistState;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _createSlicerJs = __webpack_require__(163);
+
+	var _createSlicerJs2 = _interopRequireDefault(_createSlicerJs);
+
+	var _utilMergeStateJs = __webpack_require__(166);
+
+	var _utilMergeStateJs2 = _interopRequireDefault(_utilMergeStateJs);
+
+	/**
+	 * @description
+	 * persistState is a Store Enhancer that syncs (a subset of) store state to localStorage.
+	 *
+	 * @param {String|String[]} [paths] Specify keys to sync with localStorage, if left undefined the whole store is persisted
+	 * @param {Object} [config] Optional config object
+	 * @param {String} [config.key="redux"] String used as localStorage key
+	 * @param {Function} [config.slicer] (paths) => (state) => subset. A function that returns a subset
+	 * of store state that should be persisted to localStorage
+	 * @param {Function} [config.serialize=JSON.stringify] (subset) => serializedData. Called just before persisting to
+	 * localStorage. Should transform the subset into a format that can be stored.
+	 * @param {Function} [config.deserialize=JSON.parse] (persistedData) => subset. Called directly after retrieving
+	 * persistedState from localStorage. Should transform the data into the format expected by your application
+	 *
+	 * @return {Function} An enhanced store
+	 */
+
+	function persistState(paths, config) {
+	  var cfg = _extends({
+	    key: 'redux',
+	    merge: _utilMergeStateJs2['default'],
+	    slicer: _createSlicerJs2['default'],
+	    serialize: JSON.stringify,
+	    deserialize: JSON.parse
+	  }, config);
+
+	  var key = cfg.key;
+	  var merge = cfg.merge;
+	  var slicer = cfg.slicer;
+	  var serialize = cfg.serialize;
+	  var deserialize = cfg.deserialize;
+
+	  return function (next) {
+	    return function (reducer, initialState, enhancer) {
+	      if (typeof initialState === 'function' && typeof enhancer === 'undefined') {
+	        enhancer = initialState;
+	        initialState = undefined;
+	      }
+
+	      var persistedState = undefined;
+	      var finalInitialState = undefined;
+
+	      try {
+	        persistedState = deserialize(localStorage.getItem(key));
+	        finalInitialState = merge(initialState, persistedState);
+	      } catch (e) {
+	        console.warn('Failed to retrieve initialize state from localStorage:', e);
+	      }
+
+	      var store = next(reducer, finalInitialState, enhancer);
+	      var slicerFn = slicer(paths);
+
+	      store.subscribe(function () {
+	        var state = store.getState();
+	        var subset = slicerFn(state);
+
+	        try {
+	          localStorage.setItem(key, serialize(subset));
+	        } catch (e) {
+	          console.warn('Unable to persist state to localStorage:', e);
+	        }
+	      });
+
+	      return store;
+	    };
+	  };
+	}
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = createSlicer;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _getSubsetJs = __webpack_require__(164);
+
+	var _getSubsetJs2 = _interopRequireDefault(_getSubsetJs);
+
+	var _utilTypeOfJs = __webpack_require__(165);
+
+	var _utilTypeOfJs2 = _interopRequireDefault(_utilTypeOfJs);
+
+	/**
+	 * @description
+	 * createSlicer inspects the typeof paths and returns an appropriate slicer function.
+	 *
+	 * @param {String|String[]} [paths] The paths argument supplied to persistState.
+	 *
+	 * @return {Function} A slicer function, which returns the subset to store when called with Redux's store state.
+	 */
+
+	function createSlicer(paths) {
+	  switch ((0, _utilTypeOfJs2['default'])(paths)) {
+	    case 'void':
+	      return function (state) {
+	        return state;
+	      };
+	    case 'string':
+	      return function (state) {
+	        return (0, _getSubsetJs2['default'])(state, [paths]);
+	      };
+	    case 'array':
+	      return function (state) {
+	        return (0, _getSubsetJs2['default'])(state, paths);
+	      };
+	    default:
+	      return console.error('Invalid paths argument, should be of type String, Array or Void');
+	  }
+	}
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 164 */
+/***/ function(module, exports) {
+
+	/**
+	 * @description
+	 * getSubset returns an object with the same structure as the original object passed in,
+	 * but contains only the specified keys and only if that key has a truth-y value.
+	 *
+	 * @param {Object} obj The object from which to create a subset.
+	 * @param {String[]} paths An array of (top-level) keys that should be included in the subset.
+	 *
+	 * @return {Object} An object that contains the specified keys with truth-y values
+	 */
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports["default"] = getSubset;
+
+	function getSubset(obj, paths) {
+	  var subset = {};
+
+	  paths.forEach(function (key) {
+	    var slice = obj[key];
+	    if (slice) subset[key] = slice;
+	  });
+
+	  return subset;
+	}
+
+	module.exports = exports["default"];
+
+/***/ },
+/* 165 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = typeOf;
+	var _isArray = Array.isArray || (Array.isArray = function (a) {
+	  return '' + a !== a && ({}).toString.call(a) === '[object Array]';
+	});
+
+	/**
+	 * @description
+	 * typeof method that
+	 * 1. groups all false-y & empty values as void
+	 * 2. distinguishes between object and array
+	 *
+	 * @param {*} thing The thing to inspect
+	 *
+	 * @return {String} Actionable type classification
+	 */
+
+	function typeOf(thing) {
+	  if (!thing) return 'void';
+
+	  if (_isArray(thing)) {
+	    if (!thing.length) return 'void';
+	    return 'array';
+	  }
+
+	  return typeof thing;
+	}
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 166 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports["default"] = mergeState;
+
+	function mergeState(initialState, persistedState) {
+	  return persistedState ? _extends({}, initialState, persistedState) : initialState;
+	}
+
+	module.exports = exports["default"];
 
 /***/ }
 /******/ ])

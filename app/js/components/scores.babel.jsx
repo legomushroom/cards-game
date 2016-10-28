@@ -8,11 +8,11 @@ class Scores extends Component {
   render() {
     const {state} = this.props;
     const {cards} = state;
-    
+
     return  <div className={CLASSES.scores} data-component="scores">
               <div className={CLASSES.scores__text}>
                 <TryStagger state={state} />
-                <em> {cards.tries} </em> tries
+                <em> {cards.tries} </em> { (cards.tries === 1) ? 'try' : 'tries' }
               </div>
             </div>;
   }
