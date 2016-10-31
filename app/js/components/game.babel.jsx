@@ -3,6 +3,7 @@ import Icons from './icons';
 import Card from './card';
 import Scores from './scores';
 import ResetButton from './reset-button';
+import Congrats from './congrats';
 
 const CLASSES = require('../../css/blocks/game.postcss.css.json');
 require('../../css/blocks/game');
@@ -22,6 +23,7 @@ class Game extends Component {
                   <ResetButton state={state} />
                 </div>
                 <div className={CLASSES.game__left}>
+                  <Congrats state={state} />
                   {cardComponents}
                 </div>
               </div>

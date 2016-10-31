@@ -1,0 +1,121 @@
+@import '../assets/globals.postcss.css';
+
+.congrats {
+  position:     absolute;
+  z-index:      5;
+  left:         0;
+  top:          calc(2*$GS);
+  right:        0;
+  bottom:       0;
+  display:      none;
+  overflow:     hidden;
+  
+  &__counter {
+    position:   absolute;
+    top:        calc(1.5*$GS);
+    right:      calc(2*$GS);
+    z-index:    2;
+    color:      $c-blue;
+    opacity:    0;
+    
+    &-footer {
+      font-family:  'bebasregular';
+      font-size:    calc(7*$FPX);
+      width:        calc(3*$GS);
+      text-align:   center;
+    }
+
+    &-number {
+      font-family:  Menlo;
+      color:        $c-green;
+      font-size:    calc(14*$FPX);
+      text-align:   center;
+      /*margin-left:  calc(-.8*$GS);*/
+      /*&:before {
+        content: '+';
+      }*/
+    }
+  }
+
+  &__background {
+    position:       absolute;
+    left:           0;
+    top:            0;
+    right:          0;
+    bottom:         0;
+    opacity:        .975;
+    overflow:       hidden;
+    border-radius:  6*$PX;
+  }
+
+  &__button {
+    position:     absolute;
+    left:         50%;
+    top:          50%;
+    cursor:       pointer;
+    margin-top:   calc(2*$GS);
+    margin-left:  calc(-100/2*$PX);
+    border:       none;
+    color:        white;
+    font:         inherit;
+    font-size:    calc(12*$FPX);
+    padding:      calc($GS) calc(2*$GS);
+    z-index:      1;
+    appearance:   none;
+    border-radius: 6*$PX;
+    background:   transparent;
+    overflow:     hidden;
+    outline:      0;
+    /*&:focus {
+      outline:    calc(2*$PX) solid $c-yellow;
+    }*/
+    &:hover {
+      opacity:    .85;
+    }
+  }
+
+  &__button-text {
+    position: relative;
+    z-index:  2;
+    display:  inline-block;
+    /*transform-origin: '50% 100%',*/
+    opacity:  0;
+  }
+  
+  $size: 27;
+  &__texts {
+    position:       absolute;
+    z-index:        2;
+    width:          calc($size*$GS);
+    left:           50%;
+    margin-left:    calc(-$size/2*$GS);
+    top:            20%;
+  }
+
+  &__text {
+    position:       absolute;
+    top:            0;
+    font-family:    Bebas, 'bebasregular';
+    font-size:      calc(20*$FPX);
+    text-transform: uppercase;
+    letter-spacing: calc(.5*$PX);
+    opacity:        0;
+    $sideAngle: 10deg;
+    $sideShift: 7;
+    &--1 {
+      left:         0;
+      color:        $c-red;
+      transform:    rotate(calc(-$sideAngle)) translateY(calc($sideShift*$PX));
+    }
+    &--2 {
+      left:         50%;
+      margin-left:  calc(-31/2*$PX);
+      color:        $c-blue;
+    }
+    &--3 {
+      right:        0;
+      color:        $c-orange;
+      transform:    rotate(calc($sideAngle)) translateY(calc($sideShift*$PX));
+    }
+  }
+}

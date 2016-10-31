@@ -22,7 +22,7 @@ class Card extends Component {
       store.dispatch({ type: 'OPEN_CARD', data: p.id });
       store.dispatch({ type: 'CHECK_EQUAL_CARDS' });
       store.dispatch(checkOpenCards);
-      store.dispatch({ type: 'RESET_CONFIRM' });      
+      store.dispatch({ type: 'RESET_CONFIRM' });
     });
   }
 

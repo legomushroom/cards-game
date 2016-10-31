@@ -1,0 +1,22 @@
+
+@import '../assets/globals.postcss.css';
+
+.button {
+  background:     $c-red;
+  font-size:      14*$FPX;
+  color:          white;
+  padding:        6*$PX 35*$PX 8*$PX;
+  border-radius:  4*$PX;
+  position:       relative;
+  cursor:         pointer;
+  z-index:        1;
+  position:       relative;
+  display:        inline-block;
+  &:hover {
+    background:   #FF6361;
+  }
+  &:active {
+    background:   $c-red;
+  }
+  
+}

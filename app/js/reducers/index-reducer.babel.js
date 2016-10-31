@@ -12,11 +12,16 @@ const UNDOABLE_OPTS = {
   debug: false
 };
 
-import recycleState from 'redux-recycle';
+// import recycleState from 'redux-recycle';
 
-const reducer = recycleState(combineReducers({
+// const reducer = recycleState(combineReducers({
+//   // cards:          undoable(cards, { ...UNDOABLE_OPTS }),
+//   cards, controls
+// }), ['SET_STATE'], (state, action) => action.data );
+
+const reducer = combineReducers({
   // cards:          undoable(cards, { ...UNDOABLE_OPTS }),
   cards, controls
-}), ['SET_STATE'], (state, action) => action.data );
+});
 
 export default reducer;

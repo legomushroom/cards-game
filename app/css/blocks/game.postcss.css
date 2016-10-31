@@ -15,7 +15,6 @@ $rightSize: 200;
   /*transform:        translate(-50%, -50%);*/
   margin-top:       -(470/2)*$PX;
   margin-left:      -(750/2)*$PX;
-  border-radius:    6*$PX;
   
   &__inner {
     display:        inline-block;
