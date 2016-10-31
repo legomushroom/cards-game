@@ -3,6 +3,7 @@ import C from '../constants';
 
 const INITIAL_STATE = {
   cards:      makeCards(),
+  highScore:  null,
   tries:      0,
   pairsLeft:  C.CARDS_AMOUNT/2,
   prevID:     null,
@@ -78,6 +79,14 @@ const cardsReducer = (state = INITIAL_STATE, action) => {
 
   case 'RESET_CARDS': {
     const newState = { ...INITIAL_STATE, cards: makeCards() };
+    return newState;
+  }
+
+  case 'RESET_CARDS_HIGH_SCORE': {
+    const highScore = (state.highScore == null)
+      ? state.tries : Math.min( state.highScore, state.tries );
+
+    const newState = { ...INITIAL_STATE, cards: makeCards(), highScore };
     return newState;
   }
 

@@ -20373,7 +20373,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function _onClick() {
 	      var store = this.context.store;
 
-	      store.dispatch({ type: 'RESET_CARDS' });
+	      store.dispatch({ type: 'RESET_CARDS_HIGH_SCORE' });
 	    }
 	  }]);
 	  return CongratsButton;
@@ -21180,6 +21180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var INITIAL_STATE = {
 	  cards: (0, _makeCards2.default)(),
+	  highScore: null,
 	  tries: 0,
 	  pairsLeft: _constants2.default.CARDS_AMOUNT / 2,
 	  prevID: null,
@@ -21286,6 +21287,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      {
 	        var _newState = (0, _extends3.default)({}, INITIAL_STATE, { cards: (0, _makeCards2.default)() });
 	        return _newState;
+	      }
+
+	    case 'RESET_CARDS_HIGH_SCORE':
+	      {
+	        var highScore = state.highScore == null ? state.tries : Math.min(state.highScore, state.tries);
+
+	        var _newState2 = (0, _extends3.default)({}, INITIAL_STATE, { cards: (0, _makeCards2.default)(), highScore: highScore });
+	        return _newState2;
 	      }
 
 	  }

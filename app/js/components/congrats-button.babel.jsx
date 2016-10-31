@@ -54,7 +54,7 @@ class CongratsButton extends Component {
   @bind
   _onClick () {
     const {store} = this.context;
-    store.dispatch({ type: 'RESET_CARDS' });
+    store.dispatch({ type: 'RESET_CARDS_HIGH_SCORE' });
   }
 }
 
