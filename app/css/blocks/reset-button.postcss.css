@@ -32,7 +32,8 @@
   }
   
   &__confirm  {
-    background:   #850908;
+    background:   $c-yellow;
+    color:        $c-blue !important;
     position:     absolute;
     top:          100%;
     left:         50%;
@@ -44,7 +45,7 @@
     transform:    translate(-50%, -100%);
     transition:   all .225s ease-out;
     &:hover {
-      opacity:    .75;
+      opacity:    .9;
     }
   }
 

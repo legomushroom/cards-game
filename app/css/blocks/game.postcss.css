@@ -3,10 +3,16 @@
 
 $rightSize: 200;
 .game {
-  margin-top:       30*$PX;
+  /*margin-top:       30*$PX;*/
   font-family:      Arial, sans-serif;
   text-align:       center;
   perspective:      800*$PX;
+  padding-bottom:   30*$PX;
+  
+  position:         absolute;
+  left:             50%;
+  top:              50%;
+  transform:        translate(-50%, -50%);
   
   &__inner {
     display:        inline-block;
@@ -14,7 +20,8 @@ $rightSize: 200;
     position:       relative;
   }
   &__left {
-    max-width:      550*$PX;
+    /*max-width:      550*$PX;*/
+    width:          550*$PX;
     display:        flex;
     flex-wrap:      wrap;
     align-content:  center;

@@ -1,8 +1,12 @@
 import { h, Component } from 'preact';
-import C from '../constants';
 import Hammer from 'hammerjs';
+import mojs from 'mo-js';
+
+import C from '../constants';
 import Icon from './icon';
+import CardStagger from './card-stagger';
 import checkOpenCards from '../actions/check-open-cards';
+import lockAnimation from '../actions/card-lock-animation';
 
 const CLASSES = require('../../css/blocks/card.postcss.css.json');
 require('../../css/blocks/card');
@@ -16,10 +20,20 @@ class Card extends Component {
 
     mc.on('tap', (e) => {
       store.dispatch({ type: 'OPEN_CARD', data: p.id });
-      store.dispatch({ type: 'RESET_CONFIRM' });
-      store.dispatch(checkOpenCards);
       store.dispatch({ type: 'CHECK_EQUAL_CARDS' });
+      store.dispatch(checkOpenCards);
+      store.dispatch({ type: 'RESET_CONFIRM' });      
     });
+  }
+
+  componentWillMount() {
+    const {store}   = this.context;
+    this._timeline = new mojs.Timeline({
+      onComplete: () => { store.dispatch(lockAnimation(this.props.id)); }
+    });
+  }
+  componentDidUpdate() {
+    this.props.isPlay && this._timeline.play();
   }
 
   render() {
@@ -32,6 +46,7 @@ class Card extends Component {
     return  <div className={className} data-component="card">
               <div className={CLASSES.card__inner}>
                 <Icon shape={type} />
+                <CardStagger timeline={this._timeline} />
               </div>
             </div>;
   }

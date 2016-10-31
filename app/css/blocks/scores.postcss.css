@@ -8,6 +8,7 @@
     font-size:      20*$PX;
     letter-spacing: .5*$PX;
     margin-bottom:  25*$PX;
+    color:          white;
     em {
       font-size:    24*$PX;
       font-style:   normal;
