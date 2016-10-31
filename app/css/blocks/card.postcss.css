@@ -8,8 +8,8 @@
   background:     white;
   display:        block;
   border-radius:  7*$PX;
-  margin-left:    20*$PX;
-  margin-top:     20*$PX;
+  margin-left:    $CARD_GUTTER*$PX;
+  margin-top:     $CARD_GUTTER*$PX;
   cursor:         pointer;
 
   background:     $c-orange;
@@ -89,4 +89,13 @@
       height: $size*$PX;
     }
   }*/
+
+  @media all and (max-width: 535px) {
+    margin-left: $CARD_GUTTER_SMALL*$PX;
+    margin-top:  $CARD_GUTTER_SMALL*$PX;
+  }
+  @media all and (max-width: 450px) {
+    margin-left: ($CARD_GUTTER_MEDIUM)*$PX;
+    margin-top:  ($CARD_GUTTER_MEDIUM)*$PX;
+  }
 }

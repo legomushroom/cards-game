@@ -1,8 +1,13 @@
 
 @import './colors.postcss.css';
+@import './media.postcss.css';
 
 /*$PX:      1/16rem;*/
 $PX:      1px;
 $FPX:     1px;
 $GS:      calc( 10 * $PX );
 $BRADIUS: calc( 3 * $PX );
+
+$CARD_GUTTER:        20;
+$CARD_GUTTER_MEDIUM: 0.75*$CARD_GUTTER;
+$CARD_GUTTER_SMALL:  0.5*$CARD_GUTTER;

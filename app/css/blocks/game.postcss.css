@@ -12,19 +12,24 @@ $rightSize: 200;
   position:         absolute;
   left:             50%;
   top:              50%;
-  transform:        translate(-50%, -50%);
+  /*transform:        translate(-50%, -50%);*/
+  margin-top:       -(470/2)*$PX;
+  margin-left:      -(750/2)*$PX;
+  border-radius:    6*$PX;
   
   &__inner {
     display:        inline-block;
     padding-right:  $rightSize*$PX;
     position:       relative;
   }
+
   &__left {
     /*max-width:      550*$PX;*/
     width:          550*$PX;
     display:        flex;
     flex-wrap:      wrap;
     align-content:  center;
+    margin-left:    -$CARD_GUTTER*$PX;
   }
   &__right {
     position:       absolute;
@@ -40,5 +45,59 @@ $rightSize: 200;
       top:          50%;
       transform:    translate(-50%, -50%);
     }*/
+  }
+  
+  @media (--BREAKING_POINT_W1) {
+    width:          100%;
+    transform:      translateY(-50%);
+    margin-top:     0;
+    margin-left:    0;
+    left:           0;
+    
+    .game__right {
+      position:       static;
+      float:          left;
+      width:          100%;
+      padding-top:    20*$PX;
+      padding-bottom: 20*$PX;
+    }
+
+    .game__left {
+      clear:        both;
+      padding-left: 30*$PX;
+    }
+
+    .game__inner {
+      padding-right: 0;
+    }
+  }
+
+  @media (--BREAKING_POINT_W2) {
+    left: 0;
+    margin: 0 auto;
+    
+    .game__left {
+      width:        450*$PX;
+      margin-left: -$CARD_GUTTER_SMALL*$PX;
+      padding-left: 0;
+      /*margin: 0 auto;*/
+    }
+  }
+
+  @media (--BREAKING_POINT_W3) {
+    .game__left {
+      width:    320*$PX;
+    }
+  }
+
+  @media (--BREAKING_POINT_H1) {
+    top:            0;
+    margin-top:     0;
+    transform:      none;
+  }
+
+  @media (--BREAKING_POINT_W1) and (--BREAKING_POINT_H2) {
+    position:     static;
+    transform:    none;
   }
 }

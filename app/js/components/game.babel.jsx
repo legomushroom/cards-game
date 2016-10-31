@@ -17,12 +17,12 @@ class Game extends Component {
     return <div className={CLASSES.game} data-component="game">
               <Icons />
               <div className={CLASSES.game__inner}>
-                <div className={CLASSES.game__left}>
-                  {cardComponents}
-                </div>
                 <div className={CLASSES.game__right}>
                   <Scores state={state} />
                   <ResetButton state={state} />
+                </div>
+                <div className={CLASSES.game__left}>
+                  {cardComponents}
                 </div>
               </div>
             </div>;
