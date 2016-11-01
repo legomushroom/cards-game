@@ -1,5 +1,25 @@
 # Guarantee Rate Game
 
+## Notes
+
+## Difficulty
+
+## Undo/Redo
+
+## Development
+
+In your terminal:
+
+```
+[sudo] npm install
+```
+
+Then launch webpack:
+
+```
+webpack
+```
+
 ## License
 
 (The MIT License)

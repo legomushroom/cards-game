@@ -20,7 +20,7 @@ class Button extends Component {
     const mc = new Hammer.Manager(this.base);
     mc.add(new Hammer.Tap);
 
-    mc.on('tap', (e) => { this.props.onTap(e) });
+    mc.on('tap', (e) => { this.props.onTap(e); });
   }
 }
 

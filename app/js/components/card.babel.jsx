@@ -20,7 +20,6 @@ class Card extends Component {
 
     mc.on('tap', (e) => {
       store.dispatch({ type: 'OPEN_CARD', data: p.id, isRecord: true });
-      store.dispatch({ type: 'CHECK_EQUAL_CARDS' });
       store.dispatch(checkOpenCards);
       store.dispatch({ type: 'RESET_CONFIRM' });
     });
@@ -33,6 +32,9 @@ class Card extends Component {
     });
   }
   componentDidUpdate() {
+    const {store} = this.context;
+    const state = store.getState();
+
     this.props.isPlay && this._timeline.play();
   }
 

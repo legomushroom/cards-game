@@ -1,10 +1,10 @@
 import {createStore, compose, applyMiddleware} from 'redux';
 import reducer from './reducers/index-reducer';
-import persistState from 'redux-localstorage';
+// import persistState from 'redux-localstorage';
 import thunk from 'redux-thunk';
 
 const enhancer = compose(
-  persistState(),
+  // persistState(),
   applyMiddleware(thunk)
 );
 

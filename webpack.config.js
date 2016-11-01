@@ -19,7 +19,7 @@ module.exports = {
     loaders: [
       { test: /\.(json)$/, exclude: /node_modules/, loaders: ['json-loader'] },
       { test: /\.(jsx|.js|babel.jsx|babel.js)$/,
-        exclude: /node_modules/,
+        exclude: /(node_modules)|(vendors)/,
         loaders:  ['babel-loader', 'eslint-loader']
       },
       { test: /\.(postcss.css)$/,  loader: "style-loader!css-loader!postcss-loader" },
@@ -60,7 +60,7 @@ module.exports = {
   // devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'inline-source-map',
   resolve: {
     root: [ path.resolve('./') ],
-    moduleDirectories: ['node_modules'],
+    moduleDirectories: ['node_modules', 'vendors'],
     target: 'node',
     extensions: [
       '', '.js', '.babel.js', '.babel.jsx',

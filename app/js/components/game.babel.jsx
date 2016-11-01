@@ -1,5 +1,5 @@
 import { h, Component } from 'preact';
-import { ActionCreators } from 'redux-undo';
+import { ActionCreators } from 'vendors/redux-undo';
 import { bind } from 'decko';
 
 import Icons from './icons';
@@ -29,8 +29,13 @@ class Game extends Component {
                   <br/>
                   <br/>
                   <br/>
-                  <Button onTap={this._undo} title="undo" />
-                  <Button onTap={this._redo} title="redo" />
+                  { (cards.past.length)
+                      ? <Button onTap={this._undo} title="undo" />
+                      : null }
+                  <br/>
+                  { (cards.future.length)
+                      ? <Button onTap={this._redo} title="redo" />
+                      : null }
                 </div>
                 <div className={CLASSES.game__left}>
                   <Congrats state={state} />
@@ -47,11 +52,10 @@ class Game extends Component {
   }
 
   @bind
-  redo() {
+  _redo() {
     const {store} = this.context;
-    store.dispatch(ActionCreators.redo()); 
+    store.dispatch(ActionCreators.redo());
   }
-
 
   _renderCards (cards=[]) {
     const cardComponents = [];

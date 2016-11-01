@@ -1,6 +1,8 @@
 import {h, Component} from 'preact';
+import {ActionCreators} from 'vendors/redux-undo';
 import {bind} from 'decko';
 import mojs from 'mo-js';
+
 
 require('../../css/blocks/congrats');
 const CLS = require('../../css/blocks/congrats.postcss.css.json');
@@ -55,6 +57,7 @@ class CongratsButton extends Component {
   _onClick () {
     const {store} = this.context;
     store.dispatch({ type: 'RESET_CARDS_HIGH_SCORE' });
+    store.dispatch(ActionCreators.clearHistory());
   }
 }
 

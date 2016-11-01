@@ -10,6 +10,24 @@ const INITIAL_STATE = {
   open:       []
 };
 
+const checkEqual = (state, action) => {
+  const {cards, open} = state;
+  if (open.length < 2) { return state; }
+
+  const [id1, id2] = open;
+  const first  = cards[id1];
+  const second = cards[id2];
+
+  if (first.type === second.type) {
+    const newCards = [...cards];
+    const pairsLeft = state.pairsLeft-1;
+    newCards[id1] = { ...first, isPlay: (pairsLeft > 0) ? true : false };
+    newCards[id2] = { ...second, isPlay: (pairsLeft > 0) ? true : false };
+    return {...state, open: [], cards: newCards, pairsLeft };
+  }
+  return state;
+};
+
 const cardsReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case 'OPEN_CARD': {
@@ -19,7 +37,9 @@ const cardsReducer = (state = INITIAL_STATE, action) => {
 
     const newCards = [...cards];
     newCards[id] = { ...cards[id], isOpen: true };
-    return {...state, cards: newCards, open: [...open, id] };
+    const newState = {...state, cards: newCards, open: [...open, id] };
+
+    return checkEqual(newState, action);
   }
 
   case 'CHECK_OPEN_CARDS': {
@@ -40,23 +60,23 @@ const cardsReducer = (state = INITIAL_STATE, action) => {
     return {...state, open: []};
   }
 
-  case 'CHECK_EQUAL_CARDS': {
-    const {cards, open} = state;
-    if (open.length < 2) { return state; }
+  // case 'CHECK_EQUAL_CARDS': {
+  //   const {cards, open} = state;
+  //   if (open.length < 2) { return state; }
 
-    const [id1, id2] = open;
-    const first  = cards[id1];
-    const second = cards[id2];
+  //   const [id1, id2] = open;
+  //   const first  = cards[id1];
+  //   const second = cards[id2];
 
-    if (first.type === second.type) {
-      const newCards = [...cards];
-      const pairsLeft = state.pairsLeft-1;
-      newCards[id1] = { ...first, isPlay: (pairsLeft > 0) ? true : false };
-      newCards[id2] = { ...second, isPlay: (pairsLeft > 0) ? true : false };
-      return {...state, open: [], cards: newCards, pairsLeft };
-    }
-    return state;
-  }
+  //   if (first.type === second.type) {
+  //     const newCards = [...cards];
+  //     const pairsLeft = state.pairsLeft-1;
+  //     newCards[id1] = { ...first, isPlay: (pairsLeft > 0) ? true : false };
+  //     newCards[id2] = { ...second, isPlay: (pairsLeft > 0) ? true : false };
+  //     return {...state, open: [], cards: newCards, pairsLeft };
+  //   }
+  //   return state;
+  // }
 
   case 'CARDS_RESET_PLAY': {
     const [id1, id2] = action.data;
@@ -93,7 +113,6 @@ const cardsReducer = (state = INITIAL_STATE, action) => {
   }
 
   }
-
 
   return state;
 };

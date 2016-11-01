@@ -28,7 +28,7 @@ class Congrats extends Component {
   _checkPlay() {
     const {store} = this.context;
     const state = store.getState();
-    const isPlay = state.cards.pairsLeft === 0;
+    const isPlay = state.cards.present.pairsLeft === 0;
     isPlay && this._play();
     isPlay || this._hide();
   }

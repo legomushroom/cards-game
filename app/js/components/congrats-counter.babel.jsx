@@ -7,7 +7,7 @@ const CLS = require('../../css/blocks/congrats.postcss.css.json');
 class CongratsCounter extends Component {
   render () {
     const {state} = this.props;
-    const tries = state.cards.tries;
+    const tries = state.cards.present.tries;
 
     return  <div  className={CLS['congrats__counter']}
                   ref={(el) => { this._counter = el; }}>
@@ -22,7 +22,7 @@ class CongratsCounter extends Component {
 
   componentDidMount () {
     const {state} = this.props;
-    let tries = state.cards.tries;
+    let tries = state.cards.present.tries;
 
     const counter = new mojs.Html({
       el: this._counter,
@@ -33,7 +33,7 @@ class CongratsCounter extends Component {
       onStart: ()=> {
         const {store} = this.context;
         const state   = store.getState();
-        tries = state.cards.tries;
+        tries = state.cards.present.tries;
       },
       onUpdate: (ep, p) => { this._number.innerHTML = Math.round(ep*tries); }
     });

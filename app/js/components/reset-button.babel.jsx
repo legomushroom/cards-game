@@ -1,7 +1,8 @@
 import { h, Component } from 'preact';
-import C from '../constants';
 import Hammer from 'hammerjs';
+import {ActionCreators} from 'vendors/redux-undo';
 
+import C from '../constants';
 import Button from './button';
 
 const CLS = require('../../css/blocks/reset-button.postcss.css.json');
@@ -34,7 +35,10 @@ class ResetButton extends Component {
     confirmMC.add(new Hammer.Tap);
 
     mainMC.on('tap', (e) => { store.dispatch({ type: 'SET_CONFIRM' }); });
-    confirmMC.on('tap', (e) => { store.dispatch({ type: 'RESET_CARDS' }); });
+    confirmMC.on('tap', (e) => {
+      store.dispatch({ type: 'RESET_CARDS' });
+      store.dispatch(ActionCreators.clearHistory());
+    });
   }
 }
 

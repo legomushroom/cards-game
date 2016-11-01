@@ -7,7 +7,7 @@ const asyncCheck = (dispatch, getState) => {
 
   if (count === 2 && !timeoutID) {
     timeoutID = setTimeout(() => {
-      dispatch({ type: 'CHECK_OPEN_CARDS' });
+      dispatch({ type: 'CHECK_OPEN_CARDS', isRecord: true });
       timeoutID = null;
     }, C.OPEN_DELAY);
   }

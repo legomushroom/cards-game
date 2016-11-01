@@ -2,20 +2,9 @@ import {h, Component} from 'preact';
 import mojs from 'mo-js';
 
 class CardStagger extends Component {
-  render () {
-    const STYLE = {
-      // width: '100%',
-      // height: '100%',
-      // // // overflow: 'hidden',
-      // position: 'absolute'
-    };
+  render () { return  <div ref={ (el) => { this._el = el; } } />; }
 
-    return  <div style={STYLE} ref={ (el) => { this._el = el; } } />;
-  }
-
-  shouldComponentUpdate () {
-    return false;
-  }
+  shouldComponentUpdate () { return false; }
 
   componentDidMount () {
     const ShapeStagger = mojs.stagger( mojs.Shape );
