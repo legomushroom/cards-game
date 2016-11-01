@@ -4,6 +4,8 @@
 
 ## Difficulty
 
+To adjust dificulty, change `DIFFICULTY` constant in `app/js/constants`. Could be in range of `[0...10]`.
+
 ## Undo/Redo
 
 ## Development

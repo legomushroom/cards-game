@@ -42,3 +42,5 @@ try {
 } catch (e) {
   console.error(e);
 }
+
+// localStorage.removeItem(C.NAME);

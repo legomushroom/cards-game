@@ -14,6 +14,33 @@
     }
   }
 
+  &__momento {
+    background:     $c-orange;
+    height:         31*$PX;
+    position:       relative;
+    top:            8px;
+    margin-left:    5px;
+    border-radius:  4px;
+    display:        none;
+    
+    &:hover { opacity: .85; }
+    &:active { opacity: 1; }
+    
+    [data-component="icon"] {
+      width:        14*$PX;
+      height:       14*$PX;
+      cursor:       inherit;
+    }
+    &.is-disable {
+      cursor:       default;
+      background:   gray;
+      opacity:      .5;
+    }
+    &.is-cheat {
+      display:      inline-block;
+    }
+  }
+
   &__main {
     background:     $c-red;
     font-size:      14*$FPX;

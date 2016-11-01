@@ -26,16 +26,6 @@ class Game extends Component {
                 <div className={CLASSES.game__right}>
                   <Scores state={state} />
                   <ResetButton state={state} />
-                  <br/>
-                  <br/>
-                  <br/>
-                  { (cards.past.length)
-                      ? <Button onTap={this._undo} title="undo" />
-                      : null }
-                  <br/>
-                  { (cards.future.length)
-                      ? <Button onTap={this._redo} title="redo" />
-                      : null }
                 </div>
                 <div className={CLASSES.game__left}>
                   <Congrats state={state} />

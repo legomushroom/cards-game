@@ -15,6 +15,7 @@ $rightSize: 200;
   /*transform:        translate(-50%, -50%);*/
   margin-top:       -(470/2)*$PX;
   margin-left:      -(750/2)*$PX;
+  animation:        fadeIn .5s ease-in;
   
   &__inner {
     display:        inline-block;
@@ -98,5 +99,15 @@ $rightSize: 200;
   @media (--BREAKING_POINT_W1) and (--BREAKING_POINT_H2) {
     position:     static;
     transform:    none;
+  }
+}
+
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
