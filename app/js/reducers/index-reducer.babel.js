@@ -20,7 +20,7 @@ const UNDOABLE_OPTS = {
 // }), ['SET_STATE'], (state, action) => action.data );
 
 const reducer = combineReducers({
-  // cards:          undoable(cards, { ...UNDOABLE_OPTS }),
+  // cards: undoable(cards, { ...UNDOABLE_OPTS }),
   cards, controls
 });
 
