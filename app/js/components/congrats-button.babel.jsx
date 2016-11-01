@@ -12,7 +12,7 @@ class CongratsButton extends Component {
                     ref={(el) => { this._button = el; }}>
               <span className={CLS['congrats__button-text']}
                     ref={(el) => { this._buttonText = el; }}>
-                Restart Game
+                restart game
               </span>
             </button>;
   }

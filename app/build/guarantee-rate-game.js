@@ -19241,6 +19241,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var cards = state.cards;
 
 
+	      var highSore = cards.highScore != null ? (0, _preact.h)(
+	        'span',
+	        null,
+	        ' / ',
+	        (0, _preact.h)(
+	          'em',
+	          null,
+	          cards.highScore
+	        ),
+	        ' best'
+	      ) : null;
+
 	      return (0, _preact.h)(
 	        'div',
 	        { className: CLASSES.scores, 'data-component': 'scores' },
@@ -19257,7 +19269,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            ' '
 	          ),
 	          ' ',
-	          cards.tries === 1 ? 'try' : 'tries'
+	          cards.tries === 1 ? 'try' : 'tries',
+	          highSore
 	        )
 	      );
 	    }
@@ -20194,7 +20207,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._congrats_1spfx_3 {\n  position:     absolute;\n  z-index:      5;\n  left:         0;\n  top:          20px;\n  right:        0;\n  bottom:       0;\n  display:      none;\n  overflow:     hidden\n}\n\n._congrats__counter_1spfx_1 {\n  position:     absolute;\n  top:     15px;\n  right:     20px;\n  z-index:     2;\n  color:     #2C405A;\n  opacity:     0\n}\n\n._congrats__counter-footer_1spfx_1 {\n  font-family:     'bebasregular';\n  font-size:     7px;\n  width:     30px;\n  text-align:     center\n}\n\n._congrats__counter-number_1spfx_1 {\n  font-family:     Menlo;\n  color:     $c-green;\n  font-size:     14px;\n  text-align:     center\n  /*margin-left:  calc(-.8*$GS);*/\n  /*&:before {\n        content: '+';\n      }*/\n}\n\n._congrats__background_1spfx_1 {\n  position:     absolute;\n  left:     0;\n  top:     0;\n  right:     0;\n  bottom:     0;\n  opacity:     .975;\n  overflow:     hidden;\n  border-radius:     6px\n}\n\n._congrats__button_1spfx_1 {\n  position:     absolute;\n  left:     50%;\n  top:     50%;\n  cursor:     pointer;\n  margin-top:     20px;\n  margin-left:     -50px;\n  border:     none;\n  color:     white;\n  font:     inherit;\n  font-size:     12px;\n  padding:     10px 20px;\n  z-index:     1;\n  -webkit-appearance:     none;\n     -moz-appearance:     none;\n          appearance:     none;\n  border-radius:     6px;\n  background:     transparent;\n  overflow:     hidden;\n  outline:     0\n  /*&:focus {\n      outline:    calc(2*$PX) solid $c-yellow;\n    }*/\n}\n\n._congrats__button_1spfx_1:hover {\n  opacity:     .85\n}\n\n._congrats__button-text_1spfx_1 {\n  position:     relative;\n  z-index:     2;\n  display:     inline-block;\n  /*transform-origin: '50% 100%',*/\n  opacity:     0\n}\n\n._congrats__texts_1spfx_1 {\n  position:     absolute;\n  z-index:     2;\n  width:     270px;\n  left:     50%;\n  margin-left:     -135px;\n  top:     20%\n}\n\n._congrats__text_1spfx_1 {\n  position:     absolute;\n  top:     0;\n  font-family:     Bebas, 'bebasregular';\n  font-size:     20px;\n  text-transform:     uppercase;\n  letter-spacing:     0.5px;\n  opacity:     0\n}\n\n._congrats__text--1_1spfx_1 {\n  left:     0;\n  color:     #EC5351;\n  -webkit-transform:     rotate(-10deg) translateY(7px);\n          transform:     rotate(-10deg) translateY(7px)\n}\n\n._congrats__text--2_1spfx_1 {\n  left:     50%;\n  margin-left:     -15.5px;\n  color:     #2C405A\n}\n\n._congrats__text--3_1spfx_1 {\n  right:     0;\n  color:     #F27B35;\n  -webkit-transform:     rotate(10deg) translateY(7px);\n          transform:     rotate(10deg) translateY(7px)\n}", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._congrats_pcf8y_3 {\n  position:     absolute;\n  z-index:      5;\n  left:         0;\n  top:          20px;\n  right:        0;\n  bottom:       0;\n  display:      none;\n  overflow:     hidden\n}\n\n._congrats__counter_pcf8y_1 {\n  position:     absolute;\n  top:     15px;\n  right:     20px;\n  z-index:     2;\n  color:     #2C405A;\n  opacity:     0\n}\n\n._congrats__counter-footer_pcf8y_1 {\n  font-family:     'bebasregular';\n  font-size:     7px;\n  width:     30px;\n  text-align:     center\n}\n\n._congrats__counter-number_pcf8y_1 {\n  font-family:     Menlo;\n  color:     $c-green;\n  font-size:     14px;\n  text-align:     center\n  /*margin-left:  calc(-.8*$GS);*/\n  /*&:before {\n        content: '+';\n      }*/\n}\n\n._congrats__background_pcf8y_1 {\n  position:     absolute;\n  left:     0;\n  top:     0;\n  right:     0;\n  bottom:     0;\n  opacity:     .975;\n  overflow:     hidden;\n  border-radius:     6px\n}\n\n._congrats__button_pcf8y_1 {\n  position:     absolute;\n  left:     50%;\n  top:     50%;\n  cursor:     pointer;\n  margin-top:     20px;\n  margin-left:     -50px;\n  border:     none;\n  color:     white;\n  font:     inherit;\n  font-size:     12px;\n  padding:     10px 20px;\n  z-index:     1;\n  -webkit-appearance:     none;\n     -moz-appearance:     none;\n          appearance:     none;\n  border-radius:     6px;\n  background:     transparent;\n  overflow:     hidden;\n  outline:     0;\n  letter-spacing:     0.5px;\n  font-size:     12px\n  /*&:focus {\n      outline:    calc(2*$PX) solid $c-yellow;\n    }*/\n}\n\n._congrats__button_pcf8y_1:hover {\n  opacity:     .85\n}\n\n._congrats__button-text_pcf8y_1 {\n  position:     relative;\n  z-index:     2;\n  display:     inline-block;\n  /*transform-origin: '50% 100%',*/\n  opacity:     0\n}\n\n._congrats__texts_pcf8y_1 {\n  position:     absolute;\n  z-index:     2;\n  width:     270px;\n  left:     50%;\n  margin-left:     -135px;\n  top:     20%\n}\n\n._congrats__text_pcf8y_1 {\n  position:     absolute;\n  top:     0;\n  font-family:     Bebas, 'bebasregular';\n  font-size:     20px;\n  text-transform:     uppercase;\n  letter-spacing:     0.5px;\n  opacity:     0\n}\n\n._congrats__text--1_pcf8y_1 {\n  left:     0;\n  color:     #EC5351;\n  -webkit-transform:     rotate(-10deg) translateY(7px);\n          transform:     rotate(-10deg) translateY(7px)\n}\n\n._congrats__text--2_pcf8y_1 {\n  left:     50%;\n  margin-left:     -15.5px;\n  color:     #2C405A\n}\n\n._congrats__text--3_pcf8y_1 {\n  right:     0;\n  color:     #F27B35;\n  -webkit-transform:     rotate(10deg) translateY(7px);\n          transform:     rotate(10deg) translateY(7px)\n}", ""]);
 
 	// exports
 
@@ -20204,18 +20217,18 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	module.exports = {
-		"congrats": "_congrats_1spfx_3",
-		"congrats__counter": "_congrats__counter_1spfx_1",
-		"congrats__counter-footer": "_congrats__counter-footer_1spfx_1",
-		"congrats__counter-number": "_congrats__counter-number_1spfx_1",
-		"congrats__background": "_congrats__background_1spfx_1",
-		"congrats__button": "_congrats__button_1spfx_1",
-		"congrats__button-text": "_congrats__button-text_1spfx_1",
-		"congrats__texts": "_congrats__texts_1spfx_1",
-		"congrats__text": "_congrats__text_1spfx_1",
-		"congrats__text--1": "_congrats__text--1_1spfx_1",
-		"congrats__text--2": "_congrats__text--2_1spfx_1",
-		"congrats__text--3": "_congrats__text--3_1spfx_1"
+		"congrats": "_congrats_pcf8y_3",
+		"congrats__counter": "_congrats__counter_pcf8y_1",
+		"congrats__counter-footer": "_congrats__counter-footer_pcf8y_1",
+		"congrats__counter-number": "_congrats__counter-number_pcf8y_1",
+		"congrats__background": "_congrats__background_pcf8y_1",
+		"congrats__button": "_congrats__button_pcf8y_1",
+		"congrats__button-text": "_congrats__button-text_pcf8y_1",
+		"congrats__texts": "_congrats__texts_pcf8y_1",
+		"congrats__text": "_congrats__text_pcf8y_1",
+		"congrats__text--1": "_congrats__text--1_pcf8y_1",
+		"congrats__text--2": "_congrats__text--2_pcf8y_1",
+		"congrats__text--3": "_congrats__text--3_pcf8y_1"
 	};
 
 /***/ },
@@ -20326,7 +20339,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            ref: function ref(el) {
 	              _this2._buttonText = el;
 	            } },
-	          'Restart Game'
+	          'restart game'
 	        )
 	      );
 	    }
@@ -21285,15 +21298,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    case 'RESET_CARDS':
 	      {
-	        var _newState = (0, _extends3.default)({}, INITIAL_STATE, { cards: (0, _makeCards2.default)() });
+	        var _cards3 = (0, _makeCards2.default)();
+	        var highScore = state.highScore;
+	        var _newState = (0, _extends3.default)({}, INITIAL_STATE, { cards: _cards3, highScore: highScore });
 	        return _newState;
 	      }
 
 	    case 'RESET_CARDS_HIGH_SCORE':
 	      {
-	        var highScore = state.highScore == null ? state.tries : Math.min(state.highScore, state.tries);
+	        var _highScore = state.highScore == null ? state.tries : Math.min(state.highScore, state.tries);
 
-	        var _newState2 = (0, _extends3.default)({}, INITIAL_STATE, { cards: (0, _makeCards2.default)(), highScore: highScore });
+	        var _newState2 = (0, _extends3.default)({}, INITIAL_STATE, { cards: (0, _makeCards2.default)(), highScore: _highScore });
 	        return _newState2;
 	      }
 

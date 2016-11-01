@@ -66,6 +66,8 @@
     background:   transparent;
     overflow:     hidden;
     outline:      0;
+    letter-spacing: .5*$PX;
+    font-size:    12px;
     /*&:focus {
       outline:    calc(2*$PX) solid $c-yellow;
     }*/

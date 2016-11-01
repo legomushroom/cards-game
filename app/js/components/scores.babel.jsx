@@ -10,11 +10,16 @@ class Scores extends Component {
     const {state} = this.props;
     const {cards} = state;
 
+    const highSore = (cards.highScore != null)
+      ? <span> / <em>{cards.highScore}</em> best</span>
+      : null;
+
     return  <div className={CLASSES.scores} data-component="scores">
               <Ghost state={state} />
               <div className={CLASSES.scores__text}>
                 <TryStagger state={state} />
                 <em> {cards.tries} </em> { (cards.tries === 1) ? 'try' : 'tries' }
+                {highSore}
               </div>
             </div>;
   }
