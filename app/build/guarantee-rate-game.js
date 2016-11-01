@@ -2365,6 +2365,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
+	var _getOwnPropertyDescriptor = __webpack_require__(153);
+
+	var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
+
 	var _extends2 = __webpack_require__(20);
 
 	var _extends3 = _interopRequireDefault(_extends2);
@@ -2389,7 +2393,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
+	var _desc, _value, _class;
+
 	var _preact = __webpack_require__(3);
+
+	var _reduxUndo = __webpack_require__(164);
+
+	var _decko = __webpack_require__(156);
 
 	var _icons = __webpack_require__(111);
 
@@ -2407,16 +2417,49 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _resetButton2 = _interopRequireDefault(_resetButton);
 
+	var _button = __webpack_require__(140);
+
+	var _button2 = _interopRequireDefault(_button);
+
 	var _congrats = __webpack_require__(147);
 
 	var _congrats2 = _interopRequireDefault(_congrats);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+	  var desc = {};
+	  Object['ke' + 'ys'](descriptor).forEach(function (key) {
+	    desc[key] = descriptor[key];
+	  });
+	  desc.enumerable = !!desc.enumerable;
+	  desc.configurable = !!desc.configurable;
+
+	  if ('value' in desc || desc.initializer) {
+	    desc.writable = true;
+	  }
+
+	  desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+	    return decorator(target, property, desc) || desc;
+	  }, desc);
+
+	  if (context && desc.initializer !== void 0) {
+	    desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+	    desc.initializer = undefined;
+	  }
+
+	  if (desc.initializer === void 0) {
+	    Object['define' + 'Property'](target, property, desc);
+	    desc = null;
+	  }
+
+	  return desc;
+	}
+
 	var CLASSES = __webpack_require__(159);
 	__webpack_require__(160);
 
-	var Game = function (_Component) {
+	var Game = (_class = function (_Component) {
 	  (0, _inherits3.default)(Game, _Component);
 
 	  function Game() {
@@ -2432,7 +2475,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var state = store.getState();
 	      var cards = state.cards;
 
-	      var cardComponents = this._renderCards(cards.cards);
+
+	      var cardComponents = this._renderCards(cards.present.cards);
 
 	      return (0, _preact.h)(
 	        'div',
@@ -2445,7 +2489,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            'div',
 	            { className: CLASSES.game__right },
 	            (0, _preact.h)(_scores2.default, { state: state }),
-	            (0, _preact.h)(_resetButton2.default, { state: state })
+	            (0, _preact.h)(_resetButton2.default, { state: state }),
+	            (0, _preact.h)('br', null),
+	            (0, _preact.h)('br', null),
+	            (0, _preact.h)('br', null),
+	            (0, _preact.h)(_button2.default, { onTap: this._undo, title: 'undo' }),
+	            (0, _preact.h)(_button2.default, { onTap: this._redo, title: 'redo' })
 	          ),
 	          (0, _preact.h)(
 	            'div',
@@ -2455,6 +2504,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	          )
 	        )
 	      );
+	    }
+	  }, {
+	    key: '_undo',
+	    value: function _undo() {
+	      var store = this.context.store;
+
+	      store.dispatch(_reduxUndo.ActionCreators.undo());
+	    }
+	  }, {
+	    key: 'redo',
+	    value: function redo() {
+	      var store = this.context.store;
+
+	      store.dispatch(_reduxUndo.ActionCreators.redo());
 	    }
 	  }, {
 	    key: '_renderCards',
@@ -2479,8 +2542,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }]);
 	  return Game;
-	}(_preact.Component);
-
+	}(_preact.Component), (_applyDecoratedDescriptor(_class.prototype, '_undo', [_decko.bind], (0, _getOwnPropertyDescriptor2.default)(_class.prototype, '_undo'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'redo', [_decko.bind], (0, _getOwnPropertyDescriptor2.default)(_class.prototype, 'redo'), _class.prototype)), _class);
 	exports.default = Game;
 
 /***/ },
@@ -4202,7 +4264,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      mc.add(new _hammerjs2.default.Tap());
 
 	      mc.on('tap', function (e) {
-	        store.dispatch({ type: 'OPEN_CARD', data: p.id });
+	        store.dispatch({ type: 'OPEN_CARD', data: p.id, isRecord: true });
 	        store.dispatch({ type: 'CHECK_EQUAL_CARDS' });
 	        store.dispatch(_checkOpenCards2.default);
 	        store.dispatch({ type: 'RESET_CONFIRM' });
@@ -19088,7 +19150,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var cards = _getState.cards;
 
-	  var count = cards.open.length;
+	  var count = cards.present.open.length;
 
 	  if (count === 2 && !timeoutID) {
 	    timeoutID = setTimeout(function () {
@@ -19240,6 +19302,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var state = this.props.state;
 	      var cards = state.cards;
 
+	      cards = cards.present;
 
 	      var highSore = cards.highScore != null ? (0, _preact.h)(
 	        'span',
@@ -19800,6 +19863,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _preact = __webpack_require__(3);
 
+	var _hammerjs = __webpack_require__(113);
+
+	var _hammerjs2 = _interopRequireDefault(_hammerjs);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var CLASSES = __webpack_require__(141);
@@ -19824,6 +19891,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	          'data-component': 'button' },
 	        p.title || 'restart'
 	      );
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+
+	      if (!this.props.onTap) {
+	        return;
+	      }
+
+	      var mc = new _hammerjs2.default.Manager(this.base);
+	      mc.add(new _hammerjs2.default.Tap());
+
+	      mc.on('tap', function (e) {
+	        _this2.props.onTap(e);
+	      });
 	    }
 	  }]);
 	  return Button;
@@ -20771,6 +20854,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
+	var _extends2 = __webpack_require__(20);
+
+	var _extends3 = _interopRequireDefault(_extends2);
+
 	var _redux = __webpack_require__(4);
 
 	var _reduxUndo = __webpack_require__(164);
@@ -20795,16 +20882,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  debug: false
 	};
 
-	// import recycleState from 'redux-recycle';
-
-	// const reducer = recycleState(combineReducers({
-	//   // cards:          undoable(cards, { ...UNDOABLE_OPTS }),
-	//   cards, controls
-	// }), ['SET_STATE'], (state, action) => action.data );
-
 	var reducer = (0, _redux.combineReducers)({
-	  // cards: undoable(cards, { ...UNDOABLE_OPTS }),
-	  cards: _cardsReducer2.default, controls: _controlsReducer2.default
+	  cards: (0, _reduxUndo2.default)(_cardsReducer2.default, (0, _extends3.default)({}, UNDOABLE_OPTS)),
+	  // cards,
+	  controls: _controlsReducer2.default
 	});
 
 	exports.default = reducer;
@@ -21656,6 +21737,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  difficulty += 2;
 	  difficulty = (0, _clamp2.default)(difficulty, 2, _constants2.default.CARD_TYPES.length - 1);
+	  difficulty = 2;
 
 	  var cards = [];
 	  var TYPES = _constants2.default.CARD_TYPES;

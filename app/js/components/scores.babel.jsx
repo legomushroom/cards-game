@@ -8,7 +8,8 @@ require('../../css/blocks/scores');
 class Scores extends Component {
   render() {
     const {state} = this.props;
-    const {cards} = state;
+    let {cards} = state;
+    cards = cards.present;
 
     const highSore = (cards.highScore != null)
       ? <span> / <em>{cards.highScore}</em> best</span>

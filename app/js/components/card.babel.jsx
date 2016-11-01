@@ -19,7 +19,7 @@ class Card extends Component {
     mc.add(new Hammer.Tap);
 
     mc.on('tap', (e) => {
-      store.dispatch({ type: 'OPEN_CARD', data: p.id });
+      store.dispatch({ type: 'OPEN_CARD', data: p.id, isRecord: true });
       store.dispatch({ type: 'CHECK_EQUAL_CARDS' });
       store.dispatch(checkOpenCards);
       store.dispatch({ type: 'RESET_CONFIRM' });

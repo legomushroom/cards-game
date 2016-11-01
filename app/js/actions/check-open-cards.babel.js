@@ -3,7 +3,7 @@ import C from '../constants';
 let timeoutID = null;
 const asyncCheck = (dispatch, getState) => {
   const {cards} = getState();
-  const count = cards.open.length;
+  const count = cards.present.open.length;
 
   if (count === 2 && !timeoutID) {
     timeoutID = setTimeout(() => {
