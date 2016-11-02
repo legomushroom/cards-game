@@ -1,7 +1,8 @@
 const INITIAL_STATE = {
   isConfirm:      false,
   isCongratsPlay: false,
-  isCheat:        true
+  isCheat:        false,
+  isCheatPlay:    false
 };
 
 const controls = (state = INITIAL_STATE, action) => {
@@ -9,7 +10,8 @@ const controls = (state = INITIAL_STATE, action) => {
   case 'SET_CONFIRM': { return {...state, isConfirm: !state.isConfirm}; }
   case 'RESET_CONFIRM': { return {...state, isConfirm: false}; }
   case 'RESET_CARDS': { return {...state, isConfirm: false}; }
-  case 'SET_CHEAT': { return {...state, isCheat: true}; }
+  case 'SET_CHEAT': { return {...state, isCheat: true, isCheatPlay: true}; }
+  case 'RESET_CHEAT_PLAY': { return {...state, isCheatPlay: false}; }
   }
   return state;
 };

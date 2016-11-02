@@ -1,12 +1,26 @@
 # Guarantee Rate Game
 
+## Launch
+
+Point your `HttpServer` to `app/`. Alternitavely, just open `app/index.html` in your browser.
+
 ## Notes
+
+App persists it's state in `localStorage` so you won't loose progress on page reload. You can reset the `current cards` by clicking on the red `reset` button. It won't reset anything besides `cards`. The `highScore` will show up after the first game session finished.
 
 ## Difficulty
 
 To adjust dificulty, change `DIFFICULTY` constant in `app/js/constants`. Could be in range of `[0...10]`.
 
-## Undo/Redo
+## Cheats
+
+The app implements `momento` design pattern which mean you can have `undo`/`redo` functionality. To get the `god mode cheat`, type the next `Konami` code:
+
+```
+up up down down left right left right b a
+```
+
+The appropriate buttons will show up on the right of the `red reset button`.
 
 ## Development
 
@@ -21,6 +35,16 @@ Then launch webpack:
 ```
 webpack
 ```
+
+It will take care about `building` the app and assets.
+
+If you want to use [LiveReload](https://github.com/livereload/LiveReload) instead of `webpack-dev-server`, run in your terminal:
+
+```
+gulp
+```
+
+Note that you need [LiveReload Browser Extention](http://livereload.com/extensions/) for autoreloads on code changes.
 
 ## License
 

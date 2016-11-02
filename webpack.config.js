@@ -50,12 +50,12 @@ module.exports = {
     umdNamedDefine: true,
   },
   plugins: [
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false
-    //   }
-    // }),
-    // new UnminifiedWebpackPlugin()
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    }),
+    new UnminifiedWebpackPlugin()
   ],
   // devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'inline-source-map',
   resolve: {

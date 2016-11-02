@@ -5,6 +5,7 @@ import {ActionCreators} from 'vendors/redux-undo';
 import C from '../constants';
 import Button from './button';
 import Icon from './icon';
+import KonamiBurst from './konami-burst';
 
 const CLS = require('../../css/blocks/reset-button.postcss.css.json');
 require('../../css/blocks/reset-button');
@@ -24,7 +25,7 @@ class ResetButton extends Component {
   }
 
   _renderReset(state) {
-    return  <span style={{position: 'relative', display: 'inline-block'}}>
+    return  <span className={CLS['reset-button__reset']}>
               <button className={CLS['reset-button__main']}
                       role="reset"
                       ref={(el)=> { this._main = el; }}>reset</button>
@@ -37,23 +38,23 @@ class ResetButton extends Component {
 
   _renderMomento(state) {
     const {controls, cards} = state;
+
     const cheatClass = (controls.isCheat) ? CLS['is-cheat'] : '';
     const momentoClass = `${CLS['reset-button__momento']} ${cheatClass}`;
     const undoClass = `${momentoClass} ${(cards.past.length) ? '' : CLS['is-disable']}`;
     const redoClass = `${momentoClass} ${(cards.future.length) ? '' : CLS['is-disable']}`;
-
-    return  <span>
+    return  <span style={{position: 'relative'}}>
               <button className={undoClass}
                       role="undo"
                       ref={(el)=> { this._undo = el; }}>
                 <Icon shape="undo" />
               </button>
-
               <button className={redoClass}
                       role="redo"
                       ref={(el)=> { this._redo = el; }}>
                 <Icon shape="redo" />
               </button>
+              <KonamiBurst state={state} />
             </span>;
   }
 

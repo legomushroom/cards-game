@@ -5,6 +5,12 @@
   position:       relative;
   display:        inline-block;
   
+  &__reset {
+    position:     relative;
+    display:      inline-block;
+    float:        left;
+  }
+  
   button {
     border:       none;
     color:        white;
@@ -18,7 +24,6 @@
     background:     $c-orange;
     height:         31*$PX;
     position:       relative;
-    top:            8px;
     margin-left:    5px;
     border-radius:  4px;
     display:        none;
