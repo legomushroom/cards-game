@@ -22,7 +22,9 @@ export default (store) => {
       console.error(e);
     }
   } else {
-    localStorage.removeItem(C.NAME);
+    try {
+      localStorage.removeItem(C.NAME);
+    } catch (e) { console.error(e); }
   }
 };
 

@@ -36,7 +36,7 @@ class Congrats extends Component {
 
   componentWillMount() {
     const sound = new Howl({
-      src: ['./sounds/applause.wav'],
+      src: ['./sounds/applause.mp3', './sounds/applause.wav'],
       volume: .5
     });
 

@@ -9,7 +9,7 @@ class CardStagger extends Component {
 
   componentDidMount () {
     const sound = new Howl({
-      src: ['./sounds/good.wav'],
+      src: ['./sounds/good.mp3', './sounds/good.wav'],
       volume: .5
     });
 

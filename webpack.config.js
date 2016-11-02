@@ -38,7 +38,7 @@ module.exports = {
                       require('postcss-automath'),
                       require('postcss-custom-media')
                     ],
-          cleaner:  [autoprefixer({ browsers: ['last 2 versions'] })]
+          cleaner:  [autoprefixer({ browsers: ['last 2 versions', 'ie9'] })]
       };
   },
   output: {

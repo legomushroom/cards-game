@@ -7,9 +7,12 @@ import Icon from './icon';
 import CardStagger from './card-stagger';
 import checkOpenCards from '../actions/check-open-cards';
 import lockAnimation from '../actions/card-lock-animation';
+import isIE from '../helpers/is-ie';
+
+const postfix = (isIE()) ? '-ie' : '';
 
 const CLASSES = require('../../css/blocks/card.postcss.css.json');
-require('../../css/blocks/card');
+require(`../../css/blocks/card`);
 
 class Card extends Component {
   componentDidMount () {
@@ -41,12 +44,11 @@ class Card extends Component {
   render() {
     const p         = this.props;
     const type      = p.type;
-    let   className = `${CLASSES.card} ${CLASSES['card--'+type]}`;
+    let   className = `${CLASSES[`card${postfix}`]} ${CLASSES[`card${postfix}--`+type]}`;
 
-    if (p.isOpen) { className += ` ${CLASSES['is-open']}`; }
-
+    if (p.isOpen) { className += ` ${CLASSES[`is-open${postfix}`]}`; }
     return  <div className={className} data-component="card">
-              <div className={CLASSES.card__inner}>
+              <div className={CLASSES[`card${postfix}__inner`]}>
                 <Icon shape={type} />
               </div>
               <CardStagger timeline={this._timeline} />

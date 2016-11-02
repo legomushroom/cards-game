@@ -24,7 +24,7 @@ class TryStagger extends Component {
 
   componentDidMount () {
     const sound = new Howl({
-      src: ['./sounds/zap.wav'],
+      src: ['./sounds/zap.mp3', './sounds/zap.wav'],
       volume: .15
     });
 

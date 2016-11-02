@@ -33,6 +33,7 @@
     border-radius:        inherit;
     backface-visibility:  hidden;
     transform-style:      preserve-3d;
+    transform:            translateZ(1*$PX);
   }
 
   $size: 44;
@@ -47,36 +48,61 @@
     backface-visibility: hidden;
   }
 
-  /*&--pan {
-    $size: 50;
-    [data-component="icon"] {
-      width:  $size*$PX;
-      height: $size*$PX;
-    }
+  @media all and (max-width: 535px) {
+    margin-left: $CARD_GUTTER_SMALL*$PX;
+    margin-top:  $CARD_GUTTER_SMALL*$PX;
+  }
+  @media all and (max-width: 450px) {
+    margin-left: ($CARD_GUTTER_MEDIUM)*$PX;
+    margin-top:  ($CARD_GUTTER_MEDIUM)*$PX;
+  }
+}
+
+.card-ie {
+  position:       relative;
+  width:          65*$PX;
+  height:         90*$PX;
+  background:     white;
+  display:        block;
+  border-radius:  7*$PX;
+  margin-left:    $CARD_GUTTER*$PX;
+  margin-top:     $CARD_GUTTER*$PX;
+  cursor:         pointer;
+  background:     $c-orange;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAAC0CAMAAABv/gR/AAAAilBMVEUsQFowQlrXdW7sU1HvY0rvaU/va1Hvc1fwYUrwYkrwY0rwZEvwZk7wbVPwcVXwdljweVvwfF3wfl7wg2LwhGLwhGPwhGTxfl/xf2DxgGDxgGHxgWHxgmHxgmLxg2Lxg2PxhGLxhGPyezXyezbyfDbyfDfyfTfyfTjyf2Dyg2Lyg2P1mU7+1l7/1VUpwicUAAACHklEQVR4Ae3TSVJVCRhE4VP1qi8bBURsvErC4xc19789I5zcARKEgbzj4OYKvsFJ+O33nTtfsEMX7NhthI2wETbCRtgIG2Ej/OqEBV0wNuF6IhM+TGTCyUQmHE9kwvJNEHRB0AVBFwRdEHRB0AVBFwRdEHSBQHgxkQmvJzLh5UQmHE9kwvIdQdAFQRcEXRB0QdAFQRcEXRAMgUC4nsiE04lM+DiRCW8nMmG5SxB0QdAFQRcEXRB0QdAFQRcEXRAcwQEIpxOZcDaRCUcTmbD8kCDogqALgi4IuiDogqALgi4IuiA8mEAgnE9kwtFEJjyZyIQ3E5mw3EMQdEHQBUEXBF0QdEHQBUEXBF0Q7i8wCWcTmfDHVWTC48vIhOOJTFh+miDogqALgi4IuiDogqALgi4I9xMIhPOJTHg6kQn/7CMT/t5HJiyTQxAEQdAFQRcEXRB0QdAFQRcEXRB0wd2E5xOZ8O8+MuHPi8iE5erhBZ+RSlwFX9AFRRcUXVB0QdEFRRcUXVBMwe2ETwcS3E74a38Ywe2E/y4OK7hJeHZgwU3CyRxaUMwvrARXUHRB0QVFFxRdUHRBkQUr4b0kWAmvJMFK+P/SEayERxeOYCW826uCopW4EhZbUHRB0QVFFxRdUHRB0QVFFxRdUHRB0QVFFxRdUHRB0QVFFxRdUHRB0QVFFxRdUHRB0QVFFxRdUHRB0QVFFxRdUHRB0QVFF/QrGglRP6pmTuoAAAAASUVORK5CYII=);
+  background-size: 100% auto;
+  transition:       all .2s ease-out;
+  transform-style:  preserve-3d;
+  box-shadow: 0 0 16*$PX rgba(0,0,0,.8);
+  box-shadow: 0 0 0 3*$PX rgba(0,0,0,.1), inset 2*$PX 0 10*$PX rgba(255,255,255, .35);
+  
+  &:hover:not(.is-open-ie) { transform: scaleX(.9); }
+  
+  &.is-open-ie .card-ie__inner { transform: scaleX(1); }
+  
+  &__inner {
+    position:             absolute;
+    width:                100%;
+    height:               100%;
+    background:           white;
+    box-sizing:           border-box;
+    border-radius:        inherit;
+    backface-visibility:  hidden;
+    transform-style:      preserve-3d;
+    transform:            scaleX(0);
   }
 
-  &--coffin {
-    $size: 50;
-    [data-component="icon"] {
-      width:  $size*$PX;
-      height: $size*$PX;
-    }
+  $size: 44;
+  [data-component="icon"] {
+    fill:         $c-blue;
+    position:     absolute;
+    left:         50%;
+    top:          50%;
+    transform:    translate(-50%, -50%);
+    width:        $size*$PX;
+    height:       $size*$PX;
+    backface-visibility: hidden;
   }
-  &--vampire {
-    $size: 50;
-    [data-component="icon"] {
-      width:  $size*$PX;
-      height: $size*$PX;
-    }
-  }
-
-  &--bat {
-    $size: 50;
-    [data-component="icon"] {
-      width:  $size*$PX;
-      height: $size*$PX;
-    }
-  }*/
 
   @media all and (max-width: 535px) {
     margin-left: $CARD_GUTTER_SMALL*$PX;

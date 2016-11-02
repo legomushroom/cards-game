@@ -17,7 +17,7 @@ class KonamiBurst extends Component {
 
   componentDidMount () {
     const sound = new Howl({
-      src: ['./sounds/evil-laugh.wav']
+      src: ['./sounds/evil-laugh.mp3', './sounds/evil-laugh.wav']
     });
 
     this._burst = new mojs.Burst({
