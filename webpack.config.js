@@ -2,6 +2,22 @@ var webpack = require('webpack');
 var path = require('path');
 var autoprefixer = require('autoprefixer');
 var UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
+var argv = require('yargs').argv;
+
+const plugins = [
+  new webpack.DefinePlugin({
+    'process.env.NODE_ENV': JSON.stringify(
+      (argv.production) ? 'production' : 'development'
+    )
+  })
+];
+
+if (argv.production) {
+  plugins.push(
+    new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
+    new UnminifiedWebpackPlugin()
+  );
+}
 
 module.exports = {
   watch:   true,
@@ -49,15 +65,7 @@ module.exports = {
     libraryTarget:  'umd',
     umdNamedDefine: true,
   },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
-    }),
-    new UnminifiedWebpackPlugin()
-  ],
-  // devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'inline-source-map',
+  plugins: plugins,
   resolve: {
     root: [ path.resolve('./') ],
     moduleDirectories: ['node_modules', 'vendors'],

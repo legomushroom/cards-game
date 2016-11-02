@@ -38,6 +38,8 @@ webpack
 
 It will take care about `building` the app and assets.
 
+Please use `--production` argument with `webpack` command to make a production bundle.
+
 If you want to use [LiveReload](https://github.com/livereload/LiveReload) instead of `webpack-dev-server`, run in your terminal:
 
 ```

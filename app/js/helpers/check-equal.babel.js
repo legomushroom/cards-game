@@ -20,3 +20,5 @@ const checkEqual = (state) => {
   }
   return state;
 };
+
+export default checkEqual;

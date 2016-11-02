@@ -67,19 +67,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _preact = __webpack_require__(3);
 	
-	var _game = __webpack_require__(19);
+	var _game = __webpack_require__(25);
 	
 	var _game2 = _interopRequireDefault(_game);
 	
-	var _store = __webpack_require__(170);
+	var _store = __webpack_require__(176);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
-	var _persist = __webpack_require__(198);
+	var _persist = __webpack_require__(204);
 	
 	var _persist2 = _interopRequireDefault(_persist);
 	
-	var _addKonamiCheat = __webpack_require__(202);
+	var _addKonamiCheat = __webpack_require__(208);
 	
 	var _addKonamiCheat2 = _interopRequireDefault(_addKonamiCheat);
 	
@@ -100,791 +100,727 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	(function (global, factory) {
-		 true ? factory(exports, __webpack_require__(3), __webpack_require__(4)) :
-		typeof define === 'function' && define.amd ? define(['exports', 'preact', 'redux'], factory) :
-		(factory((global.preactRedux = global.preactRedux || {}),global.preact,global.redux));
-	}(this, function (exports,preact,redux) { 'use strict';
-	
-		function __commonjs(fn, module) { return module = { exports: {} }, fn(module, module.exports), module.exports; }
-	
-	
-		var babelHelpers = {};
-	
-		babelHelpers.classCallCheck = function (instance, Constructor) {
-		  if (!(instance instanceof Constructor)) {
-		    throw new TypeError("Cannot call a class as a function");
-		  }
-		};
-	
-		babelHelpers.extends = Object.assign || function (target) {
-		  for (var i = 1; i < arguments.length; i++) {
-		    var source = arguments[i];
-	
-		    for (var key in source) {
-		      if (Object.prototype.hasOwnProperty.call(source, key)) {
-		        target[key] = source[key];
-		      }
-		    }
-		  }
-	
-		  return target;
-		};
-	
-		babelHelpers.inherits = function (subClass, superClass) {
-		  if (typeof superClass !== "function" && superClass !== null) {
-		    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-		  }
-	
-		  subClass.prototype = Object.create(superClass && superClass.prototype, {
-		    constructor: {
-		      value: subClass,
-		      enumerable: false,
-		      writable: true,
-		      configurable: true
-		    }
-		  });
-		  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-		};
-	
-		babelHelpers.possibleConstructorReturn = function (self, call) {
-		  if (!self) {
-		    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-		  }
-	
-		  return call && (typeof call === "object" || typeof call === "function") ? call : self;
-		};
-	
-		babelHelpers;
-	
-		var Children = {
-			only: function (children) {
-				return children && children[0] || null;
-			}
-		};
-	
-		function proptype() {}
-		proptype.isRequired = proptype;
-	
-		var PropTypes = {
-			element: proptype,
-			func: proptype,
-			shape: function () {
-				return proptype;
-			}
-		};
-	
-		var storeShape = PropTypes.shape({
-		  subscribe: PropTypes.func.isRequired,
-		  dispatch: PropTypes.func.isRequired,
-		  getState: PropTypes.func.isRequired
-		});
-	
-		/**
-		 * Prints a warning in the console if it exists.
-		 *
-		 * @param {String} message The warning message.
-		 * @returns {void}
-		 */
-		function warning(message) {
-		  /* eslint-disable no-console */
-		  if (typeof console !== 'undefined' && typeof console.error === 'function') {
-		    console.error(message);
-		  }
-		  /* eslint-enable no-console */
-		  try {
-		    // This error was thrown as a convenience so that you can use this stack
-		    // to find the callsite that caused this warning to fire.
-		    throw new Error(message);
-		    /* eslint-disable no-empty */
-		  } catch (e) {}
-		  /* eslint-enable no-empty */
-		}
-	
-		var didWarnAboutReceivingStore = false;
-		function warnAboutReceivingStore() {
-		  if (didWarnAboutReceivingStore) {
-		    return;
-		  }
-		  didWarnAboutReceivingStore = true;
-	
-		  warning('<Provider> does not support changing `store` on the fly. ' + 'It is most likely that you see this error because you updated to ' + 'Redux 2.x and React Redux 2.x which no longer hot reload reducers ' + 'automatically. See https://github.com/reactjs/react-redux/releases/' + 'tag/v2.0.0 for the migration instructions.');
-		}
-	
-		var Provider = function (_Component) {
-		  babelHelpers.inherits(Provider, _Component);
-	
-		  Provider.prototype.getChildContext = function getChildContext() {
-		    return { store: this.store };
-		  };
-	
-		  function Provider(props, context) {
-		    babelHelpers.classCallCheck(this, Provider);
-	
-		    var _this = babelHelpers.possibleConstructorReturn(this, _Component.call(this, props, context));
-	
-		    _this.store = props.store;
-		    return _this;
-		  }
-	
-		  Provider.prototype.render = function render() {
-		    var children = this.props.children;
-	
-		    return Children.only(children);
-		  };
-	
-		  return Provider;
-		}(preact.Component);
-	
-		if (true) {
-		  Provider.prototype.componentWillReceiveProps = function (nextProps) {
-		    var store = this.store;
-		    var nextStore = nextProps.store;
-	
-	
-		    if (store !== nextStore) {
-		      warnAboutReceivingStore();
-		    }
-		  };
-		}
-	
-		Provider.childContextTypes = {
-		  store: storeShape.isRequired
-		};
-	
-		function shallowEqual(objA, objB) {
-		  if (objA === objB) {
-		    return true;
-		  }
-	
-		  var keysA = Object.keys(objA);
-		  var keysB = Object.keys(objB);
-	
-		  if (keysA.length !== keysB.length) {
-		    return false;
-		  }
-	
-		  // Test for A's keys different from B.
-		  var hasOwn = Object.prototype.hasOwnProperty;
-		  for (var i = 0; i < keysA.length; i++) {
-		    if (!hasOwn.call(objB, keysA[i]) || objA[keysA[i]] !== objB[keysA[i]]) {
-		      return false;
-		    }
-		  }
-	
-		  return true;
-		}
-	
-		function wrapActionCreators(actionCreators) {
-		  return function (dispatch) {
-		    return redux.bindActionCreators(actionCreators, dispatch);
-		  };
-		}
-	
-		var isObjectLike = __commonjs(function (module) {
-		  /**
-		   * Checks if `value` is object-like. A value is object-like if it's not `null`
-		   * and has a `typeof` result of "object".
-		   *
-		   * @static
-		   * @memberOf _
-		   * @since 4.0.0
-		   * @category Lang
-		   * @param {*} value The value to check.
-		   * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-		   * @example
-		   *
-		   * _.isObjectLike({});
-		   * // => true
-		   *
-		   * _.isObjectLike([1, 2, 3]);
-		   * // => true
-		   *
-		   * _.isObjectLike(_.noop);
-		   * // => false
-		   *
-		   * _.isObjectLike(null);
-		   * // => false
-		   */
-		  function isObjectLike(value) {
-		    return !!value && typeof value == 'object';
-		  }
-	
-		  module.exports = isObjectLike;
-		});
-	
-		var require$$0 = isObjectLike && typeof isObjectLike === 'object' && 'default' in isObjectLike ? isObjectLike['default'] : isObjectLike;
-	
-		var _isHostObject = __commonjs(function (module) {
-		  /**
-		   * Checks if `value` is a host object in IE < 9.
-		   *
-		   * @private
-		   * @param {*} value The value to check.
-		   * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
-		   */
-		  function isHostObject(value) {
-		    // Many host objects are `Object` objects that can coerce to strings
-		    // despite having improperly defined `toString` methods.
-		    var result = false;
-		    if (value != null && typeof value.toString != 'function') {
-		      try {
-		        result = !!(value + '');
-		      } catch (e) {}
-		    }
-		    return result;
-		  }
-	
-		  module.exports = isHostObject;
-		});
-	
-		var require$$1 = _isHostObject && typeof _isHostObject === 'object' && 'default' in _isHostObject ? _isHostObject['default'] : _isHostObject;
-	
-		var _getPrototype = __commonjs(function (module) {
-		  /* Built-in method references for those with the same name as other `lodash` methods. */
-		  var nativeGetPrototype = Object.getPrototypeOf;
-	
-		  /**
-		   * Gets the `[[Prototype]]` of `value`.
-		   *
-		   * @private
-		   * @param {*} value The value to query.
-		   * @returns {null|Object} Returns the `[[Prototype]]`.
-		   */
-		  function getPrototype(value) {
-		    return nativeGetPrototype(Object(value));
-		  }
-	
-		  module.exports = getPrototype;
-		});
-	
-		var require$$2 = _getPrototype && typeof _getPrototype === 'object' && 'default' in _getPrototype ? _getPrototype['default'] : _getPrototype;
-	
-		var isPlainObject = __commonjs(function (module) {
-		  var getPrototype = require$$2,
-		      isHostObject = require$$1,
-		      isObjectLike = require$$0;
-	
-		  /** `Object#toString` result references. */
-		  var objectTag = '[object Object]';
-	
-		  /** Used for built-in method references. */
-		  var objectProto = Object.prototype;
-	
-		  /** Used to resolve the decompiled source of functions. */
-		  var funcToString = Function.prototype.toString;
-	
-		  /** Used to check objects for own properties. */
-		  var hasOwnProperty = objectProto.hasOwnProperty;
-	
-		  /** Used to infer the `Object` constructor. */
-		  var objectCtorString = funcToString.call(Object);
-	
-		  /**
-		   * Used to resolve the
-		   * [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
-		   * of values.
-		   */
-		  var objectToString = objectProto.toString;
-	
-		  /**
-		   * Checks if `value` is a plain object, that is, an object created by the
-		   * `Object` constructor or one with a `[[Prototype]]` of `null`.
-		   *
-		   * @static
-		   * @memberOf _
-		   * @since 0.8.0
-		   * @category Lang
-		   * @param {*} value The value to check.
-		   * @returns {boolean} Returns `true` if `value` is a plain object,
-		   *  else `false`.
-		   * @example
-		   *
-		   * function Foo() {
-		   *   this.a = 1;
-		   * }
-		   *
-		   * _.isPlainObject(new Foo);
-		   * // => false
-		   *
-		   * _.isPlainObject([1, 2, 3]);
-		   * // => false
-		   *
-		   * _.isPlainObject({ 'x': 0, 'y': 0 });
-		   * // => true
-		   *
-		   * _.isPlainObject(Object.create(null));
-		   * // => true
-		   */
-		  function isPlainObject(value) {
-		    if (!isObjectLike(value) || objectToString.call(value) != objectTag || isHostObject(value)) {
-		      return false;
-		    }
-		    var proto = getPrototype(value);
-		    if (proto === null) {
-		      return true;
-		    }
-		    var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
-		    return typeof Ctor == 'function' && Ctor instanceof Ctor && funcToString.call(Ctor) == objectCtorString;
-		  }
-	
-		  module.exports = isPlainObject;
-		});
-	
-		var isPlainObject$1 = isPlainObject && typeof isPlainObject === 'object' && 'default' in isPlainObject ? isPlainObject['default'] : isPlainObject;
-	
-		var index = __commonjs(function (module) {
-		    /**
-		     * Copyright 2015, Yahoo! Inc.
-		     * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
-		     */
-		    'use strict';
-	
-		    var REACT_STATICS = {
-		        childContextTypes: true,
-		        contextTypes: true,
-		        defaultProps: true,
-		        displayName: true,
-		        getDefaultProps: true,
-		        mixins: true,
-		        propTypes: true,
-		        type: true
-		    };
-	
-		    var KNOWN_STATICS = {
-		        name: true,
-		        length: true,
-		        prototype: true,
-		        caller: true,
-		        arguments: true,
-		        arity: true
-		    };
-	
-		    module.exports = function hoistNonReactStatics(targetComponent, sourceComponent) {
-		        if (typeof sourceComponent !== 'string') {
-		            // don't hoist over string (html) components
-		            var keys = Object.getOwnPropertyNames(sourceComponent);
-		            for (var i = 0; i < keys.length; ++i) {
-		                if (!REACT_STATICS[keys[i]] && !KNOWN_STATICS[keys[i]]) {
-		                    try {
-		                        targetComponent[keys[i]] = sourceComponent[keys[i]];
-		                    } catch (error) {}
-		                }
-		            }
-		        }
-	
-		        return targetComponent;
-		    };
-		});
-	
-		var hoistStatics = index && typeof index === 'object' && 'default' in index ? index['default'] : index;
-	
-		var invariant = __commonjs(function (module) {
-		  /**
-		   * Copyright 2013-2015, Facebook, Inc.
-		   * All rights reserved.
-		   *
-		   * This source code is licensed under the BSD-style license found in the
-		   * LICENSE file in the root directory of this source tree. An additional grant
-		   * of patent rights can be found in the PATENTS file in the same directory.
-		   */
-	
-		  'use strict';
-	
-		  /**
-		   * Use invariant() to assert state which your program assumes to be true.
-		   *
-		   * Provide sprintf-style format (only %s is supported) and arguments
-		   * to provide information about what broke and what you were
-		   * expecting.
-		   *
-		   * The invariant message will be stripped in production, but the invariant
-		   * will remain to ensure logic does not differ in production.
-		   */
-	
-		  var NODE_ENV = 'development';
-	
-		  var invariant = function (condition, format, a, b, c, d, e, f) {
-		    if (NODE_ENV !== 'production') {
-		      if (format === undefined) {
-		        throw new Error('invariant requires an error message argument');
-		      }
-		    }
-	
-		    if (!condition) {
-		      var error;
-		      if (format === undefined) {
-		        error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-		      } else {
-		        var args = [a, b, c, d, e, f];
-		        var argIndex = 0;
-		        error = new Error(format.replace(/%s/g, function () {
-		          return args[argIndex++];
-		        }));
-		        error.name = 'Invariant Violation';
-		      }
-	
-		      error.framesToPop = 1; // we don't care about invariant's own frame
-		      throw error;
-		    }
-		  };
-	
-		  module.exports = invariant;
-		});
-	
-		var invariant$1 = invariant && typeof invariant === 'object' && 'default' in invariant ? invariant['default'] : invariant;
-	
-		var defaultMapStateToProps = function (state) {
-		  return {};
-		}; // eslint-disable-line no-unused-vars
-		var defaultMapDispatchToProps = function (dispatch) {
-		  return { dispatch: dispatch };
-		};
-		var defaultMergeProps = function (stateProps, dispatchProps, parentProps) {
-		  return babelHelpers.extends({}, parentProps, stateProps, dispatchProps);
-		};
-	
-		function getDisplayName(WrappedComponent) {
-		  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
-		}
-	
-		var errorObject = { value: null };
-		function tryCatch(fn, ctx) {
-		  try {
-		    return fn.apply(ctx);
-		  } catch (e) {
-		    errorObject.value = e;
-		    return errorObject;
-		  }
-		}
-	
-		// Helps track hot reloading.
-		var nextVersion = 0;
-	
-		function connect(mapStateToProps, mapDispatchToProps, mergeProps) {
-		  var options = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
-	
-		  var shouldSubscribe = Boolean(mapStateToProps);
-		  var mapState = mapStateToProps || defaultMapStateToProps;
-	
-		  var mapDispatch = void 0;
-		  if (typeof mapDispatchToProps === 'function') {
-		    mapDispatch = mapDispatchToProps;
-		  } else if (!mapDispatchToProps) {
-		    mapDispatch = defaultMapDispatchToProps;
-		  } else {
-		    mapDispatch = wrapActionCreators(mapDispatchToProps);
-		  }
-	
-		  var finalMergeProps = mergeProps || defaultMergeProps;
-		  var _options$pure = options.pure;
-		  var pure = _options$pure === undefined ? true : _options$pure;
-		  var _options$withRef = options.withRef;
-		  var withRef = _options$withRef === undefined ? false : _options$withRef;
-	
-		  var checkMergedEquals = pure && finalMergeProps !== defaultMergeProps;
-	
-		  // Helps track hot reloading.
-		  var version = nextVersion++;
-	
-		  return function wrapWithConnect(WrappedComponent) {
-		    var connectDisplayName = 'Connect(' + getDisplayName(WrappedComponent) + ')';
-	
-		    function checkStateShape(props, methodName) {
-		      if (!isPlainObject$1(props)) {
-		        warning(methodName + '() in ' + connectDisplayName + ' must return a plain object. ' + ('Instead received ' + props + '.'));
-		      }
-		    }
-	
-		    function computeMergedProps(stateProps, dispatchProps, parentProps) {
-		      var mergedProps = finalMergeProps(stateProps, dispatchProps, parentProps);
-		      if (true) {
-		        checkStateShape(mergedProps, 'mergeProps');
-		      }
-		      return mergedProps;
-		    }
-	
-		    var Connect = function (_Component) {
-		      babelHelpers.inherits(Connect, _Component);
-	
-		      Connect.prototype.shouldComponentUpdate = function shouldComponentUpdate() {
-		        return !pure || this.haveOwnPropsChanged || this.hasStoreStateChanged;
-		      };
-	
-		      function Connect(props, context) {
-		        babelHelpers.classCallCheck(this, Connect);
-	
-		        var _this = babelHelpers.possibleConstructorReturn(this, _Component.call(this, props, context));
-	
-		        _this.version = version;
-		        _this.store = props.store || context.store;
-	
-		        invariant$1(_this.store, 'Could not find "store" in either the context or ' + ('props of "' + connectDisplayName + '". ') + 'Either wrap the root component in a <Provider>, ' + ('or explicitly pass "store" as a prop to "' + connectDisplayName + '".'));
-	
-		        var storeState = _this.store.getState();
-		        _this.state = { storeState: storeState };
-		        _this.clearCache();
-		        return _this;
-		      }
-	
-		      Connect.prototype.computeStateProps = function computeStateProps(store, props) {
-		        if (!this.finalMapStateToProps) {
-		          return this.configureFinalMapState(store, props);
-		        }
-	
-		        var state = store.getState();
-		        var stateProps = this.doStatePropsDependOnOwnProps ? this.finalMapStateToProps(state, props) : this.finalMapStateToProps(state);
-	
-		        if (true) {
-		          checkStateShape(stateProps, 'mapStateToProps');
-		        }
-		        return stateProps;
-		      };
-	
-		      Connect.prototype.configureFinalMapState = function configureFinalMapState(store, props) {
-		        var mappedState = mapState(store.getState(), props);
-		        var isFactory = typeof mappedState === 'function';
-	
-		        this.finalMapStateToProps = isFactory ? mappedState : mapState;
-		        this.doStatePropsDependOnOwnProps = this.finalMapStateToProps.length !== 1;
-	
-		        if (isFactory) {
-		          return this.computeStateProps(store, props);
-		        }
-	
-		        if (true) {
-		          checkStateShape(mappedState, 'mapStateToProps');
-		        }
-		        return mappedState;
-		      };
-	
-		      Connect.prototype.computeDispatchProps = function computeDispatchProps(store, props) {
-		        if (!this.finalMapDispatchToProps) {
-		          return this.configureFinalMapDispatch(store, props);
-		        }
-	
-		        var dispatch = store.dispatch;
-	
-		        var dispatchProps = this.doDispatchPropsDependOnOwnProps ? this.finalMapDispatchToProps(dispatch, props) : this.finalMapDispatchToProps(dispatch);
-	
-		        if (true) {
-		          checkStateShape(dispatchProps, 'mapDispatchToProps');
-		        }
-		        return dispatchProps;
-		      };
-	
-		      Connect.prototype.configureFinalMapDispatch = function configureFinalMapDispatch(store, props) {
-		        var mappedDispatch = mapDispatch(store.dispatch, props);
-		        var isFactory = typeof mappedDispatch === 'function';
-	
-		        this.finalMapDispatchToProps = isFactory ? mappedDispatch : mapDispatch;
-		        this.doDispatchPropsDependOnOwnProps = this.finalMapDispatchToProps.length !== 1;
-	
-		        if (isFactory) {
-		          return this.computeDispatchProps(store, props);
-		        }
-	
-		        if (true) {
-		          checkStateShape(mappedDispatch, 'mapDispatchToProps');
-		        }
-		        return mappedDispatch;
-		      };
-	
-		      Connect.prototype.updateStatePropsIfNeeded = function updateStatePropsIfNeeded() {
-		        var nextStateProps = this.computeStateProps(this.store, this.props);
-		        if (this.stateProps && shallowEqual(nextStateProps, this.stateProps)) {
-		          return false;
-		        }
-	
-		        this.stateProps = nextStateProps;
-		        return true;
-		      };
-	
-		      Connect.prototype.updateDispatchPropsIfNeeded = function updateDispatchPropsIfNeeded() {
-		        var nextDispatchProps = this.computeDispatchProps(this.store, this.props);
-		        if (this.dispatchProps && shallowEqual(nextDispatchProps, this.dispatchProps)) {
-		          return false;
-		        }
-	
-		        this.dispatchProps = nextDispatchProps;
-		        return true;
-		      };
-	
-		      Connect.prototype.updateMergedPropsIfNeeded = function updateMergedPropsIfNeeded() {
-		        var nextMergedProps = computeMergedProps(this.stateProps, this.dispatchProps, this.props);
-		        if (this.mergedProps && checkMergedEquals && shallowEqual(nextMergedProps, this.mergedProps)) {
-		          return false;
-		        }
-	
-		        this.mergedProps = nextMergedProps;
-		        return true;
-		      };
-	
-		      Connect.prototype.isSubscribed = function isSubscribed() {
-		        return typeof this.unsubscribe === 'function';
-		      };
-	
-		      Connect.prototype.trySubscribe = function trySubscribe() {
-		        if (shouldSubscribe && !this.unsubscribe) {
-		          this.unsubscribe = this.store.subscribe(this.handleChange.bind(this));
-		          this.handleChange();
-		        }
-		      };
-	
-		      Connect.prototype.tryUnsubscribe = function tryUnsubscribe() {
-		        if (this.unsubscribe) {
-		          this.unsubscribe();
-		          this.unsubscribe = null;
-		        }
-		      };
-	
-		      Connect.prototype.componentDidMount = function componentDidMount() {
-		        this.trySubscribe();
-		      };
-	
-		      Connect.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-		        if (!pure || !shallowEqual(nextProps, this.props)) {
-		          this.haveOwnPropsChanged = true;
-		        }
-		      };
-	
-		      Connect.prototype.componentWillUnmount = function componentWillUnmount() {
-		        this.tryUnsubscribe();
-		        this.clearCache();
-		      };
-	
-		      Connect.prototype.clearCache = function clearCache() {
-		        this.dispatchProps = null;
-		        this.stateProps = null;
-		        this.mergedProps = null;
-		        this.haveOwnPropsChanged = true;
-		        this.hasStoreStateChanged = true;
-		        this.haveStatePropsBeenPrecalculated = false;
-		        this.statePropsPrecalculationError = null;
-		        this.renderedElement = null;
-		        this.finalMapDispatchToProps = null;
-		        this.finalMapStateToProps = null;
-		      };
-	
-		      Connect.prototype.handleChange = function handleChange() {
-		        if (!this.unsubscribe) {
-		          return;
-		        }
-	
-		        var storeState = this.store.getState();
-		        var prevStoreState = this.state.storeState;
-		        if (pure && prevStoreState === storeState) {
-		          return;
-		        }
-	
-		        if (pure && !this.doStatePropsDependOnOwnProps) {
-		          var haveStatePropsChanged = tryCatch(this.updateStatePropsIfNeeded, this);
-		          if (!haveStatePropsChanged) {
-		            return;
-		          }
-		          if (haveStatePropsChanged === errorObject) {
-		            this.statePropsPrecalculationError = errorObject.value;
-		          }
-		          this.haveStatePropsBeenPrecalculated = true;
-		        }
-	
-		        this.hasStoreStateChanged = true;
-		        this.setState({ storeState: storeState });
-		      };
-	
-		      Connect.prototype.getWrappedInstance = function getWrappedInstance() {
-		        invariant$1(withRef, 'To access the wrapped instance, you need to specify ' + '{ withRef: true } as the fourth argument of the connect() call.');
-	
-		        return this.refs.wrappedInstance;
-		      };
-	
-		      Connect.prototype.render = function render() {
-		        var haveOwnPropsChanged = this.haveOwnPropsChanged;
-		        var hasStoreStateChanged = this.hasStoreStateChanged;
-		        var haveStatePropsBeenPrecalculated = this.haveStatePropsBeenPrecalculated;
-		        var statePropsPrecalculationError = this.statePropsPrecalculationError;
-		        var renderedElement = this.renderedElement;
-	
-	
-		        this.haveOwnPropsChanged = false;
-		        this.hasStoreStateChanged = false;
-		        this.haveStatePropsBeenPrecalculated = false;
-		        this.statePropsPrecalculationError = null;
-	
-		        if (statePropsPrecalculationError) {
-		          throw statePropsPrecalculationError;
-		        }
-	
-		        var shouldUpdateStateProps = true;
-		        var shouldUpdateDispatchProps = true;
-		        if (pure && renderedElement) {
-		          shouldUpdateStateProps = hasStoreStateChanged || haveOwnPropsChanged && this.doStatePropsDependOnOwnProps;
-		          shouldUpdateDispatchProps = haveOwnPropsChanged && this.doDispatchPropsDependOnOwnProps;
-		        }
-	
-		        var haveStatePropsChanged = false;
-		        var haveDispatchPropsChanged = false;
-		        if (haveStatePropsBeenPrecalculated) {
-		          haveStatePropsChanged = true;
-		        } else if (shouldUpdateStateProps) {
-		          haveStatePropsChanged = this.updateStatePropsIfNeeded();
-		        }
-		        if (shouldUpdateDispatchProps) {
-		          haveDispatchPropsChanged = this.updateDispatchPropsIfNeeded();
-		        }
-	
-		        var haveMergedPropsChanged = true;
-		        if (haveStatePropsChanged || haveDispatchPropsChanged || haveOwnPropsChanged) {
-		          haveMergedPropsChanged = this.updateMergedPropsIfNeeded();
-		        } else {
-		          haveMergedPropsChanged = false;
-		        }
-	
-		        if (!haveMergedPropsChanged && renderedElement) {
-		          return renderedElement;
-		        }
-	
-		        if (withRef) {
-		          this.renderedElement = preact.h(WrappedComponent, babelHelpers.extends({}, this.mergedProps, {
-		            ref: 'wrappedInstance'
-		          }));
-		        } else {
-		          this.renderedElement = preact.h(WrappedComponent, this.mergedProps);
-		        }
-	
-		        return this.renderedElement;
-		      };
-	
-		      return Connect;
-		    }(preact.Component);
-	
-		    Connect.displayName = connectDisplayName;
-		    Connect.WrappedComponent = WrappedComponent;
-		    Connect.contextTypes = {
-		      store: storeShape
-		    };
-	
-	
-		    if (true) {
-		      Connect.prototype.componentWillUpdate = function componentWillUpdate() {
-		        if (this.version === version) {
-		          return;
-		        }
-	
-		        // We are hot reloading!
-		        this.version = version;
-		        this.trySubscribe();
-		        this.clearCache();
-		      };
-		    }
-	
-		    return hoistStatics(Connect, WrappedComponent);
-		  };
-		}
-	
-		exports.Provider = Provider;
-		exports.connect = connect;
+		 true ? module.exports = factory(__webpack_require__(3), __webpack_require__(4)) :
+		typeof define === 'function' && define.amd ? define(['preact', 'redux'], factory) :
+		(global.preactRedux = factory(global.preact,global.redux));
+	}(this, (function (preact,redux) {
 
-	}));
+	var Children = {
+		only: function (children) {
+			return children && children[0] || null;
+		}
+	};
+
+	function proptype() {}
+	proptype.isRequired = proptype;
+
+	var PropTypes = {
+		element: proptype,
+		func: proptype,
+		shape: function () {
+			return proptype;
+		}
+	};
+
+	var storeShape = PropTypes.shape({
+	  subscribe: PropTypes.func.isRequired,
+	  dispatch: PropTypes.func.isRequired,
+	  getState: PropTypes.func.isRequired
+	});
+
+	/**
+	 * Prints a warning in the console if it exists.
+	 *
+	 * @param {String} message The warning message.
+	 * @returns {void}
+	 */
+	function warning(message) {
+	  /* eslint-disable no-console */
+	  if (typeof console !== 'undefined' && typeof console.error === 'function') {
+	    console.error(message);
+	  }
+	  /* eslint-enable no-console */
+	  try {
+	    // This error was thrown as a convenience so that you can use this stack
+	    // to find the callsite that caused this warning to fire.
+	    throw new Error(message);
+	    /* eslint-disable no-empty */
+	  } catch (e) {}
+	  /* eslint-enable no-empty */
+	}
+
+	var classCallCheck = function (instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	};
+
+	var _extends = Object.assign || function (target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i];
+
+	    for (var key in source) {
+	      if (Object.prototype.hasOwnProperty.call(source, key)) {
+	        target[key] = source[key];
+	      }
+	    }
+	  }
+
+	  return target;
+	};
+
+	var inherits = function (subClass, superClass) {
+	  if (typeof superClass !== "function" && superClass !== null) {
+	    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+	  }
+
+	  subClass.prototype = Object.create(superClass && superClass.prototype, {
+	    constructor: {
+	      value: subClass,
+	      enumerable: false,
+	      writable: true,
+	      configurable: true
+	    }
+	  });
+	  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	};
+
+	var possibleConstructorReturn = function (self, call) {
+	  if (!self) {
+	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	  }
+
+	  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+	};
+
+	var didWarnAboutReceivingStore = false;
+	function warnAboutReceivingStore() {
+	  if (didWarnAboutReceivingStore) {
+	    return;
+	  }
+	  didWarnAboutReceivingStore = true;
+
+	  warning('<Provider> does not support changing `store` on the fly. ' + 'It is most likely that you see this error because you updated to ' + 'Redux 2.x and React Redux 2.x which no longer hot reload reducers ' + 'automatically. See https://github.com/reactjs/react-redux/releases/' + 'tag/v2.0.0 for the migration instructions.');
+	}
+
+	var Provider = function (_Component) {
+	  inherits(Provider, _Component);
+
+	  Provider.prototype.getChildContext = function getChildContext() {
+	    return { store: this.store };
+	  };
+
+	  function Provider(props, context) {
+	    classCallCheck(this, Provider);
+
+	    var _this = possibleConstructorReturn(this, _Component.call(this, props, context));
+
+	    _this.store = props.store;
+	    return _this;
+	  }
+
+	  Provider.prototype.render = function render() {
+	    var children = this.props.children;
+
+	    return Children.only(children);
+	  };
+
+	  return Provider;
+	}(preact.Component);
+
+	if (true) {
+	  Provider.prototype.componentWillReceiveProps = function (nextProps) {
+	    var store = this.store;
+	    var nextStore = nextProps.store;
+
+
+	    if (store !== nextStore) {
+	      warnAboutReceivingStore();
+	    }
+	  };
+	}
+
+	Provider.childContextTypes = {
+	  store: storeShape.isRequired
+	};
+
+	function shallowEqual(objA, objB) {
+	  if (objA === objB) {
+	    return true;
+	  }
+
+	  var keysA = Object.keys(objA);
+	  var keysB = Object.keys(objB);
+
+	  if (keysA.length !== keysB.length) {
+	    return false;
+	  }
+
+	  // Test for A's keys different from B.
+	  var hasOwn = Object.prototype.hasOwnProperty;
+	  for (var i = 0; i < keysA.length; i++) {
+	    if (!hasOwn.call(objB, keysA[i]) || objA[keysA[i]] !== objB[keysA[i]]) {
+	      return false;
+	    }
+	  }
+
+	  return true;
+	}
+
+	function wrapActionCreators(actionCreators) {
+	  return function (dispatch) {
+	    return redux.bindActionCreators(actionCreators, dispatch);
+	  };
+	}
+
+	/**
+	 * Creates a unary function that invokes `func` with its argument transformed.
+	 *
+	 * @private
+	 * @param {Function} func The function to wrap.
+	 * @param {Function} transform The argument transform.
+	 * @returns {Function} Returns the new function.
+	 */
+	function overArg(func, transform) {
+	  return function (arg) {
+	    return func(transform(arg));
+	  };
+	}
+
+	/** Built-in value references. */
+	var getPrototype = overArg(Object.getPrototypeOf, Object);
+
+	/**
+	 * Checks if `value` is a host object in IE < 9.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
+	 */
+	function isHostObject(value) {
+	  // Many host objects are `Object` objects that can coerce to strings
+	  // despite having improperly defined `toString` methods.
+	  var result = false;
+	  if (value != null && typeof value.toString != 'function') {
+	    try {
+	      result = !!(value + '');
+	    } catch (e) {}
+	  }
+	  return result;
+	}
+
+	/**
+	 * Checks if `value` is object-like. A value is object-like if it's not `null`
+	 * and has a `typeof` result of "object".
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 * @example
+	 *
+	 * _.isObjectLike({});
+	 * // => true
+	 *
+	 * _.isObjectLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObjectLike(_.noop);
+	 * // => false
+	 *
+	 * _.isObjectLike(null);
+	 * // => false
+	 */
+	function isObjectLike(value) {
+	  return !!value && typeof value == 'object';
+	}
+
+	/** `Object#toString` result references. */
+	var objectTag = '[object Object]';
+
+	/** Used for built-in method references. */
+	var funcProto = Function.prototype;
+	var objectProto = Object.prototype;
+	/** Used to resolve the decompiled source of functions. */
+	var funcToString = funcProto.toString;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/** Used to infer the `Object` constructor. */
+	var objectCtorString = funcToString.call(Object);
+
+	/**
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objectToString = objectProto.toString;
+
+	/**
+	 * Checks if `value` is a plain object, that is, an object created by the
+	 * `Object` constructor or one with a `[[Prototype]]` of `null`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.8.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
+	 * @example
+	 *
+	 * function Foo() {
+	 *   this.a = 1;
+	 * }
+	 *
+	 * _.isPlainObject(new Foo);
+	 * // => false
+	 *
+	 * _.isPlainObject([1, 2, 3]);
+	 * // => false
+	 *
+	 * _.isPlainObject({ 'x': 0, 'y': 0 });
+	 * // => true
+	 *
+	 * _.isPlainObject(Object.create(null));
+	 * // => true
+	 */
+	function isPlainObject(value) {
+	    if (!isObjectLike(value) || objectToString.call(value) != objectTag || isHostObject(value)) {
+	        return false;
+	    }
+	    var proto = getPrototype(value);
+	    if (proto === null) {
+	        return true;
+	    }
+	    var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
+	    return typeof Ctor == 'function' && Ctor instanceof Ctor && funcToString.call(Ctor) == objectCtorString;
+	}
+
+	function interopDefault(ex) {
+		return ex && typeof ex === 'object' && 'default' in ex ? ex['default'] : ex;
+	}
+
+	function createCommonjsModule(fn, module) {
+		return module = { exports: {} }, fn(module, module.exports), module.exports;
+	}
+
+	var index = createCommonjsModule(function (module) {
+	    /**
+	     * Copyright 2015, Yahoo! Inc.
+	     * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+	     */
+	    'use strict';
+
+	    var REACT_STATICS = {
+	        childContextTypes: true,
+	        contextTypes: true,
+	        defaultProps: true,
+	        displayName: true,
+	        getDefaultProps: true,
+	        mixins: true,
+	        propTypes: true,
+	        type: true
+	    };
+
+	    var KNOWN_STATICS = {
+	        name: true,
+	        length: true,
+	        prototype: true,
+	        caller: true,
+	        arguments: true,
+	        arity: true
+	    };
+
+	    var isGetOwnPropertySymbolsAvailable = typeof Object.getOwnPropertySymbols === 'function';
+
+	    module.exports = function hoistNonReactStatics(targetComponent, sourceComponent, customStatics) {
+	        if (typeof sourceComponent !== 'string') {
+	            // don't hoist over string (html) components
+	            var keys = Object.getOwnPropertyNames(sourceComponent);
+
+	            /* istanbul ignore else */
+	            if (isGetOwnPropertySymbolsAvailable) {
+	                keys = keys.concat(Object.getOwnPropertySymbols(sourceComponent));
+	            }
+
+	            for (var i = 0; i < keys.length; ++i) {
+	                if (!REACT_STATICS[keys[i]] && !KNOWN_STATICS[keys[i]] && (!customStatics || !customStatics[keys[i]])) {
+	                    try {
+	                        targetComponent[keys[i]] = sourceComponent[keys[i]];
+	                    } catch (error) {}
+	                }
+	            }
+	        }
+
+	        return targetComponent;
+	    };
+	});
+
+	var hoistStatics = interopDefault(index);
+
+	function invariant () {}
+
+	var defaultMapStateToProps = function (state) {
+	  return {};
+	}; // eslint-disable-line no-unused-vars
+	var defaultMapDispatchToProps = function (dispatch) {
+	  return { dispatch: dispatch };
+	};
+	var defaultMergeProps = function (stateProps, dispatchProps, parentProps) {
+	  return _extends({}, parentProps, stateProps, dispatchProps);
+	};
+
+	function getDisplayName(WrappedComponent) {
+	  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+	}
+
+	var errorObject = { value: null };
+	function tryCatch(fn, ctx) {
+	  try {
+	    return fn.apply(ctx);
+	  } catch (e) {
+	    errorObject.value = e;
+	    return errorObject;
+	  }
+	}
+
+	// Helps track hot reloading.
+	var nextVersion = 0;
+
+	function connect(mapStateToProps, mapDispatchToProps, mergeProps) {
+	  var options = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
+
+	  var shouldSubscribe = Boolean(mapStateToProps);
+	  var mapState = mapStateToProps || defaultMapStateToProps;
+
+	  var mapDispatch = void 0;
+	  if (typeof mapDispatchToProps === 'function') {
+	    mapDispatch = mapDispatchToProps;
+	  } else if (!mapDispatchToProps) {
+	    mapDispatch = defaultMapDispatchToProps;
+	  } else {
+	    mapDispatch = wrapActionCreators(mapDispatchToProps);
+	  }
+
+	  var finalMergeProps = mergeProps || defaultMergeProps;
+	  var _options$pure = options.pure;
+	  var pure = _options$pure === undefined ? true : _options$pure;
+	  var _options$withRef = options.withRef;
+	  var withRef = _options$withRef === undefined ? false : _options$withRef;
+
+	  var checkMergedEquals = pure && finalMergeProps !== defaultMergeProps;
+
+	  // Helps track hot reloading.
+	  var version = nextVersion++;
+
+	  return function wrapWithConnect(WrappedComponent) {
+	    var connectDisplayName = 'Connect(' + getDisplayName(WrappedComponent) + ')';
+
+	    function checkStateShape(props, methodName) {
+	      if (!isPlainObject(props)) {
+	        warning(methodName + '() in ' + connectDisplayName + ' must return a plain object. ' + ('Instead received ' + props + '.'));
+	      }
+	    }
+
+	    function computeMergedProps(stateProps, dispatchProps, parentProps) {
+	      var mergedProps = finalMergeProps(stateProps, dispatchProps, parentProps);
+	      if (true) {
+	        checkStateShape(mergedProps, 'mergeProps');
+	      }
+	      return mergedProps;
+	    }
+
+	    var Connect = function (_Component) {
+	      inherits(Connect, _Component);
+
+	      Connect.prototype.shouldComponentUpdate = function shouldComponentUpdate() {
+	        return !pure || this.haveOwnPropsChanged || this.hasStoreStateChanged;
+	      };
+
+	      function Connect(props, context) {
+	        classCallCheck(this, Connect);
+
+	        var _this = possibleConstructorReturn(this, _Component.call(this, props, context));
+
+	        _this.version = version;
+	        _this.store = props.store || context.store;
+
+	        invariant(_this.store, 'Could not find "store" in either the context or ' + ('props of "' + connectDisplayName + '". ') + 'Either wrap the root component in a <Provider>, ' + ('or explicitly pass "store" as a prop to "' + connectDisplayName + '".'));
+
+	        var storeState = _this.store.getState();
+	        _this.state = { storeState: storeState };
+	        _this.clearCache();
+	        return _this;
+	      }
+
+	      Connect.prototype.computeStateProps = function computeStateProps(store, props) {
+	        if (!this.finalMapStateToProps) {
+	          return this.configureFinalMapState(store, props);
+	        }
+
+	        var state = store.getState();
+	        var stateProps = this.doStatePropsDependOnOwnProps ? this.finalMapStateToProps(state, props) : this.finalMapStateToProps(state);
+
+	        if (true) {
+	          checkStateShape(stateProps, 'mapStateToProps');
+	        }
+	        return stateProps;
+	      };
+
+	      Connect.prototype.configureFinalMapState = function configureFinalMapState(store, props) {
+	        var mappedState = mapState(store.getState(), props);
+	        var isFactory = typeof mappedState === 'function';
+
+	        this.finalMapStateToProps = isFactory ? mappedState : mapState;
+	        this.doStatePropsDependOnOwnProps = this.finalMapStateToProps.length !== 1;
+
+	        if (isFactory) {
+	          return this.computeStateProps(store, props);
+	        }
+
+	        if (true) {
+	          checkStateShape(mappedState, 'mapStateToProps');
+	        }
+	        return mappedState;
+	      };
+
+	      Connect.prototype.computeDispatchProps = function computeDispatchProps(store, props) {
+	        if (!this.finalMapDispatchToProps) {
+	          return this.configureFinalMapDispatch(store, props);
+	        }
+
+	        var dispatch = store.dispatch;
+
+	        var dispatchProps = this.doDispatchPropsDependOnOwnProps ? this.finalMapDispatchToProps(dispatch, props) : this.finalMapDispatchToProps(dispatch);
+
+	        if (true) {
+	          checkStateShape(dispatchProps, 'mapDispatchToProps');
+	        }
+	        return dispatchProps;
+	      };
+
+	      Connect.prototype.configureFinalMapDispatch = function configureFinalMapDispatch(store, props) {
+	        var mappedDispatch = mapDispatch(store.dispatch, props);
+	        var isFactory = typeof mappedDispatch === 'function';
+
+	        this.finalMapDispatchToProps = isFactory ? mappedDispatch : mapDispatch;
+	        this.doDispatchPropsDependOnOwnProps = this.finalMapDispatchToProps.length !== 1;
+
+	        if (isFactory) {
+	          return this.computeDispatchProps(store, props);
+	        }
+
+	        if (true) {
+	          checkStateShape(mappedDispatch, 'mapDispatchToProps');
+	        }
+	        return mappedDispatch;
+	      };
+
+	      Connect.prototype.updateStatePropsIfNeeded = function updateStatePropsIfNeeded() {
+	        var nextStateProps = this.computeStateProps(this.store, this.props);
+	        if (this.stateProps && shallowEqual(nextStateProps, this.stateProps)) {
+	          return false;
+	        }
+
+	        this.stateProps = nextStateProps;
+	        return true;
+	      };
+
+	      Connect.prototype.updateDispatchPropsIfNeeded = function updateDispatchPropsIfNeeded() {
+	        var nextDispatchProps = this.computeDispatchProps(this.store, this.props);
+	        if (this.dispatchProps && shallowEqual(nextDispatchProps, this.dispatchProps)) {
+	          return false;
+	        }
+
+	        this.dispatchProps = nextDispatchProps;
+	        return true;
+	      };
+
+	      Connect.prototype.updateMergedPropsIfNeeded = function updateMergedPropsIfNeeded() {
+	        var nextMergedProps = computeMergedProps(this.stateProps, this.dispatchProps, this.props);
+	        if (this.mergedProps && checkMergedEquals && shallowEqual(nextMergedProps, this.mergedProps)) {
+	          return false;
+	        }
+
+	        this.mergedProps = nextMergedProps;
+	        return true;
+	      };
+
+	      Connect.prototype.isSubscribed = function isSubscribed() {
+	        return typeof this.unsubscribe === 'function';
+	      };
+
+	      Connect.prototype.trySubscribe = function trySubscribe() {
+	        if (shouldSubscribe && !this.unsubscribe) {
+	          this.unsubscribe = this.store.subscribe(this.handleChange.bind(this));
+	          this.handleChange();
+	        }
+	      };
+
+	      Connect.prototype.tryUnsubscribe = function tryUnsubscribe() {
+	        if (this.unsubscribe) {
+	          this.unsubscribe();
+	          this.unsubscribe = null;
+	        }
+	      };
+
+	      Connect.prototype.componentDidMount = function componentDidMount() {
+	        this.trySubscribe();
+	      };
+
+	      Connect.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+	        if (!pure || !shallowEqual(nextProps, this.props)) {
+	          this.haveOwnPropsChanged = true;
+	        }
+	      };
+
+	      Connect.prototype.componentWillUnmount = function componentWillUnmount() {
+	        this.tryUnsubscribe();
+	        this.clearCache();
+	      };
+
+	      Connect.prototype.clearCache = function clearCache() {
+	        this.dispatchProps = null;
+	        this.stateProps = null;
+	        this.mergedProps = null;
+	        this.haveOwnPropsChanged = true;
+	        this.hasStoreStateChanged = true;
+	        this.haveStatePropsBeenPrecalculated = false;
+	        this.statePropsPrecalculationError = null;
+	        this.renderedElement = null;
+	        this.finalMapDispatchToProps = null;
+	        this.finalMapStateToProps = null;
+	      };
+
+	      Connect.prototype.handleChange = function handleChange() {
+	        if (!this.unsubscribe) {
+	          return;
+	        }
+
+	        var storeState = this.store.getState();
+	        var prevStoreState = this.state.storeState;
+	        if (pure && prevStoreState === storeState) {
+	          return;
+	        }
+
+	        if (pure && !this.doStatePropsDependOnOwnProps) {
+	          var haveStatePropsChanged = tryCatch(this.updateStatePropsIfNeeded, this);
+	          if (!haveStatePropsChanged) {
+	            return;
+	          }
+	          if (haveStatePropsChanged === errorObject) {
+	            this.statePropsPrecalculationError = errorObject.value;
+	          }
+	          this.haveStatePropsBeenPrecalculated = true;
+	        }
+
+	        this.hasStoreStateChanged = true;
+	        this.setState({ storeState: storeState });
+	      };
+
+	      Connect.prototype.getWrappedInstance = function getWrappedInstance() {
+	        invariant(withRef, 'To access the wrapped instance, you need to specify ' + '{ withRef: true } as the fourth argument of the connect() call.');
+
+	        return this.refs.wrappedInstance;
+	      };
+
+	      Connect.prototype.render = function render() {
+	        var haveOwnPropsChanged = this.haveOwnPropsChanged;
+	        var hasStoreStateChanged = this.hasStoreStateChanged;
+	        var haveStatePropsBeenPrecalculated = this.haveStatePropsBeenPrecalculated;
+	        var statePropsPrecalculationError = this.statePropsPrecalculationError;
+	        var renderedElement = this.renderedElement;
+
+
+	        this.haveOwnPropsChanged = false;
+	        this.hasStoreStateChanged = false;
+	        this.haveStatePropsBeenPrecalculated = false;
+	        this.statePropsPrecalculationError = null;
+
+	        if (statePropsPrecalculationError) {
+	          throw statePropsPrecalculationError;
+	        }
+
+	        var shouldUpdateStateProps = true;
+	        var shouldUpdateDispatchProps = true;
+	        if (pure && renderedElement) {
+	          shouldUpdateStateProps = hasStoreStateChanged || haveOwnPropsChanged && this.doStatePropsDependOnOwnProps;
+	          shouldUpdateDispatchProps = haveOwnPropsChanged && this.doDispatchPropsDependOnOwnProps;
+	        }
+
+	        var haveStatePropsChanged = false;
+	        var haveDispatchPropsChanged = false;
+	        if (haveStatePropsBeenPrecalculated) {
+	          haveStatePropsChanged = true;
+	        } else if (shouldUpdateStateProps) {
+	          haveStatePropsChanged = this.updateStatePropsIfNeeded();
+	        }
+	        if (shouldUpdateDispatchProps) {
+	          haveDispatchPropsChanged = this.updateDispatchPropsIfNeeded();
+	        }
+
+	        var haveMergedPropsChanged = true;
+	        if (haveStatePropsChanged || haveDispatchPropsChanged || haveOwnPropsChanged) {
+	          haveMergedPropsChanged = this.updateMergedPropsIfNeeded();
+	        } else {
+	          haveMergedPropsChanged = false;
+	        }
+
+	        if (!haveMergedPropsChanged && renderedElement) {
+	          return renderedElement;
+	        }
+
+	        if (withRef) {
+	          this.renderedElement = preact.h(WrappedComponent, _extends({}, this.mergedProps, {
+	            ref: 'wrappedInstance'
+	          }));
+	        } else {
+	          this.renderedElement = preact.h(WrappedComponent, this.mergedProps);
+	        }
+
+	        return this.renderedElement;
+	      };
+
+	      return Connect;
+	    }(preact.Component);
+
+	    Connect.displayName = connectDisplayName;
+	    Connect.WrappedComponent = WrappedComponent;
+	    Connect.contextTypes = {
+	      store: storeShape
+	    };
+
+
+	    if (true) {
+	      Connect.prototype.componentWillUpdate = function componentWillUpdate() {
+	        if (this.version === version) {
+	          return;
+	        }
+
+	        // We are hot reloading!
+	        this.version = version;
+	        this.trySubscribe();
+	        this.clearCache();
+	      };
+	    }
+
+	    return hoistStatics(Connect, WrappedComponent);
+	  };
+	}
+
+
+
+	var lib = {
+		Provider: Provider,
+		connect: connect
+	};
+
+	return lib;
+
+	})));
 
 
 /***/ },
@@ -1375,36 +1311,36 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	'use strict';
 	
 	exports.__esModule = true;
 	exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
 	
-	var _createStore = __webpack_require__(6);
+	var _createStore = __webpack_require__(5);
 	
 	var _createStore2 = _interopRequireDefault(_createStore);
 	
-	var _combineReducers = __webpack_require__(14);
+	var _combineReducers = __webpack_require__(20);
 	
 	var _combineReducers2 = _interopRequireDefault(_combineReducers);
 	
-	var _bindActionCreators = __webpack_require__(16);
+	var _bindActionCreators = __webpack_require__(22);
 	
 	var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 	
-	var _applyMiddleware = __webpack_require__(17);
+	var _applyMiddleware = __webpack_require__(23);
 	
 	var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 	
-	var _compose = __webpack_require__(18);
+	var _compose = __webpack_require__(24);
 	
 	var _compose2 = _interopRequireDefault(_compose);
 	
-	var _warning = __webpack_require__(15);
+	var _warning = __webpack_require__(21);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
 	/*
 	* This is a dummy function to check if the function name has been altered by minification.
@@ -1412,161 +1348,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	function isCrushed() {}
 	
-	if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
-	  (0, _warning2["default"])('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
+	if (false) {
+	  (0, _warning2['default'])('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
 	}
 	
-	exports.createStore = _createStore2["default"];
-	exports.combineReducers = _combineReducers2["default"];
-	exports.bindActionCreators = _bindActionCreators2["default"];
-	exports.applyMiddleware = _applyMiddleware2["default"];
-	exports.compose = _compose2["default"];
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+	exports.createStore = _createStore2['default'];
+	exports.combineReducers = _combineReducers2['default'];
+	exports.bindActionCreators = _bindActionCreators2['default'];
+	exports.applyMiddleware = _applyMiddleware2['default'];
+	exports.compose = _compose2['default'];
 
 /***/ },
 /* 5 */
-/***/ function(module, exports) {
-
-	// shim for using process in browser
-	
-	var process = module.exports = {};
-	
-	// cached from whatever global is present so that test runners that stub it
-	// don't break things.  But we need to wrap it in a try catch in case it is
-	// wrapped in strict mode code which doesn't define any globals.  It's inside a
-	// function because try/catches deoptimize in certain engines.
-	
-	var cachedSetTimeout;
-	var cachedClearTimeout;
-	
-	(function () {
-	  try {
-	    cachedSetTimeout = setTimeout;
-	  } catch (e) {
-	    cachedSetTimeout = function () {
-	      throw new Error('setTimeout is not defined');
-	    }
-	  }
-	  try {
-	    cachedClearTimeout = clearTimeout;
-	  } catch (e) {
-	    cachedClearTimeout = function () {
-	      throw new Error('clearTimeout is not defined');
-	    }
-	  }
-	} ())
-	var queue = [];
-	var draining = false;
-	var currentQueue;
-	var queueIndex = -1;
-	
-	function cleanUpNextTick() {
-	    if (!draining || !currentQueue) {
-	        return;
-	    }
-	    draining = false;
-	    if (currentQueue.length) {
-	        queue = currentQueue.concat(queue);
-	    } else {
-	        queueIndex = -1;
-	    }
-	    if (queue.length) {
-	        drainQueue();
-	    }
-	}
-	
-	function drainQueue() {
-	    if (draining) {
-	        return;
-	    }
-	    var timeout = cachedSetTimeout.call(null, cleanUpNextTick);
-	    draining = true;
-	
-	    var len = queue.length;
-	    while(len) {
-	        currentQueue = queue;
-	        queue = [];
-	        while (++queueIndex < len) {
-	            if (currentQueue) {
-	                currentQueue[queueIndex].run();
-	            }
-	        }
-	        queueIndex = -1;
-	        len = queue.length;
-	    }
-	    currentQueue = null;
-	    draining = false;
-	    cachedClearTimeout.call(null, timeout);
-	}
-	
-	process.nextTick = function (fun) {
-	    var args = new Array(arguments.length - 1);
-	    if (arguments.length > 1) {
-	        for (var i = 1; i < arguments.length; i++) {
-	            args[i - 1] = arguments[i];
-	        }
-	    }
-	    queue.push(new Item(fun, args));
-	    if (queue.length === 1 && !draining) {
-	        cachedSetTimeout.call(null, drainQueue, 0);
-	    }
-	};
-	
-	// v8 likes predictible objects
-	function Item(fun, array) {
-	    this.fun = fun;
-	    this.array = array;
-	}
-	Item.prototype.run = function () {
-	    this.fun.apply(null, this.array);
-	};
-	process.title = 'browser';
-	process.browser = true;
-	process.env = {};
-	process.argv = [];
-	process.version = ''; // empty string to avoid regexp issues
-	process.versions = {};
-	
-	function noop() {}
-	
-	process.on = noop;
-	process.addListener = noop;
-	process.once = noop;
-	process.off = noop;
-	process.removeListener = noop;
-	process.removeAllListeners = noop;
-	process.emit = noop;
-	
-	process.binding = function (name) {
-	    throw new Error('process.binding is not supported');
-	};
-	
-	process.cwd = function () { return '/' };
-	process.chdir = function (dir) {
-	    throw new Error('process.chdir is not supported');
-	};
-	process.umask = function() { return 0; };
-
-
-/***/ },
-/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	exports.ActionTypes = undefined;
-	exports["default"] = createStore;
+	exports['default'] = createStore;
 	
-	var _isPlainObject = __webpack_require__(7);
+	var _isPlainObject = __webpack_require__(6);
 	
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 	
-	var _symbolObservable = __webpack_require__(12);
+	var _symbolObservable = __webpack_require__(16);
 	
 	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
 	/**
 	 * These are private action types reserved by Redux.
@@ -1589,7 +1399,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Function} reducer A function that returns the next state tree, given
 	 * the current state tree and the action to handle.
 	 *
-	 * @param {any} [initialState] The initial state. You may optionally specify it
+	 * @param {any} [preloadedState] The initial state. You may optionally specify it
 	 * to hydrate the state from the server in universal apps, or to restore a
 	 * previously serialized user session.
 	 * If you use `combineReducers` to produce the root reducer function, this must be
@@ -1603,12 +1413,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {Store} A Redux store that lets you read the state, dispatch actions
 	 * and subscribe to changes.
 	 */
-	function createStore(reducer, initialState, enhancer) {
+	function createStore(reducer, preloadedState, enhancer) {
 	  var _ref2;
 	
-	  if (typeof initialState === 'function' && typeof enhancer === 'undefined') {
-	    enhancer = initialState;
-	    initialState = undefined;
+	  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+	    enhancer = preloadedState;
+	    preloadedState = undefined;
 	  }
 	
 	  if (typeof enhancer !== 'undefined') {
@@ -1616,7 +1426,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      throw new Error('Expected the enhancer to be a function.');
 	    }
 	
-	    return enhancer(createStore)(reducer, initialState);
+	    return enhancer(createStore)(reducer, preloadedState);
 	  }
 	
 	  if (typeof reducer !== 'function') {
@@ -1624,7 +1434,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  var currentReducer = reducer;
-	  var currentState = initialState;
+	  var currentState = preloadedState;
 	  var currentListeners = [];
 	  var nextListeners = currentListeners;
 	  var isDispatching = false;
@@ -1716,7 +1526,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * return something else (for example, a Promise you can await).
 	   */
 	  function dispatch(action) {
-	    if (!(0, _isPlainObject2["default"])(action)) {
+	    if (!(0, _isPlainObject2['default'])(action)) {
 	      throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
 	    }
 	
@@ -1781,7 +1591,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * be used to unsubscribe the observable from the store, and prevent further
 	       * emission of values from the observable.
 	       */
-	
 	      subscribe: function subscribe(observer) {
 	        if (typeof observer !== 'object') {
 	          throw new TypeError('Expected the observer to be an object.');
@@ -1797,7 +1606,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var unsubscribe = outerSubscribe(observeState);
 	        return { unsubscribe: unsubscribe };
 	      }
-	    }, _ref[_symbolObservable2["default"]] = function () {
+	    }, _ref[_symbolObservable2['default']] = function () {
 	      return this;
 	    }, _ref;
 	  }
@@ -1812,38 +1621,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	    subscribe: subscribe,
 	    getState: getState,
 	    replaceReducer: replaceReducer
-	  }, _ref2[_symbolObservable2["default"]] = observable, _ref2;
+	  }, _ref2[_symbolObservable2['default']] = observable, _ref2;
 	}
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var getPrototype = __webpack_require__(8),
-	    isHostObject = __webpack_require__(10),
-	    isObjectLike = __webpack_require__(11);
+	var baseGetTag = __webpack_require__(7),
+	    getPrototype = __webpack_require__(13),
+	    isObjectLike = __webpack_require__(15);
 	
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
 	
 	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
+	var funcProto = Function.prototype,
+	    objectProto = Object.prototype;
 	
 	/** Used to resolve the decompiled source of functions. */
-	var funcToString = Function.prototype.toString;
+	var funcToString = funcProto.toString;
 	
 	/** Used to check objects for own properties. */
 	var hasOwnProperty = objectProto.hasOwnProperty;
 	
 	/** Used to infer the `Object` constructor. */
 	var objectCtorString = funcToString.call(Object);
-	
-	/**
-	 * Used to resolve the
-	 * [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var objectToString = objectProto.toString;
 	
 	/**
 	 * Checks if `value` is a plain object, that is, an object created by the
@@ -1854,8 +1657,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @since 0.8.0
 	 * @category Lang
 	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a plain object,
-	 *  else `false`.
+	 * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
 	 * @example
 	 *
 	 * function Foo() {
@@ -1875,8 +1677,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // => true
 	 */
 	function isPlainObject(value) {
-	  if (!isObjectLike(value) ||
-	      objectToString.call(value) != objectTag || isHostObject(value)) {
+	  if (!isObjectLike(value) || baseGetTag(value) != objectTag) {
 	    return false;
 	  }
 	  var proto = getPrototype(value);
@@ -1884,40 +1685,184 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return true;
 	  }
 	  var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
-	  return (typeof Ctor == 'function' &&
-	    Ctor instanceof Ctor && funcToString.call(Ctor) == objectCtorString);
+	  return typeof Ctor == 'function' && Ctor instanceof Ctor &&
+	    funcToString.call(Ctor) == objectCtorString;
 	}
 	
 	module.exports = isPlainObject;
 
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var overArg = __webpack_require__(9);
+	var Symbol = __webpack_require__(8),
+	    getRawTag = __webpack_require__(11),
+	    objectToString = __webpack_require__(12);
 	
-	/* Built-in method references for those with the same name as other `lodash` methods. */
-	var nativeGetPrototype = Object.getPrototypeOf;
+	/** `Object#toString` result references. */
+	var nullTag = '[object Null]',
+	    undefinedTag = '[object Undefined]';
+	
+	/** Built-in value references. */
+	var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
 	
 	/**
-	 * Gets the `[[Prototype]]` of `value`.
+	 * The base implementation of `getTag` without fallbacks for buggy environments.
 	 *
 	 * @private
 	 * @param {*} value The value to query.
-	 * @returns {null|Object} Returns the `[[Prototype]]`.
+	 * @returns {string} Returns the `toStringTag`.
 	 */
-	var getPrototype = overArg(nativeGetPrototype, Object);
+	function baseGetTag(value) {
+	  if (value == null) {
+	    return value === undefined ? undefinedTag : nullTag;
+	  }
+	  value = Object(value);
+	  return (symToStringTag && symToStringTag in value)
+	    ? getRawTag(value)
+	    : objectToString(value);
+	}
+	
+	module.exports = baseGetTag;
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var root = __webpack_require__(9);
+	
+	/** Built-in value references. */
+	var Symbol = root.Symbol;
+	
+	module.exports = Symbol;
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var freeGlobal = __webpack_require__(10);
+	
+	/** Detect free variable `self`. */
+	var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+	
+	/** Used as a reference to the global object. */
+	var root = freeGlobal || freeSelf || Function('return this')();
+	
+	module.exports = root;
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
+	var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+	
+	module.exports = freeGlobal;
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Symbol = __webpack_require__(8);
+	
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+	
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+	
+	/**
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var nativeObjectToString = objectProto.toString;
+	
+	/** Built-in value references. */
+	var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+	
+	/**
+	 * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+	 *
+	 * @private
+	 * @param {*} value The value to query.
+	 * @returns {string} Returns the raw `toStringTag`.
+	 */
+	function getRawTag(value) {
+	  var isOwn = hasOwnProperty.call(value, symToStringTag),
+	      tag = value[symToStringTag];
+	
+	  try {
+	    value[symToStringTag] = undefined;
+	    var unmasked = true;
+	  } catch (e) {}
+	
+	  var result = nativeObjectToString.call(value);
+	  if (unmasked) {
+	    if (isOwn) {
+	      value[symToStringTag] = tag;
+	    } else {
+	      delete value[symToStringTag];
+	    }
+	  }
+	  return result;
+	}
+	
+	module.exports = getRawTag;
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+	
+	/**
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var nativeObjectToString = objectProto.toString;
+	
+	/**
+	 * Converts `value` to a string using `Object.prototype.toString`.
+	 *
+	 * @private
+	 * @param {*} value The value to convert.
+	 * @returns {string} Returns the converted string.
+	 */
+	function objectToString(value) {
+	  return nativeObjectToString.call(value);
+	}
+	
+	module.exports = objectToString;
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var overArg = __webpack_require__(14);
+	
+	/** Built-in value references. */
+	var getPrototype = overArg(Object.getPrototypeOf, Object);
 	
 	module.exports = getPrototype;
 
 
 /***/ },
-/* 9 */
+/* 14 */
 /***/ function(module, exports) {
 
 	/**
-	 * Creates a function that invokes `func` with its first argument transformed.
+	 * Creates a unary function that invokes `func` with its argument transformed.
 	 *
 	 * @private
 	 * @param {Function} func The function to wrap.
@@ -1934,33 +1879,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 10 */
-/***/ function(module, exports) {
-
-	/**
-	 * Checks if `value` is a host object in IE < 9.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
-	 */
-	function isHostObject(value) {
-	  // Many host objects are `Object` objects that can coerce to strings
-	  // despite having improperly defined `toString` methods.
-	  var result = false;
-	  if (value != null && typeof value.toString != 'function') {
-	    try {
-	      result = !!(value + '');
-	    } catch (e) {}
-	  }
-	  return result;
-	}
-	
-	module.exports = isHostObject;
-
-
-/***/ },
-/* 11 */
+/* 15 */
 /***/ function(module, exports) {
 
 	/**
@@ -1988,39 +1907,90 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // => false
 	 */
 	function isObjectLike(value) {
-	  return !!value && typeof value == 'object';
+	  return value != null && typeof value == 'object';
 	}
 	
 	module.exports = isObjectLike;
 
 
 /***/ },
-/* 12 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {/* global window */
-	'use strict';
-	
-	module.exports = __webpack_require__(13)(global || window || this);
-	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+	module.exports = __webpack_require__(17);
+
 
 /***/ },
-/* 13 */
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _ponyfill = __webpack_require__(19);
+	
+	var _ponyfill2 = _interopRequireDefault(_ponyfill);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	var root; /* global window */
+	
+	
+	if (typeof self !== 'undefined') {
+	  root = self;
+	} else if (typeof window !== 'undefined') {
+	  root = window;
+	} else if (typeof global !== 'undefined') {
+	  root = global;
+	} else if (true) {
+	  root = module;
+	} else {
+	  root = Function('return this')();
+	}
+	
+	var result = (0, _ponyfill2['default'])(root);
+	exports['default'] = result;
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(18)(module)))
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 19 */
 /***/ function(module, exports) {
 
 	'use strict';
 	
-	module.exports = function symbolObservablePonyfill(root) {
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports['default'] = symbolObservablePonyfill;
+	function symbolObservablePonyfill(root) {
 		var result;
-		var Symbol = root.Symbol;
+		var _Symbol = root.Symbol;
 	
-		if (typeof Symbol === 'function') {
-			if (Symbol.observable) {
-				result = Symbol.observable;
+		if (typeof _Symbol === 'function') {
+			if (_Symbol.observable) {
+				result = _Symbol.observable;
 			} else {
-				result = Symbol('observable');
-				Symbol.observable = result;
+				result = _Symbol('observable');
+				_Symbol.observable = result;
 			}
 		} else {
 			result = '@@observable';
@@ -2029,27 +1999,26 @@ return /******/ (function(modules) { // webpackBootstrap
 		return result;
 	};
 
-
 /***/ },
-/* 14 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	'use strict';
 	
 	exports.__esModule = true;
-	exports["default"] = combineReducers;
+	exports['default'] = combineReducers;
 	
-	var _createStore = __webpack_require__(6);
+	var _createStore = __webpack_require__(5);
 	
-	var _isPlainObject = __webpack_require__(7);
+	var _isPlainObject = __webpack_require__(6);
 	
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 	
-	var _warning = __webpack_require__(15);
+	var _warning = __webpack_require__(21);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
 	function getUndefinedStateErrorMessage(key, action) {
 	  var actionType = action && action.type;
@@ -2058,20 +2027,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return 'Given action ' + actionName + ', reducer "' + key + '" returned undefined. ' + 'To ignore an action, you must explicitly return the previous state.';
 	}
 	
-	function getUnexpectedStateShapeWarningMessage(inputState, reducers, action) {
+	function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, unexpectedKeyCache) {
 	  var reducerKeys = Object.keys(reducers);
-	  var argumentName = action && action.type === _createStore.ActionTypes.INIT ? 'initialState argument passed to createStore' : 'previous state received by the reducer';
+	  var argumentName = action && action.type === _createStore.ActionTypes.INIT ? 'preloadedState argument passed to createStore' : 'previous state received by the reducer';
 	
 	  if (reducerKeys.length === 0) {
 	    return 'Store does not have a valid reducer. Make sure the argument passed ' + 'to combineReducers is an object whose values are reducers.';
 	  }
 	
-	  if (!(0, _isPlainObject2["default"])(inputState)) {
+	  if (!(0, _isPlainObject2['default'])(inputState)) {
 	    return 'The ' + argumentName + ' has unexpected type of "' + {}.toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] + '". Expected argument to be an object with the following ' + ('keys: "' + reducerKeys.join('", "') + '"');
 	  }
 	
 	  var unexpectedKeys = Object.keys(inputState).filter(function (key) {
-	    return !reducers.hasOwnProperty(key);
+	    return !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key];
+	  });
+	
+	  unexpectedKeys.forEach(function (key) {
+	    unexpectedKeyCache[key] = true;
 	  });
 	
 	  if (unexpectedKeys.length > 0) {
@@ -2116,11 +2089,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var finalReducers = {};
 	  for (var i = 0; i < reducerKeys.length; i++) {
 	    var key = reducerKeys[i];
+	
+	    if (false) {
+	      if (typeof reducers[key] === 'undefined') {
+	        (0, _warning2['default'])('No reducer provided for key "' + key + '"');
+	      }
+	    }
+	
 	    if (typeof reducers[key] === 'function') {
 	      finalReducers[key] = reducers[key];
 	    }
 	  }
 	  var finalReducerKeys = Object.keys(finalReducers);
+	
+	  if (false) {
+	    var unexpectedKeyCache = {};
+	  }
 	
 	  var sanityError;
 	  try {
@@ -2137,10 +2121,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      throw sanityError;
 	    }
 	
-	    if (process.env.NODE_ENV !== 'production') {
-	      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action);
+	    if (false) {
+	      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
 	      if (warningMessage) {
-	        (0, _warning2["default"])(warningMessage);
+	        (0, _warning2['default'])(warningMessage);
 	      }
 	    }
 	
@@ -2161,16 +2145,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return hasChanged ? nextState : state;
 	  };
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 15 */
+/* 21 */
 /***/ function(module, exports) {
 
 	'use strict';
 	
 	exports.__esModule = true;
-	exports["default"] = warning;
+	exports['default'] = warning;
 	/**
 	 * Prints a warning in the console if it exists.
 	 *
@@ -2194,13 +2177,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 16 */
+/* 22 */
 /***/ function(module, exports) {
 
 	'use strict';
 	
 	exports.__esModule = true;
-	exports["default"] = bindActionCreators;
+	exports['default'] = bindActionCreators;
 	function bindActionCreator(actionCreator, dispatch) {
 	  return function () {
 	    return dispatch(actionCreator.apply(undefined, arguments));
@@ -2250,7 +2233,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 17 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2259,13 +2242,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	exports["default"] = applyMiddleware;
+	exports['default'] = applyMiddleware;
 	
-	var _compose = __webpack_require__(18);
+	var _compose = __webpack_require__(24);
 	
 	var _compose2 = _interopRequireDefault(_compose);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
 	/**
 	 * Creates a store enhancer that applies middleware to the dispatch method
@@ -2289,8 +2272,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  return function (createStore) {
-	    return function (reducer, initialState, enhancer) {
-	      var store = createStore(reducer, initialState, enhancer);
+	    return function (reducer, preloadedState, enhancer) {
+	      var store = createStore(reducer, preloadedState, enhancer);
 	      var _dispatch = store.dispatch;
 	      var chain = [];
 	
@@ -2303,7 +2286,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      chain = middlewares.map(function (middleware) {
 	        return middleware(middlewareAPI);
 	      });
-	      _dispatch = _compose2["default"].apply(undefined, chain)(store.dispatch);
+	      _dispatch = _compose2['default'].apply(undefined, chain)(store.dispatch);
 	
 	      return _extends({}, store, {
 	        dispatch: _dispatch
@@ -2313,7 +2296,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 18 */
+/* 24 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2340,25 +2323,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return function (arg) {
 	      return arg;
 	    };
-	  } else {
-	    var _ret = function () {
-	      var last = funcs[funcs.length - 1];
-	      var rest = funcs.slice(0, -1);
-	      return {
-	        v: function v() {
-	          return rest.reduceRight(function (composed, f) {
-	            return f(composed);
-	          }, last.apply(undefined, arguments));
-	        }
-	      };
-	    }();
-	
-	    if (typeof _ret === "object") return _ret.v;
 	  }
+	
+	  if (funcs.length === 1) {
+	    return funcs[0];
+	  }
+	
+	  var last = funcs[funcs.length - 1];
+	  var rest = funcs.slice(0, -1);
+	  return function () {
+	    return rest.reduceRight(function (composed, f) {
+	      return f(composed);
+	    }, last.apply(undefined, arguments));
+	  };
 	}
 
 /***/ },
-/* 19 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2367,31 +2348,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _getOwnPropertyDescriptor = __webpack_require__(20);
+	var _getOwnPropertyDescriptor = __webpack_require__(26);
 	
 	var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
 	
-	var _extends2 = __webpack_require__(46);
+	var _extends2 = __webpack_require__(52);
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
@@ -2399,31 +2380,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _preact = __webpack_require__(3);
 	
-	var _reduxUndo = __webpack_require__(114);
+	var _reduxUndo = __webpack_require__(120);
 	
-	var _decko = __webpack_require__(119);
+	var _decko = __webpack_require__(125);
 	
-	var _icons = __webpack_require__(120);
+	var _icons = __webpack_require__(126);
 	
 	var _icons2 = _interopRequireDefault(_icons);
 	
-	var _card = __webpack_require__(121);
+	var _card = __webpack_require__(127);
 	
 	var _card2 = _interopRequireDefault(_card);
 	
-	var _scores = __webpack_require__(139);
+	var _scores = __webpack_require__(145);
 	
 	var _scores2 = _interopRequireDefault(_scores);
 	
-	var _resetButton = __webpack_require__(150);
+	var _resetButton = __webpack_require__(156);
 	
 	var _resetButton2 = _interopRequireDefault(_resetButton);
 	
-	var _button = __webpack_require__(151);
+	var _button = __webpack_require__(157);
 	
 	var _button2 = _interopRequireDefault(_button);
 	
-	var _congrats = __webpack_require__(159);
+	var _congrats = __webpack_require__(165);
 	
 	var _congrats2 = _interopRequireDefault(_congrats);
 	
@@ -2458,15 +2439,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return desc;
 	}
 	
-	var CLASSES = __webpack_require__(167);
-	__webpack_require__(168);
+	var CLASSES = __webpack_require__(173);
+	__webpack_require__(174);
 	
 	var Game = (_class = function (_Component) {
 	  (0, _inherits3.default)(Game, _Component);
 	
 	  function Game() {
 	    (0, _classCallCheck3.default)(this, Game);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Game).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (Game.__proto__ || (0, _getPrototypeOf2.default)(Game)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(Game, [{
@@ -2534,7 +2515,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_renderCards',
 	    value: function _renderCards() {
-	      var cards = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	      var cards = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 	
 	      var cardComponents = [];
 	
@@ -2550,58 +2531,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Game;
 
 /***/ },
-/* 20 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(21), __esModule: true };
+	module.exports = { "default": __webpack_require__(27), __esModule: true };
 
 /***/ },
-/* 21 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(22);
-	var $Object = __webpack_require__(40).Object;
+	__webpack_require__(28);
+	var $Object = __webpack_require__(46).Object;
 	module.exports = function getOwnPropertyDescriptor(it, key){
 	  return $Object.getOwnPropertyDescriptor(it, key);
 	};
 
 /***/ },
-/* 22 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
-	var toIObject                 = __webpack_require__(23)
-	  , $getOwnPropertyDescriptor = __webpack_require__(27).f;
+	var toIObject                 = __webpack_require__(29)
+	  , $getOwnPropertyDescriptor = __webpack_require__(33).f;
 	
-	__webpack_require__(38)('getOwnPropertyDescriptor', function(){
+	__webpack_require__(44)('getOwnPropertyDescriptor', function(){
 	  return function getOwnPropertyDescriptor(it, key){
 	    return $getOwnPropertyDescriptor(toIObject(it), key);
 	  };
 	});
 
 /***/ },
-/* 23 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// to indexed object, toObject with fallback for non-array-like ES3 strings
-	var IObject = __webpack_require__(24)
-	  , defined = __webpack_require__(26);
+	var IObject = __webpack_require__(30)
+	  , defined = __webpack_require__(32);
 	module.exports = function(it){
 	  return IObject(defined(it));
 	};
 
 /***/ },
-/* 24 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// fallback for non-array-like ES3 and non-enumerable old V8 strings
-	var cof = __webpack_require__(25);
+	var cof = __webpack_require__(31);
 	module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
 	  return cof(it) == 'String' ? it.split('') : Object(it);
 	};
 
 /***/ },
-/* 25 */
+/* 31 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -2611,7 +2592,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 26 */
+/* 32 */
 /***/ function(module, exports) {
 
 	// 7.2.1 RequireObjectCoercible(argument)
@@ -2621,18 +2602,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 27 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var pIE            = __webpack_require__(28)
-	  , createDesc     = __webpack_require__(29)
-	  , toIObject      = __webpack_require__(23)
-	  , toPrimitive    = __webpack_require__(30)
-	  , has            = __webpack_require__(32)
-	  , IE8_DOM_DEFINE = __webpack_require__(33)
+	var pIE            = __webpack_require__(34)
+	  , createDesc     = __webpack_require__(35)
+	  , toIObject      = __webpack_require__(29)
+	  , toPrimitive    = __webpack_require__(36)
+	  , has            = __webpack_require__(38)
+	  , IE8_DOM_DEFINE = __webpack_require__(39)
 	  , gOPD           = Object.getOwnPropertyDescriptor;
 	
-	exports.f = __webpack_require__(34) ? gOPD : function getOwnPropertyDescriptor(O, P){
+	exports.f = __webpack_require__(40) ? gOPD : function getOwnPropertyDescriptor(O, P){
 	  O = toIObject(O);
 	  P = toPrimitive(P, true);
 	  if(IE8_DOM_DEFINE)try {
@@ -2642,13 +2623,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 28 */
+/* 34 */
 /***/ function(module, exports) {
 
 	exports.f = {}.propertyIsEnumerable;
 
 /***/ },
-/* 29 */
+/* 35 */
 /***/ function(module, exports) {
 
 	module.exports = function(bitmap, value){
@@ -2661,11 +2642,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 30 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.1 ToPrimitive(input [, PreferredType])
-	var isObject = __webpack_require__(31);
+	var isObject = __webpack_require__(37);
 	// instead of the ES6 spec version, we didn't implement @@toPrimitive case
 	// and the second argument - flag - preferred type is a string
 	module.exports = function(it, S){
@@ -2678,7 +2659,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 31 */
+/* 37 */
 /***/ function(module, exports) {
 
 	module.exports = function(it){
@@ -2686,7 +2667,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 32 */
+/* 38 */
 /***/ function(module, exports) {
 
 	var hasOwnProperty = {}.hasOwnProperty;
@@ -2695,24 +2676,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 33 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = !__webpack_require__(34) && !__webpack_require__(35)(function(){
-	  return Object.defineProperty(__webpack_require__(36)('div'), 'a', {get: function(){ return 7; }}).a != 7;
+	module.exports = !__webpack_require__(40) && !__webpack_require__(41)(function(){
+	  return Object.defineProperty(__webpack_require__(42)('div'), 'a', {get: function(){ return 7; }}).a != 7;
 	});
 
 /***/ },
-/* 34 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Thank's IE8 for his funny defineProperty
-	module.exports = !__webpack_require__(35)(function(){
+	module.exports = !__webpack_require__(41)(function(){
 	  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
 	});
 
 /***/ },
-/* 35 */
+/* 41 */
 /***/ function(module, exports) {
 
 	module.exports = function(exec){
@@ -2724,11 +2705,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 36 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(31)
-	  , document = __webpack_require__(37).document
+	var isObject = __webpack_require__(37)
+	  , document = __webpack_require__(43).document
 	  // in old IE typeof document.createElement is 'object'
 	  , is = isObject(document) && isObject(document.createElement);
 	module.exports = function(it){
@@ -2736,7 +2717,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 37 */
+/* 43 */
 /***/ function(module, exports) {
 
 	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
@@ -2745,13 +2726,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
 
 /***/ },
-/* 38 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// most Object methods by ES6 should accept primitives
-	var $export = __webpack_require__(39)
-	  , core    = __webpack_require__(40)
-	  , fails   = __webpack_require__(35);
+	var $export = __webpack_require__(45)
+	  , core    = __webpack_require__(46)
+	  , fails   = __webpack_require__(41);
 	module.exports = function(KEY, exec){
 	  var fn  = (core.Object || {})[KEY] || Object[KEY]
 	    , exp = {};
@@ -2760,13 +2741,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 39 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var global    = __webpack_require__(37)
-	  , core      = __webpack_require__(40)
-	  , ctx       = __webpack_require__(41)
-	  , hide      = __webpack_require__(43)
+	var global    = __webpack_require__(43)
+	  , core      = __webpack_require__(46)
+	  , ctx       = __webpack_require__(47)
+	  , hide      = __webpack_require__(49)
 	  , PROTOTYPE = 'prototype';
 	
 	var $export = function(type, name, source){
@@ -2826,18 +2807,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = $export;
 
 /***/ },
-/* 40 */
+/* 46 */
 /***/ function(module, exports) {
 
 	var core = module.exports = {version: '2.4.0'};
 	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 
 /***/ },
-/* 41 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// optional / simple context binding
-	var aFunction = __webpack_require__(42);
+	var aFunction = __webpack_require__(48);
 	module.exports = function(fn, that, length){
 	  aFunction(fn);
 	  if(that === undefined)return fn;
@@ -2858,7 +2839,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 42 */
+/* 48 */
 /***/ function(module, exports) {
 
 	module.exports = function(it){
@@ -2867,12 +2848,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 43 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var dP         = __webpack_require__(44)
-	  , createDesc = __webpack_require__(29);
-	module.exports = __webpack_require__(34) ? function(object, key, value){
+	var dP         = __webpack_require__(50)
+	  , createDesc = __webpack_require__(35);
+	module.exports = __webpack_require__(40) ? function(object, key, value){
 	  return dP.f(object, key, createDesc(1, value));
 	} : function(object, key, value){
 	  object[key] = value;
@@ -2880,15 +2861,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 44 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var anObject       = __webpack_require__(45)
-	  , IE8_DOM_DEFINE = __webpack_require__(33)
-	  , toPrimitive    = __webpack_require__(30)
+	var anObject       = __webpack_require__(51)
+	  , IE8_DOM_DEFINE = __webpack_require__(39)
+	  , toPrimitive    = __webpack_require__(36)
 	  , dP             = Object.defineProperty;
 	
-	exports.f = __webpack_require__(34) ? Object.defineProperty : function defineProperty(O, P, Attributes){
+	exports.f = __webpack_require__(40) ? Object.defineProperty : function defineProperty(O, P, Attributes){
 	  anObject(O);
 	  P = toPrimitive(P, true);
 	  anObject(Attributes);
@@ -2901,24 +2882,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 45 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(31);
+	var isObject = __webpack_require__(37);
 	module.exports = function(it){
 	  if(!isObject(it))throw TypeError(it + ' is not an object!');
 	  return it;
 	};
 
 /***/ },
-/* 46 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _assign = __webpack_require__(47);
+	var _assign = __webpack_require__(53);
 	
 	var _assign2 = _interopRequireDefault(_assign);
 	
@@ -2939,42 +2920,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 47 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(48), __esModule: true };
+	module.exports = { "default": __webpack_require__(54), __esModule: true };
 
 /***/ },
-/* 48 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(49);
-	module.exports = __webpack_require__(40).Object.assign;
+	__webpack_require__(55);
+	module.exports = __webpack_require__(46).Object.assign;
 
 /***/ },
-/* 49 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.3.1 Object.assign(target, source)
-	var $export = __webpack_require__(39);
+	var $export = __webpack_require__(45);
 	
-	$export($export.S + $export.F, 'Object', {assign: __webpack_require__(50)});
+	$export($export.S + $export.F, 'Object', {assign: __webpack_require__(56)});
 
 /***/ },
-/* 50 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	// 19.1.2.1 Object.assign(target, source, ...)
-	var getKeys  = __webpack_require__(51)
-	  , gOPS     = __webpack_require__(61)
-	  , pIE      = __webpack_require__(28)
-	  , toObject = __webpack_require__(62)
-	  , IObject  = __webpack_require__(24)
+	var getKeys  = __webpack_require__(57)
+	  , gOPS     = __webpack_require__(67)
+	  , pIE      = __webpack_require__(34)
+	  , toObject = __webpack_require__(68)
+	  , IObject  = __webpack_require__(30)
 	  , $assign  = Object.assign;
 	
 	// should work with symbols and should have deterministic property order (V8 bug)
-	module.exports = !$assign || __webpack_require__(35)(function(){
+	module.exports = !$assign || __webpack_require__(41)(function(){
 	  var A = {}
 	    , B = {}
 	    , S = Symbol()
@@ -2999,25 +2980,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	} : $assign;
 
 /***/ },
-/* 51 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-	var $keys       = __webpack_require__(52)
-	  , enumBugKeys = __webpack_require__(60);
+	var $keys       = __webpack_require__(58)
+	  , enumBugKeys = __webpack_require__(66);
 	
 	module.exports = Object.keys || function keys(O){
 	  return $keys(O, enumBugKeys);
 	};
 
 /***/ },
-/* 52 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var has          = __webpack_require__(32)
-	  , toIObject    = __webpack_require__(23)
-	  , arrayIndexOf = __webpack_require__(53)(false)
-	  , IE_PROTO     = __webpack_require__(57)('IE_PROTO');
+	var has          = __webpack_require__(38)
+	  , toIObject    = __webpack_require__(29)
+	  , arrayIndexOf = __webpack_require__(59)(false)
+	  , IE_PROTO     = __webpack_require__(63)('IE_PROTO');
 	
 	module.exports = function(object, names){
 	  var O      = toIObject(object)
@@ -3033,14 +3014,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 53 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// false -> Array#indexOf
 	// true  -> Array#includes
-	var toIObject = __webpack_require__(23)
-	  , toLength  = __webpack_require__(54)
-	  , toIndex   = __webpack_require__(56);
+	var toIObject = __webpack_require__(29)
+	  , toLength  = __webpack_require__(60)
+	  , toIndex   = __webpack_require__(62);
 	module.exports = function(IS_INCLUDES){
 	  return function($this, el, fromIndex){
 	    var O      = toIObject($this)
@@ -3059,18 +3040,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 54 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.15 ToLength
-	var toInteger = __webpack_require__(55)
+	var toInteger = __webpack_require__(61)
 	  , min       = Math.min;
 	module.exports = function(it){
 	  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
 	};
 
 /***/ },
-/* 55 */
+/* 61 */
 /***/ function(module, exports) {
 
 	// 7.1.4 ToInteger
@@ -3081,10 +3062,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 56 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var toInteger = __webpack_require__(55)
+	var toInteger = __webpack_require__(61)
 	  , max       = Math.max
 	  , min       = Math.min;
 	module.exports = function(index, length){
@@ -3093,20 +3074,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 57 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var shared = __webpack_require__(58)('keys')
-	  , uid    = __webpack_require__(59);
+	var shared = __webpack_require__(64)('keys')
+	  , uid    = __webpack_require__(65);
 	module.exports = function(key){
 	  return shared[key] || (shared[key] = uid(key));
 	};
 
 /***/ },
-/* 58 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var global = __webpack_require__(37)
+	var global = __webpack_require__(43)
 	  , SHARED = '__core-js_shared__'
 	  , store  = global[SHARED] || (global[SHARED] = {});
 	module.exports = function(key){
@@ -3114,7 +3095,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 59 */
+/* 65 */
 /***/ function(module, exports) {
 
 	var id = 0
@@ -3124,7 +3105,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 60 */
+/* 66 */
 /***/ function(module, exports) {
 
 	// IE 8- don't enum bug keys
@@ -3133,56 +3114,56 @@ return /******/ (function(modules) { // webpackBootstrap
 	).split(',');
 
 /***/ },
-/* 61 */
+/* 67 */
 /***/ function(module, exports) {
 
 	exports.f = Object.getOwnPropertySymbols;
 
 /***/ },
-/* 62 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.13 ToObject(argument)
-	var defined = __webpack_require__(26);
+	var defined = __webpack_require__(32);
 	module.exports = function(it){
 	  return Object(defined(it));
 	};
 
 /***/ },
-/* 63 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(64), __esModule: true };
+	module.exports = { "default": __webpack_require__(70), __esModule: true };
 
 /***/ },
-/* 64 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(65);
-	module.exports = __webpack_require__(40).Object.getPrototypeOf;
+	__webpack_require__(71);
+	module.exports = __webpack_require__(46).Object.getPrototypeOf;
 
 /***/ },
-/* 65 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.9 Object.getPrototypeOf(O)
-	var toObject        = __webpack_require__(62)
-	  , $getPrototypeOf = __webpack_require__(66);
+	var toObject        = __webpack_require__(68)
+	  , $getPrototypeOf = __webpack_require__(72);
 	
-	__webpack_require__(38)('getPrototypeOf', function(){
+	__webpack_require__(44)('getPrototypeOf', function(){
 	  return function getPrototypeOf(it){
 	    return $getPrototypeOf(toObject(it));
 	  };
 	});
 
 /***/ },
-/* 66 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-	var has         = __webpack_require__(32)
-	  , toObject    = __webpack_require__(62)
-	  , IE_PROTO    = __webpack_require__(57)('IE_PROTO')
+	var has         = __webpack_require__(38)
+	  , toObject    = __webpack_require__(68)
+	  , IE_PROTO    = __webpack_require__(63)('IE_PROTO')
 	  , ObjectProto = Object.prototype;
 	
 	module.exports = Object.getPrototypeOf || function(O){
@@ -3194,7 +3175,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 67 */
+/* 73 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3208,14 +3189,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 68 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _defineProperty = __webpack_require__(69);
+	var _defineProperty = __webpack_require__(75);
 	
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
 	
@@ -3240,38 +3221,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 69 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(70), __esModule: true };
+	module.exports = { "default": __webpack_require__(76), __esModule: true };
 
 /***/ },
-/* 70 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(71);
-	var $Object = __webpack_require__(40).Object;
+	__webpack_require__(77);
+	var $Object = __webpack_require__(46).Object;
 	module.exports = function defineProperty(it, key, desc){
 	  return $Object.defineProperty(it, key, desc);
 	};
 
 /***/ },
-/* 71 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $export = __webpack_require__(39);
+	var $export = __webpack_require__(45);
 	// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
-	$export($export.S + $export.F * !__webpack_require__(34), 'Object', {defineProperty: __webpack_require__(44).f});
+	$export($export.S + $export.F * !__webpack_require__(40), 'Object', {defineProperty: __webpack_require__(50).f});
 
 /***/ },
-/* 72 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _typeof2 = __webpack_require__(73);
+	var _typeof2 = __webpack_require__(79);
 	
 	var _typeof3 = _interopRequireDefault(_typeof2);
 	
@@ -3286,54 +3267,54 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 73 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _iterator = __webpack_require__(74);
+	var _iterator = __webpack_require__(80);
 	
 	var _iterator2 = _interopRequireDefault(_iterator);
 	
-	var _symbol = __webpack_require__(93);
+	var _symbol = __webpack_require__(99);
 	
 	var _symbol2 = _interopRequireDefault(_symbol);
 	
-	var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj; };
+	var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
 	  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
 	} : function (obj) {
-	  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+	  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
 	};
 
 /***/ },
-/* 74 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(75), __esModule: true };
+	module.exports = { "default": __webpack_require__(81), __esModule: true };
 
 /***/ },
-/* 75 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(76);
-	__webpack_require__(88);
-	module.exports = __webpack_require__(92).f('iterator');
+	__webpack_require__(82);
+	__webpack_require__(94);
+	module.exports = __webpack_require__(98).f('iterator');
 
 /***/ },
-/* 76 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var $at  = __webpack_require__(77)(true);
+	var $at  = __webpack_require__(83)(true);
 	
 	// 21.1.3.27 String.prototype[@@iterator]()
-	__webpack_require__(78)(String, 'String', function(iterated){
+	__webpack_require__(84)(String, 'String', function(iterated){
 	  this._t = String(iterated); // target
 	  this._i = 0;                // next index
 	// 21.1.5.2.1 %StringIteratorPrototype%.next()
@@ -3348,11 +3329,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 /***/ },
-/* 77 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var toInteger = __webpack_require__(55)
-	  , defined   = __webpack_require__(26);
+	var toInteger = __webpack_require__(61)
+	  , defined   = __webpack_require__(32);
 	// true  -> String#at
 	// false -> String#codePointAt
 	module.exports = function(TO_STRING){
@@ -3370,20 +3351,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 78 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var LIBRARY        = __webpack_require__(79)
-	  , $export        = __webpack_require__(39)
-	  , redefine       = __webpack_require__(80)
-	  , hide           = __webpack_require__(43)
-	  , has            = __webpack_require__(32)
-	  , Iterators      = __webpack_require__(81)
-	  , $iterCreate    = __webpack_require__(82)
-	  , setToStringTag = __webpack_require__(86)
-	  , getPrototypeOf = __webpack_require__(66)
-	  , ITERATOR       = __webpack_require__(87)('iterator')
+	var LIBRARY        = __webpack_require__(85)
+	  , $export        = __webpack_require__(45)
+	  , redefine       = __webpack_require__(86)
+	  , hide           = __webpack_require__(49)
+	  , has            = __webpack_require__(38)
+	  , Iterators      = __webpack_require__(87)
+	  , $iterCreate    = __webpack_require__(88)
+	  , setToStringTag = __webpack_require__(92)
+	  , getPrototypeOf = __webpack_require__(72)
+	  , ITERATOR       = __webpack_require__(93)('iterator')
 	  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
 	  , FF_ITERATOR    = '@@iterator'
 	  , KEYS           = 'keys'
@@ -3445,35 +3426,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 79 */
+/* 85 */
 /***/ function(module, exports) {
 
 	module.exports = true;
 
 /***/ },
-/* 80 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(43);
+	module.exports = __webpack_require__(49);
 
 /***/ },
-/* 81 */
+/* 87 */
 /***/ function(module, exports) {
 
 	module.exports = {};
 
 /***/ },
-/* 82 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var create         = __webpack_require__(83)
-	  , descriptor     = __webpack_require__(29)
-	  , setToStringTag = __webpack_require__(86)
+	var create         = __webpack_require__(89)
+	  , descriptor     = __webpack_require__(35)
+	  , setToStringTag = __webpack_require__(92)
 	  , IteratorPrototype = {};
 	
 	// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-	__webpack_require__(43)(IteratorPrototype, __webpack_require__(87)('iterator'), function(){ return this; });
+	__webpack_require__(49)(IteratorPrototype, __webpack_require__(93)('iterator'), function(){ return this; });
 	
 	module.exports = function(Constructor, NAME, next){
 	  Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
@@ -3481,27 +3462,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 83 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-	var anObject    = __webpack_require__(45)
-	  , dPs         = __webpack_require__(84)
-	  , enumBugKeys = __webpack_require__(60)
-	  , IE_PROTO    = __webpack_require__(57)('IE_PROTO')
+	var anObject    = __webpack_require__(51)
+	  , dPs         = __webpack_require__(90)
+	  , enumBugKeys = __webpack_require__(66)
+	  , IE_PROTO    = __webpack_require__(63)('IE_PROTO')
 	  , Empty       = function(){ /* empty */ }
 	  , PROTOTYPE   = 'prototype';
 	
 	// Create object with fake `null` prototype: use iframe Object with cleared prototype
 	var createDict = function(){
 	  // Thrash, waste and sodomy: IE GC bug
-	  var iframe = __webpack_require__(36)('iframe')
+	  var iframe = __webpack_require__(42)('iframe')
 	    , i      = enumBugKeys.length
 	    , lt     = '<'
 	    , gt     = '>'
 	    , iframeDocument;
 	  iframe.style.display = 'none';
-	  __webpack_require__(85).appendChild(iframe);
+	  __webpack_require__(91).appendChild(iframe);
 	  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
 	  // createDict = iframe.contentWindow.Object;
 	  // html.removeChild(iframe);
@@ -3528,14 +3509,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 84 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var dP       = __webpack_require__(44)
-	  , anObject = __webpack_require__(45)
-	  , getKeys  = __webpack_require__(51);
+	var dP       = __webpack_require__(50)
+	  , anObject = __webpack_require__(51)
+	  , getKeys  = __webpack_require__(57);
 	
-	module.exports = __webpack_require__(34) ? Object.defineProperties : function defineProperties(O, Properties){
+	module.exports = __webpack_require__(40) ? Object.defineProperties : function defineProperties(O, Properties){
 	  anObject(O);
 	  var keys   = getKeys(Properties)
 	    , length = keys.length
@@ -3546,30 +3527,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 85 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(37).document && document.documentElement;
+	module.exports = __webpack_require__(43).document && document.documentElement;
 
 /***/ },
-/* 86 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var def = __webpack_require__(44).f
-	  , has = __webpack_require__(32)
-	  , TAG = __webpack_require__(87)('toStringTag');
+	var def = __webpack_require__(50).f
+	  , has = __webpack_require__(38)
+	  , TAG = __webpack_require__(93)('toStringTag');
 	
 	module.exports = function(it, tag, stat){
 	  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
 	};
 
 /***/ },
-/* 87 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var store      = __webpack_require__(58)('wks')
-	  , uid        = __webpack_require__(59)
-	  , Symbol     = __webpack_require__(37).Symbol
+	var store      = __webpack_require__(64)('wks')
+	  , uid        = __webpack_require__(65)
+	  , Symbol     = __webpack_require__(43).Symbol
 	  , USE_SYMBOL = typeof Symbol == 'function';
 	
 	var $exports = module.exports = function(name){
@@ -3580,14 +3561,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	$exports.store = store;
 
 /***/ },
-/* 88 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(89);
-	var global        = __webpack_require__(37)
-	  , hide          = __webpack_require__(43)
-	  , Iterators     = __webpack_require__(81)
-	  , TO_STRING_TAG = __webpack_require__(87)('toStringTag');
+	__webpack_require__(95);
+	var global        = __webpack_require__(43)
+	  , hide          = __webpack_require__(49)
+	  , Iterators     = __webpack_require__(87)
+	  , TO_STRING_TAG = __webpack_require__(93)('toStringTag');
 	
 	for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
 	  var NAME       = collections[i]
@@ -3598,20 +3579,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 89 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var addToUnscopables = __webpack_require__(90)
-	  , step             = __webpack_require__(91)
-	  , Iterators        = __webpack_require__(81)
-	  , toIObject        = __webpack_require__(23);
+	var addToUnscopables = __webpack_require__(96)
+	  , step             = __webpack_require__(97)
+	  , Iterators        = __webpack_require__(87)
+	  , toIObject        = __webpack_require__(29);
 	
 	// 22.1.3.4 Array.prototype.entries()
 	// 22.1.3.13 Array.prototype.keys()
 	// 22.1.3.29 Array.prototype.values()
 	// 22.1.3.30 Array.prototype[@@iterator]()
-	module.exports = __webpack_require__(78)(Array, 'Array', function(iterated, kind){
+	module.exports = __webpack_require__(84)(Array, 'Array', function(iterated, kind){
 	  this._t = toIObject(iterated); // target
 	  this._i = 0;                   // next index
 	  this._k = kind;                // kind
@@ -3637,13 +3618,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	addToUnscopables('entries');
 
 /***/ },
-/* 90 */
+/* 96 */
 /***/ function(module, exports) {
 
 	module.exports = function(){ /* empty */ };
 
 /***/ },
-/* 91 */
+/* 97 */
 /***/ function(module, exports) {
 
 	module.exports = function(done, value){
@@ -3651,58 +3632,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 92 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports.f = __webpack_require__(87);
+	exports.f = __webpack_require__(93);
 
 /***/ },
-/* 93 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(94), __esModule: true };
+	module.exports = { "default": __webpack_require__(100), __esModule: true };
 
 /***/ },
-/* 94 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(95);
-	__webpack_require__(103);
-	__webpack_require__(104);
-	__webpack_require__(105);
-	module.exports = __webpack_require__(40).Symbol;
+	__webpack_require__(101);
+	__webpack_require__(109);
+	__webpack_require__(110);
+	__webpack_require__(111);
+	module.exports = __webpack_require__(46).Symbol;
 
 /***/ },
-/* 95 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	// ECMAScript 6 symbols shim
-	var global         = __webpack_require__(37)
-	  , has            = __webpack_require__(32)
-	  , DESCRIPTORS    = __webpack_require__(34)
-	  , $export        = __webpack_require__(39)
-	  , redefine       = __webpack_require__(80)
-	  , META           = __webpack_require__(96).KEY
-	  , $fails         = __webpack_require__(35)
-	  , shared         = __webpack_require__(58)
-	  , setToStringTag = __webpack_require__(86)
-	  , uid            = __webpack_require__(59)
-	  , wks            = __webpack_require__(87)
-	  , wksExt         = __webpack_require__(92)
-	  , wksDefine      = __webpack_require__(97)
-	  , keyOf          = __webpack_require__(98)
-	  , enumKeys       = __webpack_require__(99)
-	  , isArray        = __webpack_require__(100)
-	  , anObject       = __webpack_require__(45)
-	  , toIObject      = __webpack_require__(23)
-	  , toPrimitive    = __webpack_require__(30)
-	  , createDesc     = __webpack_require__(29)
-	  , _create        = __webpack_require__(83)
-	  , gOPNExt        = __webpack_require__(101)
-	  , $GOPD          = __webpack_require__(27)
-	  , $DP            = __webpack_require__(44)
-	  , $keys          = __webpack_require__(51)
+	var global         = __webpack_require__(43)
+	  , has            = __webpack_require__(38)
+	  , DESCRIPTORS    = __webpack_require__(40)
+	  , $export        = __webpack_require__(45)
+	  , redefine       = __webpack_require__(86)
+	  , META           = __webpack_require__(102).KEY
+	  , $fails         = __webpack_require__(41)
+	  , shared         = __webpack_require__(64)
+	  , setToStringTag = __webpack_require__(92)
+	  , uid            = __webpack_require__(65)
+	  , wks            = __webpack_require__(93)
+	  , wksExt         = __webpack_require__(98)
+	  , wksDefine      = __webpack_require__(103)
+	  , keyOf          = __webpack_require__(104)
+	  , enumKeys       = __webpack_require__(105)
+	  , isArray        = __webpack_require__(106)
+	  , anObject       = __webpack_require__(51)
+	  , toIObject      = __webpack_require__(29)
+	  , toPrimitive    = __webpack_require__(36)
+	  , createDesc     = __webpack_require__(35)
+	  , _create        = __webpack_require__(89)
+	  , gOPNExt        = __webpack_require__(107)
+	  , $GOPD          = __webpack_require__(33)
+	  , $DP            = __webpack_require__(50)
+	  , $keys          = __webpack_require__(57)
 	  , gOPD           = $GOPD.f
 	  , dP             = $DP.f
 	  , gOPN           = gOPNExt.f
@@ -3825,11 +3806,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  $GOPD.f = $getOwnPropertyDescriptor;
 	  $DP.f   = $defineProperty;
-	  __webpack_require__(102).f = gOPNExt.f = $getOwnPropertyNames;
-	  __webpack_require__(28).f  = $propertyIsEnumerable;
-	  __webpack_require__(61).f = $getOwnPropertySymbols;
+	  __webpack_require__(108).f = gOPNExt.f = $getOwnPropertyNames;
+	  __webpack_require__(34).f  = $propertyIsEnumerable;
+	  __webpack_require__(67).f = $getOwnPropertySymbols;
 	
-	  if(DESCRIPTORS && !__webpack_require__(79)){
+	  if(DESCRIPTORS && !__webpack_require__(85)){
 	    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
 	  }
 	
@@ -3904,7 +3885,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	
 	// 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
-	$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(43)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+	$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(49)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
 	// 19.4.3.5 Symbol.prototype[@@toStringTag]
 	setToStringTag($Symbol, 'Symbol');
 	// 20.2.1.9 Math[@@toStringTag]
@@ -3913,18 +3894,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	setToStringTag(global.JSON, 'JSON', true);
 
 /***/ },
-/* 96 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var META     = __webpack_require__(59)('meta')
-	  , isObject = __webpack_require__(31)
-	  , has      = __webpack_require__(32)
-	  , setDesc  = __webpack_require__(44).f
+	var META     = __webpack_require__(65)('meta')
+	  , isObject = __webpack_require__(37)
+	  , has      = __webpack_require__(38)
+	  , setDesc  = __webpack_require__(50).f
 	  , id       = 0;
 	var isExtensible = Object.isExtensible || function(){
 	  return true;
 	};
-	var FREEZE = !__webpack_require__(35)(function(){
+	var FREEZE = !__webpack_require__(41)(function(){
 	  return isExtensible(Object.preventExtensions({}));
 	});
 	var setMeta = function(it){
@@ -3971,25 +3952,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 97 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var global         = __webpack_require__(37)
-	  , core           = __webpack_require__(40)
-	  , LIBRARY        = __webpack_require__(79)
-	  , wksExt         = __webpack_require__(92)
-	  , defineProperty = __webpack_require__(44).f;
+	var global         = __webpack_require__(43)
+	  , core           = __webpack_require__(46)
+	  , LIBRARY        = __webpack_require__(85)
+	  , wksExt         = __webpack_require__(98)
+	  , defineProperty = __webpack_require__(50).f;
 	module.exports = function(name){
 	  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
 	  if(name.charAt(0) != '_' && !(name in $Symbol))defineProperty($Symbol, name, {value: wksExt.f(name)});
 	};
 
 /***/ },
-/* 98 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var getKeys   = __webpack_require__(51)
-	  , toIObject = __webpack_require__(23);
+	var getKeys   = __webpack_require__(57)
+	  , toIObject = __webpack_require__(29);
 	module.exports = function(object, el){
 	  var O      = toIObject(object)
 	    , keys   = getKeys(O)
@@ -4000,13 +3981,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 99 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// all enumerable object keys, includes symbols
-	var getKeys = __webpack_require__(51)
-	  , gOPS    = __webpack_require__(61)
-	  , pIE     = __webpack_require__(28);
+	var getKeys = __webpack_require__(57)
+	  , gOPS    = __webpack_require__(67)
+	  , pIE     = __webpack_require__(34);
 	module.exports = function(it){
 	  var result     = getKeys(it)
 	    , getSymbols = gOPS.f;
@@ -4020,22 +4001,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 100 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.2.2 IsArray(argument)
-	var cof = __webpack_require__(25);
+	var cof = __webpack_require__(31);
 	module.exports = Array.isArray || function isArray(arg){
 	  return cof(arg) == 'Array';
 	};
 
 /***/ },
-/* 101 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-	var toIObject = __webpack_require__(23)
-	  , gOPN      = __webpack_require__(102).f
+	var toIObject = __webpack_require__(29)
+	  , gOPN      = __webpack_require__(108).f
 	  , toString  = {}.toString;
 	
 	var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
@@ -4055,52 +4036,52 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 102 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-	var $keys      = __webpack_require__(52)
-	  , hiddenKeys = __webpack_require__(60).concat('length', 'prototype');
+	var $keys      = __webpack_require__(58)
+	  , hiddenKeys = __webpack_require__(66).concat('length', 'prototype');
 	
 	exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
 	  return $keys(O, hiddenKeys);
 	};
 
 /***/ },
-/* 103 */
+/* 109 */
 /***/ function(module, exports) {
 
 
 
 /***/ },
-/* 104 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(97)('asyncIterator');
+	__webpack_require__(103)('asyncIterator');
 
 /***/ },
-/* 105 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(97)('observable');
+	__webpack_require__(103)('observable');
 
 /***/ },
-/* 106 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _setPrototypeOf = __webpack_require__(107);
+	var _setPrototypeOf = __webpack_require__(113);
 	
 	var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
 	
-	var _create = __webpack_require__(111);
+	var _create = __webpack_require__(117);
 	
 	var _create2 = _interopRequireDefault(_create);
 	
-	var _typeof2 = __webpack_require__(73);
+	var _typeof2 = __webpack_require__(79);
 	
 	var _typeof3 = _interopRequireDefault(_typeof2);
 	
@@ -4123,34 +4104,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 107 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(108), __esModule: true };
+	module.exports = { "default": __webpack_require__(114), __esModule: true };
 
 /***/ },
-/* 108 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(109);
-	module.exports = __webpack_require__(40).Object.setPrototypeOf;
+	__webpack_require__(115);
+	module.exports = __webpack_require__(46).Object.setPrototypeOf;
 
 /***/ },
-/* 109 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.3.19 Object.setPrototypeOf(O, proto)
-	var $export = __webpack_require__(39);
-	$export($export.S, 'Object', {setPrototypeOf: __webpack_require__(110).set});
+	var $export = __webpack_require__(45);
+	$export($export.S, 'Object', {setPrototypeOf: __webpack_require__(116).set});
 
 /***/ },
-/* 110 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Works with __proto__ only. Old v8 can't work with null proto objects.
 	/* eslint-disable no-proto */
-	var isObject = __webpack_require__(31)
-	  , anObject = __webpack_require__(45);
+	var isObject = __webpack_require__(37)
+	  , anObject = __webpack_require__(51);
 	var check = function(O, proto){
 	  anObject(O);
 	  if(!isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
@@ -4159,7 +4140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
 	    function(test, buggy, set){
 	      try {
-	        set = __webpack_require__(41)(Function.call, __webpack_require__(27).f(Object.prototype, '__proto__').set, 2);
+	        set = __webpack_require__(47)(Function.call, __webpack_require__(33).f(Object.prototype, '__proto__').set, 2);
 	        set(test, []);
 	        buggy = !(test instanceof Array);
 	      } catch(e){ buggy = true; }
@@ -4174,31 +4155,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 111 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(112), __esModule: true };
+	module.exports = { "default": __webpack_require__(118), __esModule: true };
 
 /***/ },
-/* 112 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(113);
-	var $Object = __webpack_require__(40).Object;
+	__webpack_require__(119);
+	var $Object = __webpack_require__(46).Object;
 	module.exports = function create(P, D){
 	  return $Object.create(P, D);
 	};
 
 /***/ },
-/* 113 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $export = __webpack_require__(39)
+	var $export = __webpack_require__(45)
 	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-	$export($export.S, 'Object', {create: __webpack_require__(83)});
+	$export($export.S, 'Object', {create: __webpack_require__(89)});
 
 /***/ },
-/* 114 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4207,7 +4188,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _actions = __webpack_require__(115);
+	var _actions = __webpack_require__(121);
 	
 	Object.defineProperty(exports, 'ActionTypes', {
 	  enumerable: true,
@@ -4222,7 +4203,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _helpers = __webpack_require__(116);
+	var _helpers = __webpack_require__(122);
 	
 	Object.defineProperty(exports, 'parseActions', {
 	  enumerable: true,
@@ -4261,7 +4242,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _reducer = __webpack_require__(117);
+	var _reducer = __webpack_require__(123);
 	
 	Object.defineProperty(exports, 'default', {
 	  enumerable: true,
@@ -4273,7 +4254,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 115 */
+/* 121 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -4312,7 +4293,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 116 */
+/* 122 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -4385,7 +4366,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 117 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4398,13 +4379,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	exports.default = undoable;
 	
-	var _debug = __webpack_require__(118);
+	var _debug = __webpack_require__(124);
 	
 	var debug = _interopRequireWildcard(_debug);
 	
-	var _actions = __webpack_require__(115);
+	var _actions = __webpack_require__(121);
 	
-	var _helpers = __webpack_require__(116);
+	var _helpers = __webpack_require__(122);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -4648,7 +4629,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 118 */
+/* 124 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -4763,7 +4744,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.log = log;
 
 /***/ },
-/* 119 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function(global,factory){if(true){!(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));}else if(typeof exports !== 'undefined'){factory(exports);}else {var mod={exports:{}};factory(mod.exports);global.decko = mod.exports;}})(this,function(exports){'use strict';exports.__esModule = true;var EMPTY={};var HOP=Object.prototype.hasOwnProperty;var fns={memoize:function memoize(fn){var opt=arguments.length <= 1 || arguments[1] === undefined?EMPTY:arguments[1];var cache=opt.cache || {};return function(){for(var _len=arguments.length,a=Array(_len),_key=0;_key < _len;_key++) {a[_key] = arguments[_key];}var k=String(a[0]);if(opt.caseSensitive === false)k = k.toLowerCase();return HOP.call(cache,k)?cache[k]:cache[k] = fn.apply(this,a);};},debounce:function debounce(fn,opts){if(typeof opts === 'function'){var p=fn;fn = opts;opts = p;}var delay=opts && opts.delay || opts || 0,args=undefined,context=undefined,timer=undefined;return function(){for(var _len2=arguments.length,a=Array(_len2),_key2=0;_key2 < _len2;_key2++) {a[_key2] = arguments[_key2];}args = a;context = this;if(!timer)timer = setTimeout(function(){fn.apply(context,args);args = context = timer = null;},delay);};},bind:function bind(target,key,_ref){var fn=_ref.value;return {configurable:true,get:function get(){var value=fn.bind(this);Object.defineProperty(this,key,{value:value,configurable:true,writable:true});return value;}};}};var memoize=multiMethod(fns.memoize),debounce=multiMethod(fns.debounce),bind=multiMethod(function(f,c){return f.bind(c);},function(){return fns.bind;});exports.memoize = memoize;exports.debounce = debounce;exports.bind = bind;exports['default'] = {memoize:memoize,debounce:debounce,bind:bind};function multiMethod(inner,deco){deco = deco || inner.decorate || decorator(inner);var d=deco();return function(){for(var _len3=arguments.length,args=Array(_len3),_key3=0;_key3 < _len3;_key3++) {args[_key3] = arguments[_key3];}var l=args.length;return (l < 2?deco:l > 2?d:inner).apply(undefined,args);};}function decorator(fn){return function(opt){return typeof opt === 'function'?fn(opt):function(target,key,desc){desc.value = fn(desc.value,opt,target,key,desc);};};}});
@@ -4771,13 +4752,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 120 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';Object.defineProperty(exports,"__esModule",{value:true});var _preact=__webpack_require__(3);var Icons=function Icons(){return(0,_preact.h)('div',{dangerouslySetInnerHTML:{__html:'<svg height="0" version="1.1" xmlns="http://www.w3.org/2000/svg" style="position:absolute; margin-left: -100%; width:0; height:0;" xmlns:xlink="http://www.w3.org/1999/xlink">\n      <g id="pan-shape">\n        <g transform="translate(3.000000, 0.000000)">\n          <path d="M14.3875969,6.52307692 C15.379845,6.52307692 16.248062,5.72307692 16.248062,4.67692308 C16.248062,3.69230769 15.4418605,2.83076923 14.3875969,2.83076923 C13.3953488,2.83076923 12.5271318,3.63076923 12.5271318,4.67692308 C12.5271318,5.72307692 13.3953488,6.52307692 14.3875969,6.52307692 L14.3875969,6.52307692 L14.3875969,6.52307692 Z M14.3875969,3.87692308 C14.8217054,3.87692308 15.1937984,4.24615385 15.1937984,4.67692308 C15.1937984,5.10769231 14.8217054,5.47692308 14.3875969,5.47692308 C13.9534884,5.47692308 13.5813953,5.10769231 13.5813953,4.67692308 C13.5193798,4.24615385 13.8914729,3.87692308 14.3875969,3.87692308 L14.3875969,3.87692308 L14.3875969,3.87692308 Z"></path>\n          <path d="M17.9844961,1.78461538 C17.9844961,2.76923077 18.7906977,3.56923077 19.7829457,3.56923077 C20.7751938,3.56923077 21.5813953,2.76923077 21.5813953,1.78461538 C21.5813953,0.8 20.7751938,0 19.7829457,0 C18.7906977,0 17.9844961,0.861538462 17.9844961,1.78461538 L17.9844961,1.78461538 L17.9844961,1.78461538 Z M20.5891473,1.78461538 C20.5891473,2.21538462 20.2170543,2.58461538 19.7829457,2.58461538 C19.3488372,2.58461538 18.9767442,2.21538462 18.9767442,1.78461538 C18.9767442,1.35384615 19.3488372,0.984615385 19.7829457,0.984615385 C20.2170543,0.984615385 20.5891473,1.35384615 20.5891473,1.78461538 L20.5891473,1.78461538 L20.5891473,1.78461538 Z"></path>\n          <path d="M6.07751938,27.0153846 C5.95348837,27.0153846 5.82945736,26.9538462 5.76744186,26.8923077 C5.70542636,26.8307692 4.58914729,25.9076923 3.72093023,24.2461538 C3.59689922,24 3.65891473,23.6923077 3.96899225,23.5692308 C4.21705426,23.4461538 4.52713178,23.5076923 4.65116279,23.8153846 C5.39534884,25.2307692 6.4496124,26.1538462 6.4496124,26.1538462 C6.69767442,26.3384615 6.69767442,26.6461538 6.51162791,26.8923077 C6.3875969,26.9538462 6.26356589,27.0153846 6.07751938,27.0153846 L6.07751938,27.0153846 Z"></path>\n          <path d="M7.87596899,28.0615385 C7.81395349,28.0615385 7.68992248,28.0615385 7.62790698,28 L7.25581395,27.7538462 C7.00775194,27.6307692 6.88372093,27.2615385 7.06976744,27.0153846 C7.19379845,26.7692308 7.50387597,26.6461538 7.81395349,26.8307692 L8.18604651,27.0769231 C8.43410853,27.2 8.55813953,27.5692308 8.37209302,27.8153846 C8.24806202,28 8.0620155,28.0615385 7.87596899,28.0615385 L7.87596899,28.0615385 Z"></path>\n          <path d="M26.4186047,18.6461538 C26.4186047,16.4307692 25.8604651,14.2769231 24.8062016,12.3692308 L24.9302326,12.3692308 C25.5503876,12.3692308 26.0465116,11.8769231 26.0465116,11.2615385 L26.0465116,9.84615385 C26.0465116,9.23076923 25.5503876,8.73846154 24.9302326,8.73846154 L21.0232558,8.73846154 C21.0852713,8.12307692 21.0852713,7.44615385 20.4031008,6.70769231 C19.9069767,6.09230769 19.2868217,5.72307692 18.2945736,5.72307692 C17.0542636,5.72307692 16.0620155,6.52307692 15.751938,7.63076923 C15.4418605,7.44615385 15.1317829,7.26153846 14.6356589,7.26153846 C13.7674419,7.26153846 13.0232558,7.87692308 12.7131783,8.73846154 L9.30232558,8.73846154 L2.60465116,2.33846154 C2.35658915,2.09230769 1.98449612,1.90769231 1.6124031,1.90769231 C1.24031008,1.90769231 0.868217054,2.09230769 0.558139535,2.33846154 L0.558139535,2.33846154 C-1.74582571e-14,2.89230769 -1.74582571e-14,3.81538462 0.620155039,4.36923077 L5.14728682,8.73846154 L1.5503876,8.73846154 C0.930232558,8.73846154 0.434108527,9.23076923 0.434108527,9.84615385 L0.434108527,11.2615385 C0.434108527,11.8769231 0.930232558,12.3692308 1.5503876,12.3692308 L1.6744186,12.3692308 C0.620155039,14.2769231 0.0620155039,16.4307692 0.0620155039,18.6461538 C0.0620155039,20.4923077 0.434108527,22.2769231 1.17829457,23.9384615 C1.86046512,25.4769231 2.85271318,26.8307692 4.03100775,28 L3.84496124,31.0153846 C3.78294574,31.6307692 4.46511628,32.0615385 5.02325581,31.7538462 L7.50387597,30.4615385 C9.30232558,31.3230769 11.1627907,31.6923077 13.1472868,31.6923077 C15.1317829,31.6923077 16.9922481,31.2615385 18.7906977,30.4615385 L21.2713178,31.7538462 C21.8294574,32.0615385 22.5116279,31.6307692 22.4496124,31.0153846 L22.2635659,28.0615385 C23.503876,26.8923077 24.496124,25.5384615 25.1782946,23.9384615 C26.0465116,22.3384615 26.4186047,20.4923077 26.4186047,18.6461538 L26.4186047,18.6461538 Z M18.2945736,6.83076923 C19.1627907,6.83076923 19.9069767,7.56923077 19.9069767,8.43076923 C19.9069767,8.55384615 19.9069767,8.67692308 19.8449612,8.73846154 L16.744186,8.73846154 C16.744186,8.61538462 16.6821705,8.49230769 16.6821705,8.43076923 C16.6821705,7.56923077 17.4263566,6.83076923 18.2945736,6.83076923 L18.2945736,6.83076923 Z M14.6356589,8.24615385 C15.0697674,8.24615385 15.379845,8.49230769 15.627907,8.8 L13.6434109,8.8 C13.8914729,8.43076923 14.2015504,8.24615385 14.6356589,8.24615385 L14.6356589,8.24615385 Z M1.36434109,3.56923077 C1.24031008,3.44615385 1.24031008,3.26153846 1.36434109,3.13846154 L1.36434109,3.13846154 C1.42635659,3.07692308 1.48837209,3.01538462 1.6124031,3.01538462 C1.6744186,3.01538462 1.79844961,3.01538462 1.86046512,3.07692308 L7.68992248,8.73846154 L6.75968992,8.73846154 L1.36434109,3.56923077 L1.36434109,3.56923077 Z M1.5503876,11.2615385 L1.5503876,9.90769231 L24.8682171,9.90769231 L24.8682171,11.2615385 L1.5503876,11.2615385 L1.5503876,11.2615385 Z M10.6666667,16.3076923 L10.4186047,16.3076923 C9.92248062,16.3076923 9.5503876,16.6769231 9.5503876,17.1692308 C8.24806202,16.8615385 7.06976744,16.4307692 6.07751938,15.8153846 C4.46511628,14.8307692 3.53488372,13.6615385 3.28682171,12.3692308 L23.255814,12.3692308 C23.0697674,13.6615385 22.0775194,14.8923077 20.4651163,15.8153846 C19.6589147,16.3076923 18.7286822,16.6769231 17.7364341,16.9846154 C17.4883721,17.0461538 17.2403101,17.1076923 16.9922481,17.1692308 C16.9922481,16.6769231 16.620155,16.3076923 16.124031,16.3076923 L10.6666667,16.3076923 L10.6666667,16.3076923 Z M15.875969,17.4153846 L15.875969,18.8923077 L10.6666667,18.8923077 L10.6666667,17.4153846 L15.875969,17.4153846 L15.875969,17.4153846 Z M21.4573643,27.4461538 L21.2713178,27.6307692 L21.3953488,30.5230769 L18.9147287,29.2307692 L18.6046512,29.3538462 C16.9302326,30.2153846 15.1317829,30.5846154 13.2093023,30.5846154 C11.2868217,30.5846154 9.48837209,30.1538462 7.81395349,29.2923077 L7.56589147,29.1692308 L5.02325581,30.4615385 L5.20930233,27.5076923 L5.02325581,27.3230769 C3.84496124,26.2153846 2.85271318,24.9230769 2.23255814,23.4461538 C1.5503876,21.9076923 1.17829457,20.3076923 1.17829457,18.5846154 C1.17829457,16.7384615 1.6124031,14.9538462 2.41860465,13.3538462 C2.91472868,14.6461538 3.96899225,15.8153846 5.51937984,16.7384615 C6.69767442,17.4153846 8.0620155,17.9692308 9.5503876,18.2769231 L9.5503876,19.0769231 C9.5503876,19.5692308 9.92248062,19.9384615 10.4186047,19.9384615 L16.124031,19.9384615 C16.620155,19.9384615 16.9922481,19.5692308 16.9922481,19.0769231 L16.9922481,18.2769231 C17.1162791,18.2153846 17.3023256,18.2153846 17.4263566,18.1538462 C17.8604651,18.0307692 18.2325581,17.9076923 18.6666667,17.7846154 C19.5348837,17.4769231 20.3410853,17.1076923 21.0232558,16.6769231 C22.5736434,15.7538462 23.627907,14.5846154 24.124031,13.2923077 C24.9302326,14.8923077 25.3643411,16.6769231 25.3643411,18.5230769 C25.3643411,20.2461538 24.9922481,21.8461538 24.3100775,23.3846154 C23.5658915,25.0461538 22.6356589,26.3384615 21.4573643,27.4461538 L21.4573643,27.4461538 Z"></path>\n        </g>\n      </g>\n      <g id="coffin-shape">\n        <path d="M5.12307692,8.36923077 L5.12307692,8.36923077 L5.12307692,8.43076923 L5.12307692,8.43076923 L9.30769231,31.0153846 C9.36923077,31.2615385 9.55384615,31.4461538 9.8,31.4461538 L22.2923077,31.4461538 C22.5384615,31.4461538 22.7846154,31.2615385 22.7846154,31.0153846 L26.9692308,8.43076923 C26.9692308,8.30769231 26.9692308,8.18461538 26.9076923,8.12307692 L22.7846154,0.8 C22.7230769,0.615384615 22.5384615,0.553846154 22.3538462,0.553846154 L9.8,0.553846154 C9.61538462,0.553846154 9.43076923,0.676923077 9.36923077,0.8 L5.18461538,8.12307692 C5.18461538,8.12307692 5.18461538,8.18461538 5.12307692,8.18461538 L5.12307692,8.18461538 L5.12307692,8.24615385 L5.12307692,8.24615385 C5.12307692,8.30769231 5.12307692,8.30769231 5.12307692,8.36923077 L5.12307692,8.36923077 L5.12307692,8.36923077 L5.12307692,8.36923077 Z M10.1692308,1.53846154 L13.1230769,1.53846154 L9.55384615,7.87692308 L6.6,7.87692308 L10.1692308,1.53846154 L10.1692308,1.53846154 Z M10.3538462,8.43076923 L14.2923077,1.53846154 L21.9846154,1.53846154 L25.9230769,8.43076923 L21.8615385,30.4615385 L14.4153846,30.4615385 L10.3538462,8.43076923 L10.3538462,8.43076923 Z M13.3692308,30.4615385 L10.2923077,30.4615385 L6.29230769,8.86153846 L9.36923077,8.86153846 L13.3692308,30.4615385 L13.3692308,30.4615385 Z"></path>\n        <path d="M14.1692308,8.55384615 C13.8615385,8.55384615 13.6769231,8.8 13.6769231,9.04615385 C13.6769231,9.29230769 13.9230769,9.53846154 14.1692308,9.53846154 L17.6153846,9.53846154 L17.6153846,24.6769231 C17.6153846,24.9230769 17.8615385,25.1692308 18.1076923,25.1692308 C18.4153846,25.1692308 18.6,24.9230769 18.6,24.6769231 L18.6,9.53846154 L22.0461538,9.53846154 C22.3538462,9.53846154 22.5384615,9.29230769 22.5384615,9.04615385 C22.5384615,8.8 22.2923077,8.55384615 22.0461538,8.55384615 L18.6,8.55384615 L18.6,5.04615385 C18.6,4.8 18.3538462,4.55384615 18.1076923,4.55384615 C17.8,4.55384615 17.6153846,4.8 17.6153846,5.04615385 L17.6153846,8.55384615 L14.1692308,8.55384615 L14.1692308,8.55384615 L14.1692308,8.55384615 Z"></path>\n        <path d="M18.1692308,25.8461538 C17.8615385,25.8461538 17.6153846,26.0923077 17.6153846,26.3384615 L17.6153846,27.0769231 C17.6153846,27.3846154 17.8615385,27.5692308 18.1692308,27.5692308 C18.4769231,27.5692308 18.7230769,27.3230769 18.7230769,27.0769231 L18.7230769,26.4 C18.6615385,26.0923077 18.4769231,25.8461538 18.1692308,25.8461538 L18.1692308,25.8461538 L18.1692308,25.8461538 Z"></path>\n      </g>\n      <g id="vampire-shape">\n        <g transform="translate(1.000000, 0.000000)">\n          <path d="M16.190901,13.2306173 L15.223372,13.2306173 L15.4871365,13.0488889 C15.6205888,12.9568395 15.7002676,12.8043457 15.7002676,12.6415802 L15.7002676,9.30488889 C15.7002676,9.0322963 15.4804639,8.81106173 15.2096343,8.81106173 C14.9388046,8.81106173 14.7190009,9.0322963 14.7190009,9.30488889 L14.7190009,12.3812346 L13.3621053,13.3171358 C13.1850847,13.4396049 13.1073684,13.664 13.1709545,13.8706173 C13.2345406,14.0772346 13.4245138,14.2182716 13.6396075,14.2182716 L16.190901,14.2182716 C16.4617306,14.2182716 16.6815343,13.997037 16.6815343,13.7244444 C16.6815343,13.4518519 16.4617306,13.2306173 16.190901,13.2306173 L16.190901,13.2306173 Z"></path>\n          <path d="M19.2088849,6.90962963 C19.4797145,6.90962963 19.6995183,6.68839506 19.6995183,6.41580247 C19.6995183,6.14320988 19.4797145,5.92197531 19.2088849,5.92197531 C17.5042284,5.92197531 16.1178947,7.31733333 16.1178947,9.03308642 C16.1178947,9.30567901 16.3376985,9.52691358 16.6085281,9.52691358 C16.8793577,9.52691358 17.0991615,9.30567901 17.0991615,9.03308642 C17.0991615,7.86212346 18.0458876,6.90962963 19.2088849,6.90962963 L19.2088849,6.90962963 Z"></path>\n          <path d="M13.6647279,9.03308642 C13.6647279,7.31733333 12.2783943,5.92197531 10.5737377,5.92197531 C10.3029081,5.92197531 10.0831044,6.14320988 10.0831044,6.41580247 C10.0831044,6.68839506 10.3029081,6.90962963 10.5737377,6.90962963 C11.7371276,6.90962963 12.6834612,7.86212346 12.6834612,9.03308642 C12.6834612,9.30567901 12.9032649,9.52691358 13.1740946,9.52691358 C13.4449242,9.52691358 13.6647279,9.30607407 13.6647279,9.03308642 L13.6647279,9.03308642 Z"></path>\n          <ellipse cx="11.3465834" cy="9.56404938" rx="1.01816236" ry="1.02479012"></ellipse>\n          <ellipse cx="18.4364318" cy="9.56404938" rx="1.01816236" ry="1.02479012"></ellipse>\n          <path d="M20.0284389,9.67071605 C20.0284389,10.6374321 19.2473506,11.424 18.2864942,11.424 C18.0156646,11.424 17.7958608,11.6452346 17.7958608,11.9178272 C17.7958608,12.1904198 18.0156646,12.4116543 18.2864942,12.4116543 C19.7878323,12.4116543 21.0097056,11.1822222 21.0097056,9.67071605 C21.0097056,9.39812346 20.7899019,9.17688889 20.5190723,9.17688889 C20.2482426,9.17688889 20.0284389,9.39812346 20.0284389,9.67071605 L20.0284389,9.67071605 Z"></path>\n          <path d="M11.5436218,11.4243951 C10.5831579,11.4243951 9.80167707,10.6378272 9.80167707,9.67111111 C9.80167707,9.39851852 9.58187333,9.17728395 9.31104371,9.17728395 C9.04021409,9.17728395 8.82041035,9.39851852 8.82041035,9.67111111 C8.82041035,11.1826173 10.0418912,12.4120494 11.5436218,12.4120494 C11.8144514,12.4120494 12.0342551,12.1908148 12.0342551,11.9182222 C12.0342551,11.6456296 11.8148439,11.4243951 11.5436218,11.4243951 L11.5436218,11.4243951 Z"></path>\n          <path d="M24.9163247,22.3952593 C27.1339875,20.2330864 29.2707939,18.886321 29.3010169,18.867358 C29.4281891,18.7879506 29.5125781,18.6544198 29.5298483,18.5042963 C29.5471186,18.3545679 29.4957003,18.2048395 29.3897235,18.0985679 C27.9684567,16.6680494 26.3505442,15.4848395 24.581124,14.5714568 C25.4791793,14.5647407 26.1484032,13.7817284 26.222587,13.6920494 C26.2367172,13.6746667 26.2437823,13.6533333 26.255165,13.6343704 C26.2681178,13.612642 26.281463,13.593284 26.2916682,13.5699753 C26.3057984,13.5363951 26.313256,13.5016296 26.3195361,13.465679 C26.3238537,13.4415802 26.3305263,13.4198519 26.3317038,13.394963 C26.3317038,13.388642 26.3348439,13.3831111 26.3348439,13.3767901 L26.3348439,7.99604938 C26.3348439,7.80523457 26.2253345,7.63101235 26.0538091,7.54962963 C25.8818912,7.46745679 25.6797502,7.49274074 25.5325602,7.61441975 L24.0861731,8.81145679 C23.8310437,5.21165432 21.5234969,2.17560494 18.3363426,0.885333333 C18.2990544,0.860444444 18.2598037,0.839111111 18.217413,0.825283951 C18.071008,0.768790123 17.9202855,0.726123457 17.7715254,0.677925926 C17.720107,0.660938272 17.6690812,0.642765432 17.6176628,0.626962963 C17.4952007,0.589432099 17.3735236,0.553481481 17.249884,0.521481481 C17.0646209,0.472493827 16.8773952,0.430222222 16.6874219,0.392691358 C16.6163782,0.378864198 16.5461195,0.366222222 16.4750758,0.35437037 C16.2411418,0.313679012 16.0048528,0.281283951 15.7654237,0.259555556 C15.7469759,0.257580247 15.7285281,0.256790123 15.7096878,0.255209877 C15.4471008,0.232296296 15.1825513,0.218074074 14.9144692,0.218074074 C10.0654416,0.218074074 6.08306869,4.01580247 5.7435504,8.81145679 L4.29716325,7.61441975 C4.14997324,7.49274074 3.94783229,7.46745679 3.77591436,7.54962963 C3.60438894,7.63101235 3.49487957,7.80483951 3.49487957,7.99604938 L3.49487957,13.3771852 C3.49487957,13.4921481 3.53491525,13.6031605 3.60713649,13.6920494 C3.68092774,13.7817284 4.35054416,14.5651358 5.24859946,14.5714568 C3.47957181,15.4848395 1.86165923,16.6680494 0.440392507,18.0985679 C0.334023194,18.2052346 0.282604817,18.3545679 0.300267618,18.5046914 C0.317537913,18.6544198 0.401926851,18.7883457 0.529099019,18.867358 C0.559714541,18.886716 2.69573595,20.2311111 4.91418376,22.3948642 C4.0129884,22.9716543 0.0192328278,25.8362469 0.151900089,31.2351605 C0.15896521,31.5038025 0.376806423,31.7167407 0.642140946,31.7167407 L0.65470116,31.7167407 C0.925138269,31.7096296 1.13944692,31.4832593 1.13316682,31.2106667 C1.05937556,28.2188642 2.4406066,26.0614321 3.68171276,24.7348148 C3.89366637,24.6340741 4.53855486,24.3638519 5.37223907,24.3638519 C5.95942908,24.3638519 6.52267618,24.5029136 7.04981267,24.7676049 C7.2570562,25.0346667 7.45919715,25.3072593 7.65270294,25.586963 C7.74808207,25.7252346 7.90076717,25.798716 8.05580731,25.798716 C8.15236396,25.798716 8.25009813,25.7702716 8.33566459,25.7102222 C8.55782337,25.5541728 8.61277431,25.2464198 8.45812667,25.0228148 C8.24578055,24.7158519 8.02322926,24.4195556 7.79596789,24.128 C7.77123996,24.0837531 7.74023194,24.0438519 7.70412132,24.0094815 C5.4793934,21.1926914 2.71182872,19.1521975 1.57002676,18.3727407 C2.83272079,17.1824198 4.2473149,16.1923951 5.77926851,15.4117531 C6.0893488,18.1613827 7.59971454,20.5499259 9.77027654,22.0302222 L9.77027654,23.9545679 L9.59050847,23.8980741 C9.44096343,23.8514568 9.28003568,23.8791111 9.15404103,23.9719506 C9.02843889,24.0651852 8.95425513,24.2125432 8.95425513,24.3697778 L8.95425513,28.4246914 C8.95425513,28.5993086 9.04610169,28.761679 9.19564674,28.8501728 C9.27218555,28.8956049 9.35853702,28.9185185 9.44488849,28.9185185 C9.52652988,28.9185185 9.60856378,28.8979753 9.68235504,28.8568889 L13.843711,26.5374815 C13.9865834,26.7468642 14.1883318,26.9116049 14.4246209,27.0091852 L14.4246209,31.2229136 C14.4246209,31.4955062 14.6444246,31.7167407 14.9152542,31.7167407 C15.1860839,31.7167407 15.4058876,31.4955062 15.4058876,31.2229136 L15.4058876,27.0087901 C15.6488492,26.9084444 15.8557003,26.7369877 15.9989652,26.5189136 L20.1461909,28.8553086 C20.2203747,28.8971852 20.3031936,28.9181235 20.38562,28.9181235 C20.4715789,28.9181235 20.5575379,28.8952099 20.6336842,28.8501728 C20.7840143,28.761284 20.8762533,28.5993086 20.8762533,28.4242963 L20.8762533,23.9466667 C20.8762533,23.7831111 20.7957895,23.6302222 20.6615522,23.5385679 C20.5273149,23.4465185 20.356182,23.4267654 20.2054594,23.4872099 L20.0602319,23.5448889 L20.0602319,22.0298272 C22.2307939,20.5495309 23.7411597,18.1609877 24.05124,15.410963 C25.5828011,16.192 26.9981802,17.1820247 28.2608742,18.3727407 C26.9970027,19.2355556 23.7395897,21.6399012 21.4320428,24.9362963 C21.2758252,25.1591111 21.3288136,25.4672593 21.5505798,25.6240988 C21.6365388,25.6849383 21.735058,25.7145679 21.8327921,25.7145679 C21.9870473,25.7145679 22.1385549,25.6414815 22.233934,25.5051852 C22.8387868,24.6411852 23.5190009,23.8364444 24.2125602,23.1071605 C24.228653,23.1190123 24.2388582,23.1356049 24.2569135,23.1462716 C24.3024442,23.1727407 28.8292239,25.8386173 28.6969492,31.2102716 C28.6902765,31.4828642 28.9045852,31.7096296 29.1754148,31.7163457 L29.187975,31.7163457 C29.4533095,31.7163457 29.6711508,31.5034074 29.6782159,31.2347654 C29.8108831,25.837037 25.8186976,22.9724444 24.9163247,22.3952593 L24.9163247,22.3952593 Z M25.3535772,12.9781728 C24.584264,13.0291358 24.172132,12.2710123 24.1218912,12.1710617 C24.1195361,12.1659259 24.114826,12.1631605 24.112471,12.1588148 L24.112471,12.0086914 L24.5713113,12.0086914 C24.8421409,12.0086914 25.0619447,11.7874568 25.0619447,11.5148642 C25.0619447,11.2422716 24.8421409,11.021037 24.5713113,11.021037 L24.112471,11.021037 L24.112471,10.0689383 L25.3535772,9.04177778 L25.3535772,12.9781728 L25.3535772,12.9781728 Z M4.47693131,9.04177778 L5.71803747,10.0689383 L5.71803747,11.021037 L5.33534344,11.021037 C5.06451383,11.021037 4.84471008,11.2422716 4.84471008,11.5148642 C4.84471008,11.7874568 5.06451383,12.0086914 5.33534344,12.0086914 L5.71803747,12.0086914 L5.71803747,13.3673086 C5.49470116,13.5838025 5.32199822,13.5841975 5.25998216,13.5841975 C4.96363961,13.5841975 4.65395183,13.350716 4.47693131,13.1812346 L4.47693131,9.04177778 L4.47693131,9.04177778 Z M10.9344514,27.0293333 C10.4657984,27.0384198 10.0744692,26.4884938 9.93512935,26.2637037 L9.93512935,25.0398025 L12.8620517,25.9543704 L10.9344514,27.0293333 L10.9344514,27.0293333 Z M14.5965388,25.798716 C14.5965388,25.6217284 14.7394112,25.4779259 14.9152542,25.4779259 C15.0910972,25.4779259 15.2339697,25.6217284 15.2339697,25.798716 C15.2339697,25.9757037 15.0910972,26.1195062 14.9152542,26.1195062 C14.7394112,26.1195062 14.5965388,25.9757037 14.5965388,25.798716 L14.5965388,25.798716 Z M16.8667975,25.8757531 L19.5134701,24.8240988 C19.5327029,24.8264691 19.5499732,24.8355556 19.5699911,24.8355556 C19.6959857,24.8355556 19.8082426,24.7841975 19.8953791,24.7055802 L19.8953791,27.5820247 L16.8667975,25.8757531 L16.8667975,25.8757531 Z M19.0789652,23.9348148 L16.0342908,25.1444938 C15.808992,24.754963 15.3945049,24.4898765 14.9152542,24.4898765 C14.4128457,24.4898765 13.9806958,24.7814321 13.7644246,25.2025679 L10.7511508,24.2611358 L10.7511508,22.6101728 C12.0024621,23.2525432 13.4166637,23.6175802 14.9148617,23.6175802 C16.4130598,23.6175802 17.8276539,23.2525432 19.0785727,22.6101728 L19.0785727,23.9348148 L19.0789652,23.9348148 Z M14.9152542,22.6299259 C12.645388,22.6299259 10.5882605,21.6983704 9.09987511,20.1955556 C10.5427297,19.9395556 11.7685281,19.0522469 12.4895629,17.8271605 L12.9695986,19.2351605 C13.024157,19.3947654 13.1733095,19.5022222 13.3409099,19.5022222 C13.5085103,19.5022222 13.6576628,19.3951605 13.7118287,19.2355556 L14.4418912,17.0955062 L15.3882248,17.0955062 L16.1175022,19.2351605 C16.1720607,19.3947654 16.3212132,19.5022222 16.4888136,19.5022222 C16.6564139,19.5022222 16.8055665,19.3951605 16.8597324,19.2355556 L17.3405531,17.8263704 C18.0615879,19.0522469 19.2877788,19.9395556 20.7306334,20.1955556 C19.242248,21.6983704 17.1851204,22.6299259 14.9152542,22.6299259 L14.9152542,22.6299259 Z M13.0700803,17.0955062 L13.612132,17.0955062 L13.3409099,17.8903704 L13.0700803,17.0955062 L13.0700803,17.0955062 Z M16.2183764,17.0955062 L16.7604282,17.0955062 L16.4892061,17.8903704 L16.2183764,17.0955062 L16.2183764,17.0955062 Z M23.1312043,14.361284 C23.1312043,16.2066173 22.5200714,17.9065679 21.5015165,19.2837531 C19.3603925,19.2359506 17.6325781,17.4712099 17.6325781,15.3050864 C17.6325781,15.0324938 17.4127743,14.8112593 17.1419447,14.8112593 C16.8711151,14.8112593 16.6513113,15.0324938 16.6513113,15.3050864 C16.6513113,15.6476049 16.6858519,15.9826173 16.751793,16.3057778 L13.079893,16.3057778 C13.1458341,15.9826173 13.1803747,15.6476049 13.1803747,15.3050864 C13.1803747,15.0324938 12.9605709,14.8112593 12.6897413,14.8112593 C12.4189117,14.8112593 12.1991079,15.0324938 12.1991079,15.3050864 C12.1991079,17.4712099 10.4712935,19.2359506 8.33016949,19.2837531 C7.31122212,17.9065679 6.70048171,16.2066173 6.70048171,14.361284 L6.70048171,11.5891358 C6.70440678,11.5642469 6.71539697,11.5413333 6.71539697,11.5148642 C6.71539697,11.4883951 6.70440678,11.4654815 6.70048171,11.4405926 L6.70048171,9.47555556 C6.70048171,6.03417284 8.80117752,3.07990123 11.7783408,1.83624691 C12.8910972,2.17639506 13.818198,2.91555556 14.3975379,3.93837037 C14.4980196,4.11535802 14.6911329,4.20385185 14.8807136,4.18449383 C14.899554,4.18646914 14.9187868,4.18765432 14.9376271,4.18765432 C15.1083675,4.18765432 15.2736128,4.09797531 15.3642819,3.93837037 C15.9514719,2.90054321 16.8927029,2.15822222 18.0219447,1.824 C21.0163782,3.05975309 23.1323818,6.02153086 23.1323818,9.47516049 L23.1323818,14.361284 L23.1312043,14.361284 Z"></path>\n        </g>\n      </g>\n      <g id="bat-shape">\n        <path d="M3.79259259,28.6814815 L11.437037,29.7481481 L10.1925926,30.9925926 C10.0148148,31.1703704 10.0148148,31.5259259 10.1925926,31.7037037 C10.3111111,31.8222222 10.4296296,31.8814815 10.5481481,31.8814815 C10.6666667,31.8814815 10.7851852,31.8222222 10.9037037,31.7037037 L12.8592593,29.7481481 C16.2962963,27.2 21.2148148,27.9111111 23.8222222,31.3481481 C23.9407407,31.4666667 24.0592593,31.5259259 24.237037,31.5259259 L24.237037,31.5259259 C24.4148148,31.5259259 24.5333333,31.4666667 24.6518519,31.3481481 C26.1925926,29.3925926 29.037037,29.037037 30.9925926,30.5777778 C31.1111111,30.6962963 31.3481481,30.6962963 31.5259259,30.637037 C31.7037037,30.5777778 31.8222222,30.4 31.8222222,30.2222222 C32,27.8518519 31.2888889,25.5407407 29.7481481,23.762963 C28.4444444,22.2222222 26.7259259,21.2148148 24.7703704,20.8 L24.7703704,20.8 L24.7703704,20.8 C24.9481481,20.6222222 24.9481481,20.2666667 24.7703704,20.0888889 C24.5925926,19.9111111 24.237037,19.9111111 24.0592593,20.0888889 L23.2888889,20.7407407 C20.9185185,22.7555556 17.7185185,23.0518519 14.7555556,21.6296296 C15.0518519,21.1555556 15.2296296,20.562963 15.2888889,19.9703704 L16.5333333,18.7259259 C16.7111111,18.5481481 16.7111111,18.1925926 16.5333333,18.0148148 C16.3555556,17.837037 16,17.837037 15.8222222,18.0148148 L15.0518519,18.7851852 C14.8740741,18.3703704 14.637037,18.0148148 14.3407407,17.7185185 C14.0444444,17.4222222 13.6888889,17.1851852 13.2740741,17.0074074 L14.0444444,16.237037 C14.2222222,16.0592593 14.2222222,15.7037037 14.0444444,15.5259259 C13.8666667,15.3481481 13.5111111,15.3481481 13.3333333,15.5259259 L12.0888889,16.7703704 C11.4962963,16.7703704 10.9037037,16.9481481 10.4296296,17.3037037 C9.00740741,14.4 9.3037037,11.1407407 11.3185185,8.77037037 L12.0296296,8.05925926 C12.2074074,7.88148148 12.2074074,7.52592593 12.0296296,7.34814815 C11.8518519,7.17037037 11.4962963,7.17037037 11.3185185,7.34814815 L11.3185185,7.34814815 C10.9037037,5.39259259 9.8962963,3.67407407 8.35555556,2.37037037 C6.45925926,0.711111111 4.14814815,5.19029264e-15 1.77777778,0.177777778 C1.6,0.177777778 1.42222222,0.296296296 1.36296296,0.474074074 C1.3037037,0.651851852 1.3037037,0.888888889 1.42222222,1.00740741 C2.19259259,1.95555556 2.48888889,3.14074074 2.31111111,4.32592593 C2.13333333,5.51111111 1.54074074,6.57777778 0.592592593,7.34814815 C0.474074074,7.46666667 0.414814815,7.58518519 0.414814815,7.76296296 C0.414814815,7.94074074 0.474074074,8.05925926 0.592592593,8.17777778 C4.02962963,10.7851852 4.74074074,15.7037037 2.13333333,19.1407407 C2.13333333,19.2 2.07407407,19.2 2.07407407,19.2592593 L0.237037037,21.0962963 C0.0592592593,21.2740741 0.0592592593,21.6296296 0.237037037,21.8074074 C0.414814815,21.9259259 0.533333333,21.9259259 0.651851852,21.9259259 C0.77037037,21.9259259 0.888888889,21.8666667 1.00740741,21.7481481 L2.19259259,20.562963 L3.25925926,28.0888889 L3.79259259,28.6814815 Z M3.26801698,28.0261188 C3.4962963,27.8181327 4.1970679,27.0522762 4.1970679,27.0522762 L3.14074074,19.6148148 C4.44444444,17.7777778 5.03703704,15.4666667 4.74074074,13.2148148 C4.44444444,11.0814815 3.37777778,9.18518519 1.77777778,7.76296296 C3.55555556,6.04444444 3.91111111,3.37777778 2.78518519,1.18518519 C4.56296296,1.24444444 6.28148148,1.8962963 7.64444444,3.02222222 C9.18518519,4.32592593 10.1333333,6.16296296 10.3703704,8.17777778 C9.24444444,9.6 8.59259259,11.2592593 8.53333333,13.037037 C8.47407407,14.6962963 8.82962963,16.3555556 9.65925926,17.8962963 L6.6962963,20.8592593 C5.57037037,21.9851852 5.45185185,23.7037037 6.34074074,24.9481481 C6.34074074,24.9481481 4.91162551,26.3772634 4.1970679,27.091821 C3.72644033,27.5624486 2.78518519,28.5037037 2.78518519,28.5037037 C2.60740741,28.6814815 2.60740741,29.037037 2.78518519,29.2148148 C2.9037037,29.3333333 3.02222222,29.3925926 3.14074074,29.3925926 C3.25925926,29.3925926 3.37777778,29.3333333 3.4962963,29.2148148 L7.05185185,25.6592593 C7.58518519,26.0740741 8.23703704,26.2518519 8.88888889,26.2518519 C9.71851852,26.2518519 10.5481481,25.8962963 11.1407407,25.3037037 L14.1037037,22.3407407 C15.6444444,23.1703704 17.3037037,23.5259259 18.962963,23.4666667 C20.7407407,23.3481481 22.4,22.7555556 23.8222222,21.6296296 C25.837037,21.8666667 27.6740741,22.8148148 28.9777778,24.3555556 C30.162963,25.7185185 30.7555556,27.437037 30.8148148,29.2148148 C28.6814815,28.0888889 25.9555556,28.4444444 24.237037,30.2222222 C21.2740741,26.7851852 16.1185185,26.1333333 12.3851852,28.8 L5.01439043,27.6977238 L3.97719907,28.7281636 L3.7945216,28.6761188 C3.7945216,28.6761188 3.2032373,28.0851398 3.26801698,28.0261188 Z M10.4296296,24.5925926 C10.0148148,25.0074074 9.48148148,25.2444444 8.88888889,25.2444444 C8.2962963,25.2444444 7.76296296,25.0074074 7.34814815,24.5925926 C6.51851852,23.762963 6.51851852,22.4 7.34814815,21.5111111 L10.5481481,18.3111111 C10.5481481,18.3111111 10.5481481,18.3111111 10.6074074,18.2518519 C11.0222222,17.837037 11.5555556,17.6592593 12.0888889,17.6592593 L12.2074074,17.6592593 L12.2074074,17.6592593 C12.7407407,17.7185185 13.2148148,17.8962963 13.6296296,18.3111111 C13.9851852,18.6666667 14.2222222,19.2 14.2814815,19.7333333 L14.2814815,19.7333333 L14.2814815,19.8518519 C14.2814815,20.4444444 14.0444444,20.9777778 13.6888889,21.3333333 C13.6888889,21.3333333 13.6888889,21.3333333 13.6296296,21.3925926 L10.4296296,24.5925926 L10.4296296,24.5925926 Z"></path>\n        <path d="M27.2,25.3037037 C27.0814815,25.3037037 26.962963,25.2444444 26.8444444,25.1851852 C26.8444444,25.1851852 25.8962963,24.2962963 24.4148148,23.762963 C24.1777778,23.6444444 24,23.4074074 24.1185185,23.1111111 C24.237037,22.8740741 24.4740741,22.6962963 24.7703704,22.8148148 C26.4296296,23.4074074 27.4962963,24.3555556 27.5555556,24.4148148 C27.7333333,24.5925926 27.7925926,24.9481481 27.6148148,25.1259259 C27.437037,25.2444444 27.3185185,25.3037037 27.2,25.3037037 L27.2,25.3037037 Z"></path>\n        <path d="M28.4444444,26.8444444 C28.2666667,26.8444444 28.1481481,26.7851852 28.0296296,26.6666667 L27.7925926,26.3111111 C27.6148148,26.0740741 27.6740741,25.7777778 27.9111111,25.6 C28.1481481,25.4222222 28.4444444,25.4814815 28.6222222,25.7185185 L28.8592593,26.0740741 C29.037037,26.3111111 28.9777778,26.6074074 28.7407407,26.7851852 C28.6222222,26.8444444 28.5037037,26.8444444 28.4444444,26.8444444 L28.4444444,26.8444444 Z"></path>\n      </g>\n      <g id="spider-shape">\n        <g transform="translate(2.000000, 0.000000)">\n          <path d="M25.1076923,4.06153846 C24.9230769,3.81538462 24.6153846,3.75384615 24.3692308,3.87692308 C24.1230769,4 24.0615385,4.36923077 24.1846154,4.55384615 C25.8461538,7.07692308 26.1538462,9.90769231 26.0923077,11.8153846 C26.0307692,13.4153846 25.7846154,14.7076923 25.6615385,15.2 L19.5692308,17.4153846 L22.8923077,14.3384615 C22.9538462,14.2769231 23.0153846,14.1538462 23.0769231,14.0307692 C23.0769231,13.9692308 23.3846154,11.9384615 23.1384615,9.23076923 C22.9538462,6.70769231 22.2769231,3.2 20.1230769,0.430769231 C19.9384615,0.184615385 19.5692308,0.184615385 19.3846154,0.307692308 C19.0769231,0.492307692 19.0769231,0.8 19.2,1.04615385 C22.7692308,5.53846154 22.1538462,12.5538462 22.0307692,13.7230769 L20.5538462,15.0769231 C20.6769231,14.6461538 20.7384615,14.1538462 20.7384615,13.6615385 C20.7384615,10.0923077 17.6,7.13846154 13.7846154,7.13846154 C9.96923077,7.13846154 6.83076923,10.0307692 6.83076923,13.6615385 C6.83076923,14.1538462 6.89230769,14.5846154 7.01538462,15.0769231 L5.53846154,13.7230769 C5.41538462,12.5538462 4.73846154,5.53846154 8.30769231,1.04615385 C8.49230769,0.8 8.43076923,0.492307692 8.18461538,0.307692308 C7.93846154,0.123076923 7.56923077,0.184615385 7.44615385,0.430769231 C5.23076923,3.13846154 4.55384615,6.70769231 4.30769231,9.23076923 C4.12307692,11.9384615 4.36923077,13.9692308 4.36923077,14.0307692 C4.36923077,14.1538462 4.43076923,14.2769231 4.55384615,14.3384615 L7.87692308,17.4153846 L1.84615385,15.2 C1.53846154,14.0307692 0.492307692,8.86153846 3.32307692,4.55384615 C3.50769231,4.30769231 3.38461538,4 3.13846154,3.87692308 C2.89230769,3.75384615 2.52307692,3.81538462 2.4,4.06153846 C0.553846154,6.76923077 0.246153846,9.84615385 0.307692308,11.8769231 C0.369230769,14.0923077 0.861538462,15.6923077 0.861538462,15.7538462 C0.923076923,15.9384615 1.04615385,16.0615385 1.16923077,16.0615385 L10.5230769,19.4461538 C10.2153846,19.8153846 9.96923077,20.1846154 9.78461538,20.6153846 L2.89230769,20.0615385 C2.64615385,20.0615385 2.4,20.1846154 2.33846154,20.4307692 C2.33846154,20.4923077 1.84615385,22.0307692 1.84615385,24.0615385 C1.78461538,26.8307692 2.52307692,29.2307692 3.87692308,31.1384615 C4,31.2615385 4.18461538,31.3846154 4.30769231,31.3846154 C4.43076923,31.3846154 4.55384615,31.3846154 4.61538462,31.2615385 C4.86153846,31.0769231 4.92307692,30.7692308 4.73846154,30.5230769 C2.15384615,27.0769231 2.95384615,22.5230769 3.26153846,21.1076923 L9.53846154,21.6615385 L9.53846154,22.0307692 L9.53846154,22.2153846 L5.47692308,23.0153846 C5.23076923,23.0769231 5.10769231,23.2 5.04615385,23.4461538 C4.98461538,23.6307692 4.18461538,28.7384615 7.56923077,31.8769231 C7.69230769,32 7.81538462,32 7.93846154,32 C8.06153846,32 8.24615385,31.9384615 8.30769231,31.8769231 C8.49230769,31.6923077 8.49230769,31.3230769 8.30769231,31.1384615 C5.78461538,28.8 5.96923077,25.1076923 6.09230769,23.9384615 L9.72307692,23.2 C10.0307692,24.1846154 10.7692308,24.9846154 11.7538462,25.4769231 L11.7538462,27.2 C11.7538462,27.5076923 12,27.6923077 12.3076923,27.6923077 C12.6153846,27.6923077 12.8615385,27.4461538 12.8615385,27.2 L12.8615385,25.8461538 C13.1692308,25.9076923 13.4769231,25.9692308 13.7846154,25.9692308 C14.0923077,25.9692308 14.4,25.9076923 14.7076923,25.8461538 L14.7076923,27.2 C14.7076923,27.5076923 14.9538462,27.6923077 15.2615385,27.6923077 C15.5692308,27.6923077 15.8153846,27.4461538 15.8153846,27.2 L15.8153846,25.4769231 C16.7384615,24.9846154 17.4769231,24.1846154 17.8461538,23.2 L21.4769231,23.9384615 C21.6,25.1076923 21.7230769,28.8 19.2615385,31.1384615 C19.0769231,31.3230769 19.0769231,31.6923077 19.2615385,31.8769231 C19.3846154,32 19.5076923,32 19.6307692,32 C19.7538462,32 19.9384615,31.9384615 20,31.8769231 C23.3846154,28.7384615 22.5230769,23.6307692 22.5230769,23.4461538 C22.4615385,23.2615385 22.3384615,23.0769231 22.0923077,23.0153846 L17.9692308,22.1538462 L17.9692308,21.9692308 L17.9692308,21.6 L24.2461538,21.0461538 C24.5538462,22.4615385 25.3538462,27.0153846 22.7692308,30.4615385 C22.5846154,30.7076923 22.6461538,31.0153846 22.8923077,31.2 C23.0153846,31.2615385 23.0769231,31.3230769 23.2,31.3230769 C23.3846154,31.3230769 23.5692308,31.2615385 23.6307692,31.0769231 C25.0461538,29.2307692 25.7230769,26.7692308 25.6615385,24 C25.6,21.9076923 25.1692308,20.4307692 25.1692308,20.3692308 C25.1076923,20.1230769 24.8615385,20 24.6153846,20 L17.7230769,20.5538462 C17.5384615,20.1230769 17.2923077,19.6923077 16.9846154,19.3846154 L26.3384615,16 C26.5230769,15.9384615 26.6461538,15.8153846 26.6461538,15.6923077 C26.6461538,15.6307692 27.1384615,14.0307692 27.2,11.8153846 C27.2615385,9.78461538 26.8923077,6.76923077 25.1076923,4.06153846 L25.1076923,4.06153846 L25.1076923,4.06153846 Z M13.7230769,24.9230769 C12,24.9230769 10.5846154,23.6307692 10.5846154,22.0307692 C10.5846154,21.7846154 10.5846154,21.5384615 10.6461538,21.3538462 L10.6461538,21.2923077 C10.8307692,20.6769231 11.2,20.1230769 11.7538462,19.7538462 L11.8153846,19.6923077 C12.1230769,19.5076923 12.4307692,19.3846154 12.7384615,19.2615385 C13.0461538,19.2 13.1692308,18.8923077 13.1076923,18.6461538 C13.0461538,18.4 12.7384615,18.2153846 12.4307692,18.2769231 C12.0615385,18.4 11.6923077,18.5230769 11.3846154,18.7076923 C9.23076923,17.8461538 7.81538462,15.8769231 7.81538462,13.6615385 C7.81538462,10.6461538 10.4615385,8.18461538 13.6615385,8.18461538 C16.9230769,8.18461538 19.5076923,10.6461538 19.5076923,13.6615385 C19.5076923,15.8769231 18.0923077,17.8461538 15.9384615,18.7076923 C15.6307692,18.5230769 15.2615385,18.3384615 14.8923077,18.2769231 C14.5846154,18.2153846 14.2769231,18.3384615 14.2153846,18.6461538 C14.1538462,18.8923077 14.2769231,19.2 14.5846154,19.2615385 C14.9538462,19.3846154 15.2615385,19.5076923 15.5076923,19.6923077 L15.5692308,19.7538462 C16.1230769,20.1230769 16.4923077,20.6769231 16.6769231,21.2923077 L16.6769231,21.3538462 C16.7384615,21.6 16.7384615,21.7846154 16.7384615,22.0307692 C16.8615385,23.6307692 15.4461538,24.9230769 13.7230769,24.9230769 L13.7230769,24.9230769 L13.7230769,24.9230769 Z"></path>\n          <path d="M11.5692308,12.4307692 C11.2615385,12.4307692 11.0153846,12.6769231 11.0153846,12.9230769 L11.0153846,13.6 C11.0153846,13.9076923 11.2615385,14.0923077 11.5692308,14.0923077 C11.8769231,14.0923077 12.1230769,13.8461538 12.1230769,13.6 L12.1230769,12.9230769 C12.1230769,12.6153846 11.8769231,12.4307692 11.5692308,12.4307692 L11.5692308,12.4307692 L11.5692308,12.4307692 Z"></path>\n          <path d="M15.9384615,14.0923077 C16.2461538,14.0923077 16.4923077,13.8461538 16.4923077,13.6 L16.4923077,12.9230769 C16.4923077,12.6153846 16.2461538,12.4307692 15.9384615,12.4307692 C15.6307692,12.4307692 15.3846154,12.6769231 15.3846154,12.9230769 L15.3846154,13.6 C15.3846154,13.9076923 15.6307692,14.0923077 15.9384615,14.0923077 L15.9384615,14.0923077 L15.9384615,14.0923077 Z"></path>\n          <path d="M13.7230769,17.2307692 C13.4153846,17.2307692 13.2307692,16.8615385 13.1692308,16.5538462 L13.1692308,13.4153846 C13.1692308,13.1076923 13.4153846,12.8615385 13.6615385,12.8615385 L13.6615385,12.8615385 C13.9692308,12.8615385 14.1538462,13.0461538 14.1538462,13.2923077 L14.1538462,16.4923077 C14.2769231,16.9230769 14.0307692,17.2307692 13.7230769,17.2307692 L13.7230769,17.2307692 L13.7230769,17.2307692 Z"></path>\n          <path d="M13.7230769,10.0923077 C13.4153846,10.0923077 13.1692308,10.3384615 13.1692308,10.5846154 L13.1692308,11.2615385 C13.1692308,11.5692308 13.4153846,11.7538462 13.7230769,11.7538462 C14.0307692,11.7538462 14.2769231,11.5076923 14.2769231,11.2615385 L14.2769231,10.5846154 C14.2769231,10.3384615 14.0307692,10.0923077 13.7230769,10.0923077 L13.7230769,10.0923077 L13.7230769,10.0923077 Z"></path>\n        </g>\n      </g>\n      <g id="hat-shape">\n        <g transform="translate(2.000000, 0.000000)">\n          <path d="M25.3787234,30.4592593 C27.2255319,29.8666667 28.0595745,29.037037 28.0595745,28.5037037 C28.0595745,28.2074074 28,27.7925926 27.2851064,27.6148148 C26.093617,27.3185185 22.4,26.7851852 22.4,26.7851852 L17.693617,9.71851852 C17.6340426,9.6 17.6340426,9.48148148 17.693617,9.36296296 L18.587234,5.98518519 C18.6468085,5.86666667 18.706383,5.74814815 18.7659574,5.68888889 L23.412766,1.12592593 C23.5914894,0.948148148 23.5914894,0.711111111 23.4723404,0.474074074 C23.3531915,0.296296296 23.0553191,0.177777778 22.8170213,0.296296296 C22.8170213,0.296296296 17.0978723,2.31111111 15.5489362,2.84444444 C15.4297872,2.9037037 15.2510638,3.02222222 15.1914894,3.14074074 L11.6170213,7.7037037 C11.4382979,7.94074074 11.3191489,8.11851852 11.2595745,8.41481481 C9.7106383,13.3333333 6.19574468,26.8444444 6.19574468,26.8444444 L1.37021277,27.6740741 C0.774468085,27.8518519 0.536170213,28.3851852 0.536170213,28.6222222 C0.536170213,29.5111111 1.37021277,29.9259259 3.21702128,30.5185185 L25.3787234,30.4592593 Z M21.2680851,26.7851852 C20.1957447,26.962963 19.0042553,27.0814815 17.7531915,27.1407407 L17.7531915,24.4148148 C18.706383,24.3555556 19.6595745,24.237037 20.493617,24.1777778 L21.2680851,26.7851852 L21.2680851,26.7851852 Z M12.3319149,8.47407407 L16.0255319,3.79259259 L21.0297872,2.01481481 L17.812766,5.21481481 C17.7531915,5.27407407 17.693617,5.33333333 17.693617,5.45185185 L16.6212766,9.42222222 L16.6212766,9.65925926 L20.3148936,23.1703704 C19.5404255,23.2888889 18.706383,23.3481481 17.812766,23.4074074 C17.7531915,23.1703704 17.5148936,23.0518519 17.2765957,23.0518519 L11.3191489,23.0518519 C11.0808511,23.0518519 10.8425532,23.2296296 10.7829787,23.4074074 C9.8893617,23.3481481 9.05531915,23.2888889 8.28085106,23.1703704 L12.3319149,8.47407407 L12.3319149,8.47407407 Z M16.7404255,24.0592593 L16.7404255,27.5555556 L11.9148936,27.5555556 L11.9148936,24.0592593 L16.7404255,24.0592593 L16.7404255,24.0592593 Z M8.04255319,24.1777778 C8.93617021,24.2962963 9.82978723,24.3555556 10.7829787,24.4148148 L10.7829787,27.1407407 C9.53191489,27.0814815 8.34042553,26.9037037 7.26808511,26.7851852 L8.04255319,24.1777778 L8.04255319,24.1777778 Z M1.72765957,28.6222222 L6.67234043,27.7333333 C7.92340426,27.9703704 9.35319149,28.0888889 10.8425532,28.2074074 C10.9021277,28.4444444 11.1404255,28.6222222 11.3787234,28.6222222 L17.2765957,28.6222222 C17.5148936,28.6222222 17.7531915,28.4444444 17.812766,28.2074074 C19.3021277,28.0888889 20.7319149,27.9703704 21.9829787,27.7333333 L26.9276596,28.6222222 C26.5106383,28.9777778 25.5574468,29.4518519 23.6510638,29.8666667 C21.1489362,30.4 17.8723404,30.7555556 14.2978723,30.7555556 C10.7829787,30.7555556 7.44680851,30.4592593 4.94468085,29.8666667 C3.03829787,29.4518519 2.14468085,28.9777778 1.72765957,28.6222222 L1.72765957,28.6222222 L1.72765957,28.6222222 Z M3.21702128,30.4592593 C3.33617021,30.5185185 4.58723404,30.8148148 4.76595745,30.8740741 C7.32765957,31.4666667 10.7234043,31.762963 14.3574468,31.762963 C17.9914894,31.762963 21.387234,31.4666667 23.9489362,30.8740741 C24.0680851,30.8740741 25.3787234,30.5185185 25.4978723,30.4592593 L3.21702128,30.4592593 Z"></path>\n          <path d="M13.2255319,25.0666667 C12.9276596,25.0666667 12.6893617,25.3037037 12.6893617,25.5407407 L12.6893617,26.1925926 C12.6893617,26.4888889 12.9276596,26.6666667 13.2255319,26.6666667 C13.5234043,26.6666667 13.7617021,26.4296296 13.7617021,26.1925926 L13.7617021,25.5407407 C13.7617021,25.2444444 13.5234043,25.0666667 13.2255319,25.0666667 L13.2255319,25.0666667 L13.2255319,25.0666667 Z"></path>\n          <path d="M15.4297872,25.0666667 C15.1319149,25.0666667 14.893617,25.3037037 14.893617,25.5407407 L14.893617,26.1925926 C14.893617,26.4888889 15.1319149,26.6666667 15.4297872,26.6666667 C15.7276596,26.6666667 15.9659574,26.4296296 15.9659574,26.1925926 L15.9659574,25.5407407 C15.9659574,25.2444444 15.7276596,25.0666667 15.4297872,25.0666667 L15.4297872,25.0666667 L15.4297872,25.0666667 Z"></path>\n          <path d="M12.5702128,13.5703704 L12.4510638,13.5703704 C12.1531915,13.5111111 12.0340426,13.2148148 12.093617,12.9777778 L12.8085106,10.0740741 C12.8680851,9.77777778 13.1659574,9.65925926 13.4042553,9.71851852 C13.7021277,9.77777778 13.8212766,10.0740741 13.7617021,10.3111111 L13.0468085,13.2148148 C12.987234,13.4518519 12.8085106,13.5703704 12.5702128,13.5703704 L12.5702128,13.5703704 Z"></path>\n          <path d="M11.9148936,15.762963 L11.7957447,15.762963 C11.4978723,15.7037037 11.3787234,15.4074074 11.4382979,15.1703704 L11.5574468,14.7555556 C11.6170213,14.4592593 11.9148936,14.3407407 12.1531915,14.4 C12.4510638,14.4592593 12.5702128,14.7555556 12.5106383,14.9925926 L12.3914894,15.4074074 C12.3319149,15.6444444 12.1531915,15.762963 11.9148936,15.762963 L11.9148936,15.762963 Z"></path>\n        </g>\n      </g>\n      <g id="poison-shape" transform="translate(7.000000, 0.000000)">\n        <path d="M8.34782609,19.8518519 C7.21490683,19.8518519 6.26086957,20.2666667 5.60496894,21.0962963 C4.77018634,22.0444444 4.41242236,23.4666667 4.59130435,25.0074074 C4.59130435,25.2444444 4.82981366,25.4814815 5.06832298,25.4814815 L6.26086957,25.4814815 L6.49937888,26.7259259 C6.55900621,26.962963 6.7378882,27.1407407 6.97639752,27.1407407 L9.77888199,27.1407407 C10.0173913,27.1407407 10.1962733,26.962963 10.2559006,26.7259259 L10.4944099,25.4814815 L11.6869565,25.4814815 C11.9254658,25.4814815 12.1639752,25.3037037 12.1639752,25.0074074 C12.3428571,23.4666667 11.9850932,22.0444444 11.1503106,21.0962963 C10.4347826,20.2666667 9.48074534,19.8518519 8.34782609,19.8518519 L8.34782609,19.8518519 L8.34782609,19.8518519 Z M11.1503106,24.4740741 L10.0173913,24.4740741 C9.77888199,24.4740741 9.6,24.6518519 9.54037267,24.8888889 L9.36149068,26.0740741 L7.39378882,26.0740741 L7.09565217,24.8888889 C7.03602484,24.6518519 6.85714286,24.4740741 6.61863354,24.4740741 L5.48571429,24.4740741 C5.42608696,23.4074074 5.7242236,22.4592593 6.26086957,21.8074074 C6.7378882,21.2148148 7.45341615,20.9185185 8.28819876,20.9185185 C9.12298137,20.9185185 9.83850932,21.2148148 10.315528,21.8074074 C10.9118012,22.4 11.2099379,23.4074074 11.1503106,24.4740741 L11.1503106,24.4740741 L11.1503106,24.4740741 Z"></path>\n        <path d="M11.9850932,10.4296296 L11.9850932,7.7037037 C12.1639752,7.52592593 12.2832298,7.28888889 12.2832298,7.05185185 L12.2832298,5.45185185 C12.2832298,4.97777778 11.9254658,4.62222222 11.5080745,4.62222222 L11.3888199,4.62222222 L11.6273292,0.711111111 C11.6273292,0.592592593 11.5677019,0.414814815 11.5080745,0.355555556 C11.3888199,0.237037037 11.2695652,0.177777778 11.1503106,0.177777778 L5.60496894,0.177777778 C5.48571429,0.177777778 5.36645963,0.237037037 5.24720497,0.355555556 C5.12795031,0.474074074 5.12795031,0.592592593 5.12795031,0.711111111 L5.36645963,4.62222222 L5.24720497,4.62222222 C4.82981366,4.62222222 4.47204969,4.97777778 4.47204969,5.45185185 L4.47204969,7.05185185 C4.47204969,7.34814815 4.59130435,7.58518519 4.77018634,7.7037037 L4.77018634,10.4296296 C1.90807453,11.9111111 0.119254658,14.9333333 0.119254658,18.3111111 L0.119254658,31.4074074 C0.119254658,31.7037037 0.357763975,31.9407407 0.596273292,31.9407407 L16.2186335,31.9407407 C16.4571429,31.9407407 16.6956522,31.7037037 16.6956522,31.4074074 L16.6956522,18.3111111 C16.6360248,14.9333333 14.7875776,11.8518519 11.9850932,10.4296296 L11.9850932,10.4296296 L11.9850932,10.4296296 Z M6.08198758,1.12592593 L10.5540373,1.12592593 L10.3751553,4.56296296 L6.26086957,4.56296296 L6.08198758,1.12592593 L6.08198758,1.12592593 Z M5.36645963,6.81481481 L5.36645963,5.57037037 L11.3291925,5.57037037 L11.3291925,6.81481481 L5.36645963,6.81481481 L5.36645963,6.81481481 Z M15.6819876,18.7851852 L15.6819876,28.1481481 L1.0136646,28.1481481 L1.0136646,18.7851852 L15.6819876,18.7851852 L15.6819876,18.7851852 Z M1.07329193,17.7777778 C1.25217391,14.9333333 2.92173913,12.3851852 5.42608696,11.2 L5.42608696,11.2 C5.60496894,11.1407407 5.7242236,10.962963 5.7242236,10.7259259 L5.7242236,7.82222222 L11.0310559,7.82222222 L11.0310559,10.7259259 C11.0310559,10.9037037 11.1503106,11.1407407 11.3291925,11.2 C13.8335404,12.3851852 15.5031056,14.9333333 15.6819876,17.7777778 L1.07329193,17.7777778 L1.07329193,17.7777778 Z M1.0136646,30.8740741 L1.0136646,29.1555556 L15.6223602,29.1555556 L15.6223602,30.8740741 L1.0136646,30.8740741 L1.0136646,30.8740741 Z"></path>\n        <path d="M7.57267081,22.162963 C7.27453416,22.162963 7.03602484,22.4 7.03602484,22.637037 L7.03602484,23.2888889 C7.03602484,23.5851852 7.27453416,23.762963 7.57267081,23.762963 C7.87080745,23.762963 8.10931677,23.5259259 8.10931677,23.2888889 L8.10931677,22.637037 C8.04968944,22.4 7.81118012,22.162963 7.57267081,22.162963 L7.57267081,22.162963 L7.57267081,22.162963 Z"></path>\n        <path d="M9.12298137,22.162963 C8.82484472,22.162963 8.5863354,22.4 8.5863354,22.637037 L8.5863354,23.2888889 C8.5863354,23.5851852 8.82484472,23.762963 9.12298137,23.762963 C9.42111801,23.762963 9.65962733,23.5259259 9.65962733,23.2888889 L9.65962733,22.637037 C9.65962733,22.4 9.42111801,22.162963 9.12298137,22.162963 L9.12298137,22.162963 L9.12298137,22.162963 Z"></path>\n        <path d="M13.0583851,14.8148148 C12.8795031,14.8148148 12.7602484,14.7555556 12.6409938,14.637037 C12.6409938,14.637037 11.8658385,13.6296296 10.4944099,12.8 C10.2559006,12.6814815 10.1962733,12.3259259 10.315528,12.0888889 C10.4347826,11.8518519 10.7925466,11.7925926 11.0310559,11.9111111 C12.5813665,12.8 13.4161491,13.9851852 13.4757764,13.9851852 C13.6546584,14.2222222 13.5950311,14.5185185 13.3565217,14.6962963 C13.2372671,14.7555556 13.1180124,14.8148148 13.0583851,14.8148148 L13.0583851,14.8148148 Z"></path>\n        <path d="M13.952795,16.5333333 C13.773913,16.5333333 13.5950311,16.4148148 13.4757764,16.237037 L13.2968944,15.8814815 C13.1776398,15.6444444 13.2968944,15.3481481 13.5354037,15.2296296 C13.773913,15.1111111 14.0720497,15.2296296 14.1913043,15.4666667 L14.3701863,15.8222222 C14.489441,16.0592593 14.3701863,16.3555556 14.131677,16.4740741 C14.131677,16.5333333 14.0124224,16.5333333 13.952795,16.5333333 L13.952795,16.5333333 Z"></path>\n      </g>\n      <g id="grave-shape">\n        <g transform="translate(0.000000, 1.000000)">\n          <path d="M9.61381818,4.19623912 C8.60872727,4.98995696 7.77490909,5.9519847 7.136,7.05498996 C7.01127273,7.27041224 7.08654545,7.54517456 7.30472727,7.66852989 C7.37563636,7.70880918 7.45345455,7.72822956 7.53018182,7.72822956 C7.688,7.72822956 7.84072727,7.6469517 7.92509091,7.50237781 C8.50690909,6.49791296 9.26618182,5.62183835 10.1814545,4.89932855 C10.3774545,4.7443252 10.4094545,4.46165088 10.2527273,4.26744715 C10.0967273,4.07324342 9.81054545,4.04159541 9.61381818,4.19623912 L9.61381818,4.19623912 Z"></path>\n          <path d="M11.8436364,3.80423529 C11.908,3.80423529 11.9730909,3.79056911 12.0352727,3.76179818 C12.708,3.45143185 13.4181818,3.22234338 14.1465455,3.08172549 C14.3927273,3.03425347 14.5534545,2.79797226 14.5050909,2.55449833 C14.4570909,2.31102439 14.22,2.15098613 13.9716364,2.19953706 C13.1712727,2.35418077 12.3901818,2.60592635 11.6509091,2.94722143 C11.4232727,3.05223529 11.3250909,3.31980488 11.4312727,3.54493735 C11.5083636,3.70821234 11.6727273,3.80423529 11.8436364,3.80423529 L11.8436364,3.80423529 Z"></path>\n          <path d="M31.2621818,28.345473 L26.6963636,28.345473 L26.6963636,11.216704 C26.6963636,8.1892836 25.4883636,5.35822477 23.2945455,3.24536011 C23.1145455,3.0720153 22.8269091,3.07561167 22.6516364,3.25363176 C22.4767273,3.43165184 22.4803636,3.71612434 22.66,3.88946915 C24.6767273,5.83150646 25.7872727,8.43383644 25.7872727,11.216704 L25.7872727,28.345473 L7.53745455,28.345473 C6.19636364,28.345473 5.10545455,27.1622688 5.10545455,25.7082582 L5.10545455,11.216704 C5.10545455,5.57724342 9.74436364,0.989360115 15.4465455,0.989360115 C17.22,0.989360115 18.9694545,1.44070397 20.5058182,2.29448111 C20.7247273,2.4163979 21.0018182,2.33907604 21.1247273,2.12257484 C21.2476364,1.90607365 21.1698182,1.63203061 20.9509091,1.51047346 C19.2789091,0.581532281 17.3752727,0.0902687709 15.4461818,0.0899091344 C9.24290909,0.0899091344 4.196,5.08130464 4.196,11.2163443 L4.196,25.7082582 L4.196,28.345473 L0.737818182,28.345473 C0.486909091,28.345473 0.283272727,28.5468694 0.283272727,28.7950187 C0.283272727,29.0431679 0.486909091,29.2445643 0.737818182,29.2445643 L4.65054545,29.2445643 L7.53709091,29.2445643 L31.2618182,29.2445643 C31.5127273,29.2445643 31.7163636,29.0431679 31.7163636,28.7950187 C31.7163636,28.5468694 31.5130909,28.345473 31.2621818,28.345473 L31.2621818,28.345473 Z"></path>\n          <path d="M18.0603636,8.45937064 C18.0603636,8.21122143 17.8567273,8.00982496 17.6058182,8.00982496 L16.4545455,8.00982496 L16.4545455,6.87193496 C16.4545455,6.62378575 16.2509091,6.42238929 16,6.42238929 C15.7490909,6.42238929 15.5454545,6.62378575 15.5454545,6.87193496 L15.5454545,8.00982496 L14.3941818,8.00982496 C14.1432727,8.00982496 13.9396364,8.21122143 13.9396364,8.45937064 C13.9396364,8.70751985 14.1432727,8.90891631 14.3941818,8.90891631 L15.5454545,8.90891631 L15.5454545,11.6356805 C15.5454545,11.8838297 15.7490909,12.0852262 16,12.0852262 C16.2509091,12.0852262 16.4545455,11.8838297 16.4545455,11.6356805 L16.4545455,8.90891631 L17.6058182,8.90891631 C17.8567273,8.90891631 18.0603636,8.70787948 18.0603636,8.45937064 L18.0603636,8.45937064 Z"></path>\n          <path d="M16.1254545,14.9389421 C15.8745455,14.9389421 15.6709091,15.1403386 15.6709091,15.3884878 L15.6709091,19.0064314 C15.6709091,19.2545806 15.8745455,19.455977 16.1254545,19.455977 C16.3763636,19.455977 16.58,19.2545806 16.58,19.0064314 L16.58,15.3884878 C16.58,15.1403386 16.3763636,14.9389421 16.1254545,14.9389421 L16.1254545,14.9389421 Z"></path>\n          <path d="M14.2032727,16.3566294 C14.2032727,15.5747795 13.56,14.9389421 12.7698182,14.9389421 L11.088,14.9389421 C11.0643636,14.9389421 11.044,14.9486523 11.0214545,14.9522487 C10.9989091,14.9486523 10.9781818,14.9389421 10.9545455,14.9389421 C10.7036364,14.9389421 10.5,15.1403386 10.5,15.3884878 L10.5,19.0064314 C10.5,19.2545806 10.7036364,19.455977 10.9545455,19.455977 C11.2054545,19.455977 11.4090909,19.2545806 11.4090909,19.0064314 L11.4090909,17.7743166 L12.5069091,17.7743166 L13.3549091,19.2304849 C13.4389091,19.3750588 13.5916364,19.4556174 13.7490909,19.4556174 C13.8261818,19.4556174 13.904,19.436197 13.9756364,19.3955581 C14.1930909,19.2718431 14.268,18.9970808 14.1425455,18.7816585 L13.452,17.5952176 C13.8970909,17.3549804 14.2032727,16.8928474 14.2032727,16.3566294 L14.2032727,16.3566294 Z M11.4090909,15.8380335 L12.7694545,15.8380335 C13.0585455,15.8380335 13.2938182,16.0707183 13.2938182,16.3566294 C13.2938182,16.6425404 13.0585455,16.8752253 12.7694545,16.8752253 L11.4090909,16.8752253 L11.4090909,15.8380335 L11.4090909,15.8380335 Z"></path>\n          <path d="M18.8443636,14.9389421 C18.8207273,14.9389421 18.8003636,14.9486523 18.7774545,14.9522487 C18.7549091,14.9486523 18.7345455,14.9389421 18.7105455,14.9389421 C18.4596364,14.9389421 18.256,15.1403386 18.256,15.3884878 L18.256,19.0064314 C18.256,19.2545806 18.4596364,19.455977 18.7105455,19.455977 C18.9614545,19.455977 19.1650909,19.2545806 19.1650909,19.0064314 L19.1650909,17.7743166 L20.5258182,17.7743166 C21.3163636,17.7743166 21.9592727,17.1381196 21.9592727,16.3566294 C21.9592727,15.5747795 21.316,14.9389421 20.5258182,14.9389421 L18.8443636,14.9389421 L18.8443636,14.9389421 Z M21.0509091,16.3566294 C21.0509091,16.6425404 20.8156364,16.8752253 20.5265455,16.8752253 L19.1658182,16.8752253 L19.1658182,15.8380335 L20.5265455,15.8380335 C20.8152727,15.8380335 21.0509091,16.0707183 21.0509091,16.3566294 L21.0509091,16.3566294 Z"></path>\n        </g>\n      </g>\n      <g id="net-shape">\n        <path d="M31.9890011,11.4599074 C31.9336457,11.2078156 31.685294,11.0488556 31.4317061,11.104211 L29.267232,11.5822131 L29.266484,11.5822131 C27.8343479,11.9001331 25.528493,10.6434141 23.5304594,8.45911675 C21.5511269,6.29539073 20.5087234,3.91435704 20.9190272,2.50952473 L21.2051552,1.60925013 C21.2833261,1.36314266 21.1471816,1.10020413 20.9014481,1.02203321 C20.6549666,0.943862298 20.3924021,1.08038088 20.3142312,1.32574031 L20.0445602,2.17365161 C20.0430641,2.17813989 20.0393239,2.18113208 20.0378278,2.18562036 C19.594984,3.58521635 17.3549572,4.95414241 14.4637554,5.59260055 C11.5729277,6.23068466 8.96560975,5.93183987 7.97556951,4.84941582 C7.9643488,4.83707305 7.94863981,4.83183672 7.93629704,4.82061601 L5.45726919,2.11680004 C5.28334826,1.92642207 4.98749566,1.91407929 4.79674367,2.08800023 C4.6063657,2.26266921 4.5936489,2.55814778 4.76831788,2.74852575 L7.36030083,5.57539546 C8.31630493,6.75992793 8.31181664,9.51573318 7.33224906,12.3635482 C7.24809377,12.6077856 7.37787993,12.8737163 7.62211729,12.9578716 C7.86485855,13.0424009 8.13228536,12.9118667 8.21606663,12.6680033 C8.77036947,11.056336 9.15636174,9.02688445 8.95999939,7.31984113 L10.8637791,9.39641968 C11.3810536,10.0094442 11.3971366,11.5197512 10.8970672,13.1007486 C10.3891432,14.7071795 9.4866245,15.9496857 8.70267122,16.1228585 C8.70229719,16.1228585 8.70192317,16.1232326 8.70154915,16.1232326 L5.97379566,16.7257844 C6.62085634,16.0061632 7.22116408,15.0509072 7.7320802,13.9015329 C7.83680678,13.6655241 7.73058411,13.3891207 7.49457527,13.2843941 C7.25744436,13.1785454 6.98216305,13.2858902 6.87743647,13.521525 C5.95023218,15.6070801 4.71034423,17.0040579 3.56096998,17.2580199 C3.56096998,17.2580199 3.56059595,17.2580199 3.56059595,17.2583939 L0.366809175,17.9641763 C0.114717327,18.0199058 -0.0446166901,18.2693795 0.0111128134,18.5214713 C0.0593618466,18.739527 0.252732003,18.8880144 0.4674215,18.8880144 C0.500709592,18.8880144 0.534745732,18.8842741 0.568781872,18.8771677 L3.76369072,18.1717593 C5.27063146,17.8377563 7.74666712,19.2556795 9.78397319,21.6153938 C9.876357,21.7227386 10.0068912,21.77772 10.1381735,21.77772 C10.2462663,21.77772 10.3547331,21.7403177 10.4430026,21.6640169 C10.6382429,21.4953323 10.6603103,21.2002277 10.4916257,21.0046134 C9.36244869,19.6966532 7.78032923,18.324735 6.18624102,17.6365317 L8.90651403,17.0358499 C9.6885972,16.8634251 11.0309676,17.6114721 12.166503,18.8532302 C13.2148909,19.9988642 13.8193129,21.2742844 13.7194486,22.0679623 L12.8274025,24.8746347 C12.5221993,23.9612693 11.9929561,22.9730992 11.2561297,21.9654798 C11.1031541,21.7571487 10.8110418,21.7111439 10.6027107,21.8641195 C10.3943796,22.016347 10.3491227,22.3088334 10.5013503,22.5175385 C11.721415,24.1853094 12.3247149,25.7917404 12.1766016,26.9201693 L11.0283494,30.5328624 C10.9501785,30.7789699 11.0863231,31.0419084 11.3320565,31.1200794 C11.3791835,31.1350403 11.4270585,31.1421467 11.4738114,31.1421467 C11.6720439,31.1421467 11.8560635,31.0149787 11.9192734,30.8163723 L12.9025812,27.7228238 C12.9403576,27.677941 12.9725236,27.6274478 12.9908508,27.567978 L12.9912248,27.567978 C12.9912248,27.56723 12.9912248,27.566856 12.9915988,27.566482 C13.6049974,25.6324064 18.1067444,23.5019684 22.3032882,23.8647712 C22.5565022,23.8853425 22.7872747,23.6968347 22.809342,23.4391325 C22.8317835,23.1818043 22.6414055,22.9555201 22.3837033,22.9330787 C19.5078365,22.6806128 15.8154764,23.6194118 13.6899007,25.2475362 L14.5026538,22.6907114 C14.5348199,22.6488208 14.5617496,22.6016938 14.5785806,22.5478345 L14.5789546,22.5478345 C14.7708287,21.9407943 15.6467918,21.3045803 16.8661084,20.8871701 C17.1099717,20.8033888 17.240506,20.5374581 17.1567247,20.2932207 C17.0729434,20.0493574 16.8085088,19.9188232 16.5627753,20.0026044 C16.0249295,20.186624 15.555156,20.4099161 15.1489665,20.6575196 L15.7028953,18.91457 C15.7309471,18.8752976 15.7541365,18.8311628 15.7694715,18.7825397 C15.8936473,18.389067 16.9670948,17.8897456 17.9964075,17.8897456 C18.4687992,17.8897456 18.7388441,18.0012046 18.8345942,18.1055572 C18.8461889,18.118274 18.8622719,18.1231363 18.8746147,18.134357 L20.1638737,19.5403114 C19.6286461,19.4830858 19.0313305,19.4890702 18.3786595,19.5758436 C18.1224534,19.6102538 17.9429221,19.8451405 17.9769583,20.1009726 C18.0113684,20.3571787 18.2514915,20.5333438 18.5020873,20.5026739 C19.8897145,20.3164102 21.0387147,20.5153907 21.4998857,21.0192004 C21.5167168,21.0379015 21.5391582,21.045756 21.5582334,21.060717 L24.8690895,24.6711659 C24.9281852,24.7508329 24.9865329,24.831622 25.0531091,24.9041826 C25.0770466,24.9307383 25.1084646,24.9442031 25.1372644,24.9640263 L26.8405675,26.8218011 C26.9329513,26.9224135 27.0589972,26.9732807 27.1854172,26.9732807 C27.2983723,26.9732807 27.4113274,26.9328861 27.501467,26.8506009 C27.691845,26.675932 27.7045618,26.3800794 27.5302668,26.1897014 L25.7600135,24.258618 C25.7596395,24.258244 25.7592655,24.258244 25.7588915,24.25787 L25.5722537,24.0544012 C24.68507,22.7748667 24.7482799,20.0347705 25.7592655,17.212389 C25.846039,16.9692738 25.719993,16.7014729 25.4768777,16.6143254 C25.2330144,16.527552 24.9659616,16.6535979 24.8788141,16.8967132 C24.2474625,18.6583639 23.8827895,20.7225997 24.0761597,22.4225366 L22.0874767,20.2532002 C21.647625,19.5851942 21.6588457,18.149692 22.1323595,16.6524758 C22.6402834,15.0452968 23.5428022,13.8020426 24.3275035,13.6292438 L24.3278775,13.6292438 L27.0530128,13.0274399 C26.5200293,13.6213893 26.0177157,14.3772908 25.5666434,15.2805576 C25.4510701,15.5117041 25.54495,15.7922218 25.7760966,15.907795 C25.8434208,15.9414571 25.9144853,15.9571661 25.9848017,15.9571661 C26.1564785,15.9571661 26.3214228,15.8625382 26.403334,15.6987159 C27.3043566,13.8948005 28.4208168,12.7270991 29.4665866,12.4948305 L29.4673346,12.4948305 L29.4688307,12.4948305 L29.4688307,12.4948305 L31.6329307,12.0168284 C31.8853966,11.9614729 32.0443566,11.7119992 31.9890011,11.4599074 L31.9890011,11.4599074 Z M22.840386,9.09046844 C23.9463735,10.2989384 25.3912264,11.4916994 26.8420636,12.1178148 L24.1251568,12.7177485 C23.3393334,12.8916694 21.9984591,12.1428743 20.8618016,10.9003682 C19.7243961,9.65711407 19.0990288,8.25377784 19.341022,7.48777769 C19.3436402,7.47954917 19.3417701,7.47132065 19.3436402,7.46309214 L20.1795827,4.83408086 C20.6740418,6.33503722 21.7343985,7.88125042 22.840386,9.09046844 L22.840386,9.09046844 Z M15.3311159,16.9991956 C15.285111,16.9292532 15.2402282,16.8637991 15.1987116,16.8065735 C14.9488639,16.4658381 14.6227154,16.1288429 14.267393,15.8520655 L15.8038816,15.5128262 L15.3311159,16.9991956 L15.3311159,16.9991956 Z M14.552399,13.4201646 L15.6288386,14.5942244 L14.0732748,14.937578 C14.2281206,14.6331229 14.3264888,14.3526053 14.3743638,14.2011257 C14.4222388,14.0485241 14.5037759,13.760526 14.552399,13.4201646 L14.552399,13.4201646 Z M15.2439684,12.7914311 C15.7126199,12.7656235 16.2691669,12.6556606 16.7752207,12.456306 L16.3017069,13.9452936 L15.2439684,12.7914311 L15.2439684,12.7914311 Z M17.6736252,12.7170004 C17.7274846,12.8011557 17.7805959,12.8800747 17.829219,12.9462768 C18.0794407,13.2877603 18.4059632,13.6247555 18.7616596,13.9022809 L17.1862725,14.2501228 L17.6736252,12.7170004 L17.6736252,12.7170004 Z M20.2704704,13.569026 L20.2704704,13.569026 C20.248403,13.5738883 20.2244655,13.5761324 20.1982839,13.5761324 C19.7786295,13.5761324 19.0694809,13.0566138 18.5843724,12.3934701 C18.2013724,11.8705852 18.0910354,11.4438244 18.1512532,11.2526984 C18.1591077,11.2287609 18.1591077,11.2048234 18.1624739,11.1808859 L18.7291195,9.39791577 C19.0735952,10.1665341 19.6133111,10.9198174 20.1724763,11.5313459 C20.7290233,12.1398821 21.4276992,12.7409379 22.1592892,13.1519898 L20.2704704,13.569026 L20.2704704,13.569026 Z M14.66498,6.50596597 C16.2672968,6.15213972 18.0218411,5.49311029 19.2897808,4.54720483 L17.2221788,11.0499776 C16.9929024,11.4281154 15.9931375,11.8638528 15.0322711,11.8638528 C14.5643677,11.8638528 14.2958188,11.7542639 14.1985727,11.6506594 L12.88201,10.2151571 C14.0179194,10.3340966 15.3531833,10.1377343 16.5021835,9.73865119 C16.7460469,9.65374785 16.875085,9.38781714 16.7905557,9.14357978 C16.7056523,8.89971645 16.4397216,8.76955627 16.1954843,8.85520765 C14.2898345,9.51685525 12.1971729,9.46299586 11.5295409,8.73477208 C11.5291669,8.73477208 11.5287929,8.73439806 11.5284189,8.73402403 C11.5246786,8.72990978 11.5194423,8.72841368 11.5157021,8.72467345 L9.63511184,6.6735285 C11.1858133,7.0011731 13.0596711,6.86016623 14.66498,6.50596597 L14.66498,6.50596597 Z M11.7879912,13.3831363 C12.0363428,12.5969389 12.2076456,11.691428 12.198295,10.8524932 L13.4998968,12.2722865 C13.5013929,12.2741566 13.5021409,12.2771488 13.5040111,12.2790189 C13.6831683,12.4746332 13.7366537,13.1160835 13.4826917,13.918738 C13.2287298,14.7210184 12.8169299,15.2147294 12.5577316,15.271955 C12.5573575,15.271955 12.5573575,15.2723291 12.5569835,15.2723291 L10.6681648,15.6893653 C11.1585096,15.0086425 11.5392655,14.1697078 11.7879912,13.3831363 L11.7879912,13.3831363 Z M12.8565764,18.2226265 C12.3004034,17.6140903 11.6021015,17.0137825 10.8708855,16.6023567 L12.7608263,16.1853205 C12.7817717,16.1804582 12.8057092,16.17784 12.8315168,16.17784 C13.2500491,16.17784 13.9588236,16.6969846 14.4443062,17.3593803 C14.7626002,17.7936216 14.8908902,18.1597906 14.8916383,18.3815865 L14.2789878,20.3081817 C13.9337641,19.5563944 13.4041468,18.8210642 12.8565764,18.2226265 L12.8565764,18.2226265 Z M18.4392513,16.9827386 C18.3004886,16.9644114 18.1523753,16.9554349 17.9967815,16.9554349 C17.480255,16.9554349 16.8062647,17.0721302 16.2123153,17.3133754 L16.8586279,15.2798095 L18.9557778,14.8167684 C18.8009321,15.1219716 18.7021898,15.4032373 18.6539408,15.5554649 C18.577266,15.7982061 18.4164359,16.3880412 18.4392513,16.9827386 L18.4392513,16.9827386 Z M21.2410615,16.3719582 C20.99458,17.1521712 20.8236512,18.0498277 20.8300096,18.8831521 L19.5306519,17.466351 C19.5224234,17.4577485 19.5112027,17.4540082 19.5026002,17.4457797 C19.5011041,17.4442836 19.499982,17.4427875 19.4984859,17.4412914 C19.341022,17.2135111 19.3054898,16.5974944 19.5459869,15.8367306 C19.7999489,15.0340761 20.2117487,14.539617 20.4713211,14.4820174 L22.3608879,14.0646071 C21.870543,14.745704 21.4897871,15.5853868 21.2410615,16.3719582 L21.2410615,16.3719582 Z"></path>\n      </g>\n      <g id="pumpkin-shape">\n        <path d="M19.5664176,6.89138019 C19.2242637,5.65273687 18.292044,4.65606271 17.0514286,4.24798119 C16.8203956,4.17177319 16.5721319,4.29749882 16.4961758,4.52752757 C16.4202198,4.7579075 16.5457582,5.00584688 16.7760879,5.08205487 C17.6559121,5.37143454 18.3395165,6.041503 18.6507253,6.88892187 L15.3635165,6.88892187 C14.6707692,6.54019127 14.3694066,5.86169428 14.2431648,5.40093441 C14.5167473,5.22779828 14.8181099,5.09329292 15.1444396,5.01497779 C15.1511209,5.01357303 15.156044,5.0083052 15.1623736,5.00654926 C15.2014066,4.99531121 15.2365714,4.97740057 15.2706813,4.95632924 C15.282989,4.94895427 15.2970549,4.94438882 15.3083077,4.93560909 C15.3501538,4.9036509 15.3870769,4.86466893 15.4155604,4.81901437 C15.4197802,4.81199059 15.4208352,4.80356206 15.4247033,4.79653828 C15.4443956,4.76001463 15.4626813,4.72278861 15.4718242,4.67994356 C15.9314286,2.53804233 17.8567033,0.983328978 20.0495824,0.983328978 C20.2922198,0.983328978 20.4891429,0.786663183 20.4891429,0.544342827 C20.4891429,0.302022472 20.2922198,0.105356676 20.0495824,0.105356676 C17.5363516,0.105356676 15.3237802,1.82688477 14.680967,4.23288006 C13.4255824,4.62656284 12.4606593,5.62990959 12.1132308,6.89138019 C11.258022,6.89875516 10.4073846,6.99603449 9.5781978,7.17900392 C8.77116484,6.63325634 7.79850549,6.31402561 6.75235165,6.31402561 C3.96589011,6.31402561 1.69916484,8.57778939 1.69916484,11.3606104 C1.69916484,11.8013525 1.76175824,12.2266423 1.86865934,12.6343726 C0.665318681,14.5623998 0.0253186813,16.7798066 0.0253186813,19.0646418 C0.0253186813,19.3069621 0.222241758,19.5036279 0.464879121,19.5036279 C0.707516484,19.5036279 0.90443956,19.3069621 0.90443956,19.0646418 C0.90443956,17.1717335 1.3752967,15.3279916 2.27024176,13.681618 C2.49389011,14.1107708 2.77767033,14.5034001 3.11032967,14.8496723 L0.939956044,20.7981103 C0.881934066,20.9564965 0.920263736,21.1341981 1.03841758,21.2550071 C1.15621978,21.375816 1.33345055,21.4179587 1.49345055,21.364578 L3.43876923,20.7096107 L4.57002198,22.4894361 C4.6509011,22.6172689 4.79156044,22.6931257 4.94101099,22.6931257 C4.95683516,22.6931257 4.97265934,22.6924233 4.98848352,22.6906674 C5.15516484,22.6727567 5.29652747,22.561781 5.3541978,22.4047996 L6.0363956,20.5357721 L6.61907692,23.2729386 C6.65424176,23.4379974 6.78083516,23.5682885 6.94505495,23.608324 C6.97951648,23.6164014 7.01432967,23.6206156 7.04879121,23.6206156 C7.1789011,23.6206156 7.30408791,23.5630206 7.38883516,23.4597711 L8.88334066,21.6388565 L11.0691868,22.6832924 C11.2203956,22.7552861 11.3993846,22.7359707 11.5309011,22.6320188 C11.6624176,22.5287693 11.7236044,22.3594962 11.6887912,22.1958422 L10.1710769,15.0663559 C11.1732747,14.1437826 11.8055385,12.826473 11.8055385,11.3609616 C11.8055385,10.6227625 11.6423736,9.92319415 11.3557802,9.2907029 C12.2918681,8.65224144 13.3088352,8.20763627 14.3683516,7.97128612 C12.8351648,9.9976462 12.0235604,14.5543224 12.0235604,18.9076603 C12.0235604,19.3002895 12.0295385,19.6883533 12.0418462,20.070798 C12.0495824,20.3082017 12.2447473,20.4957366 12.4810549,20.4957366 L12.4954725,20.4957366 C12.7381099,20.4880105 12.9283516,20.2850233 12.9206154,20.0427029 C12.9086593,19.6693891 12.9026813,19.2904562 12.9026813,18.9076603 C12.9026813,12.3421834 14.624,7.76689417 16.1691429,7.76689417 L16.1691429,7.76689417 C17.076044,7.76689417 18.0346374,9.35672642 18.6707692,11.9154889 C18.7294945,12.1504343 18.9668571,12.2933682 19.2035165,12.2357732 C19.4391209,12.1771246 19.5825934,11.9390186 19.5242198,11.703722 C19.109978,10.0380329 18.5744176,8.77831826 17.9527033,7.96426235 C22.3715165,8.94162111 25.7241319,13.4754701 25.7241319,18.9076603 C25.7241319,19.765966 25.6400879,20.6204087 25.4748132,21.4474586 C25.426989,21.6852135 25.5817143,21.9162958 25.8194286,21.9640575 C25.8486154,21.9700277 25.8774505,21.972486 25.9062857,21.972486 C26.1112967,21.972486 26.2948571,21.8281474 26.3367033,21.6195412 C26.5135824,20.736301 26.6032527,19.8239122 26.6032527,18.9076603 C26.6032527,13.8912778 23.9205275,9.58535041 20.1216703,7.78691194 C26.0564396,8.12651163 30.7811868,13.0547458 30.7811868,19.0653441 C30.7811868,23.8243052 27.8181978,27.9030133 23.6385055,29.5648393 C22.8254945,29.5532501 21.9407473,29.4278756 21.3601758,29.3277868 C23.2566154,28.0747447 24.8066813,26.1460152 25.7237802,23.7456389 C25.8102857,23.519122 25.6967033,23.2652124 25.4698901,23.17882 C25.2427253,23.0927787 24.9891868,23.2058615 24.9023297,23.4323784 C23.6163516,26.798173 21.0018462,29.1592161 17.9716923,29.8405226 C19.5034725,27.8127578 20.3143736,23.2585398 20.3143736,18.9076603 C20.3143736,17.2454831 20.205011,15.6380915 19.9898022,14.1311398 C19.9553407,13.8912778 19.7345055,13.7241118 19.4925714,13.7585284 C19.2523956,13.7925937 19.0853626,14.0148963 19.1194725,14.2551095 C19.3287033,15.7213232 19.4349011,17.2865722 19.4349011,18.9076603 C19.4349011,25.4446909 17.7283516,30.0073373 16.1884835,30.0463193 C16.1723077,30.0463193 16.1564835,30.0449146 16.139956,30.0445634 C15.1732747,30.0062838 13.8591648,27.9915129 13.2251429,23.6114847 C13.1903297,23.3712715 12.965978,23.2044568 12.7272088,23.2395756 C12.4866813,23.2743433 12.3203516,23.4969971 12.3548132,23.7368592 C12.762022,26.5495312 13.4712967,28.6538552 14.3697582,29.8370107 C11.7643956,29.2410431 9.48641758,27.4071346 8.06575824,24.6826109 C7.95358242,24.4673321 7.68808791,24.3841003 7.47287912,24.4957784 C7.25767033,24.6078077 7.17362637,24.8729553 7.2858022,25.0878829 C8.62628571,27.658937 10.6806154,29.4970598 13.067956,30.3637941 L12.2166154,30.3637941 C7.22918681,30.3637941 2.76536264,27.0296065 1.36052747,22.2562467 C1.29301099,22.0234084 1.04791209,21.8896054 0.815824176,21.9587897 C0.583032967,22.0269203 0.449406593,22.2709966 0.517978022,22.5038349 C2.03147253,27.6487525 6.84237363,31.2417664 12.2173187,31.2417664 L19.4672527,31.2417664 C26.1904176,31.2417664 31.659956,25.7793739 31.659956,19.0653441 C31.659956,12.3843261 26.2438681,6.94476091 19.5664176,6.89138019 L19.5664176,6.89138019 Z M4.83375824,21.2662451 L3.99613187,19.9485843 C3.88782418,19.7779065 3.67648352,19.7031032 3.48448352,19.767722 L2.07859341,20.2407735 L3.63920879,15.964346 C4.15718681,16.5497779 5.12175824,17.7613797 5.61265934,19.1317188 L4.83375824,21.2662451 L4.83375824,21.2662451 Z M10.6433407,21.5064583 L8.95156044,20.6980214 C8.76835165,20.6102242 8.54997802,20.6593906 8.42197802,20.8156697 L7.28861538,22.1965446 L6.04413187,16.3517073 C6.27621978,16.3843679 6.51147253,16.4071952 6.75235165,16.4071952 C7.72254945,16.4071952 8.62663736,16.128 9.3970989,15.6524902 L10.6433407,21.5064583 L10.6433407,21.5064583 Z M6.75235165,15.5295741 C4.45081319,15.5295741 2.57828571,13.6594931 2.57828571,11.3609616 C2.57828571,9.0624301 4.45081319,7.1923491 6.75235165,7.1923491 C9.05389011,7.1923491 10.9264176,9.0624301 10.9264176,11.3609616 C10.9264176,13.6598443 9.05389011,15.5295741 6.75235165,15.5295741 L6.75235165,15.5295741 Z M10.4302418,7.91123282 C11.0196044,7.81781657 11.6174066,7.76654298 12.2176703,7.76654298 L12.263033,7.76654298 C11.8034286,7.98006585 11.3571868,8.23221949 10.9260659,8.52124797 C10.7776703,8.30421322 10.6099341,8.1019284 10.4302418,7.91123282 L10.4302418,7.91123282 Z"></path>\n        <path d="M6.75235165,8.90966292 C5.39885714,8.90966292 4.29784615,10.0092354 4.29784615,11.3609616 C4.29784615,12.7126877 5.39885714,13.8122603 6.75235165,13.8122603 C8.10584615,13.8122603 9.20685714,12.7126877 9.20685714,11.3609616 C9.20685714,10.0092354 8.10584615,8.90966292 6.75235165,8.90966292 L6.75235165,8.90966292 Z M6.75235165,12.934288 C5.88378022,12.934288 5.17696703,12.2283982 5.17696703,11.3609616 C5.17696703,10.493525 5.88378022,9.78763522 6.75235165,9.78763522 C7.62092308,9.78763522 8.32773626,10.493525 8.32773626,11.3609616 C8.32773626,12.2283982 7.62092308,12.934288 6.75235165,12.934288 L6.75235165,12.934288 Z"></path>\n      </g>\n      <g id="hand-shape">\n        <g transform="translate(0.000000, 1.000000)">\n          <path d="M10.410427,17.9351827 C10.421573,17.9351827 10.4327191,17.9348225 10.4442247,17.9341022 C10.6915955,17.9153732 10.8774831,17.6999896 10.8591461,17.4518303 C10.848,17.3009177 10.8426067,17.1485645 10.8426067,16.9944104 L10.8426067,15.2871896 L10.8426067,13.7110719 L10.8426067,11.0097732 C11.6174382,11.0209385 12.2894382,11.4225316 12.3038202,11.8849939 L12.3038202,15.3639065 C12.3038202,15.3901991 12.3146067,15.4132502 12.3189213,15.4384623 C12.3239551,15.466916 12.3257528,15.4953697 12.3358202,15.5220225 C12.348764,15.556239 12.3692584,15.5843325 12.3893933,15.6135065 C12.401618,15.6315152 12.4106067,15.6509645 12.4253483,15.6668121 C12.455191,15.6992277 12.4915056,15.722639 12.5292584,15.7453299 C12.5404045,15.7521732 12.5475955,15.7626182 12.5594607,15.7680208 C12.5648539,15.770542 12.5698876,15.7737835 12.5752809,15.7763048 C12.5767191,15.7770251 12.5781573,15.7777455 12.5795955,15.7784658 C14.1227865,16.5294268 15.1191011,18.1217524 15.1191011,19.8422996 C15.1191011,20.090819 15.3204494,20.292516 15.5685393,20.292516 C15.8166292,20.292516 16.0179775,20.090819 16.0179775,19.8422996 C16.0179775,17.8663896 14.9209888,16.0327481 13.2023371,15.0898147 L13.2023371,12.5628398 C13.2023371,12.5621195 13.2026966,12.5617593 13.2026966,12.561039 L13.2026966,11.9105662 C13.2026966,11.9062442 13.2048539,11.9030026 13.2048539,11.8990407 C13.2048539,11.887155 13.2026966,11.8756294 13.2026966,11.8633835 L13.2023371,6.89659567 C13.2023371,6.64807619 13.0009888,6.44637922 12.7528989,6.44637922 C12.504809,6.44637922 12.3034607,6.64807619 12.3034607,6.89659567 L12.3034607,9.50172814 C12.0826966,9.38971429 11.836764,9.32056104 11.5724944,9.32056104 C10.6739775,9.32056104 9.94301124,10.0527931 9.94301124,10.9528658 L9.94301124,13.7099913 L9.94301124,15.2861091 L9.94301124,16.9933299 C9.94301124,17.1698147 9.94948315,17.3441385 9.96206742,17.5166615 C9.98004494,17.7547359 10.1770787,17.9351827 10.410427,17.9351827 L10.410427,17.9351827 Z M11.7148764,10.2368416 C11.7235056,10.2386424 11.7321348,10.241884 11.740764,10.2436848 C11.7321348,10.2411636 11.7231461,10.2393628 11.7148764,10.2368416 L11.7148764,10.2368416 Z M11.761618,10.250168 C11.8022472,10.2613333 11.8417978,10.2746597 11.879191,10.2919481 C11.8403596,10.2779013 11.8018876,10.2631342 11.761618,10.250168 L11.761618,10.250168 Z"></path>\n          <path d="M20.2815281,17.3963636 C20.0384719,17.3416173 19.7982921,17.4914494 19.7422022,17.7334857 C19.580764,18.4315013 19.2366742,19.0672069 18.7466067,19.5721697 C18.5736629,19.7504554 18.5779775,20.0357126 18.7559551,20.2089558 C18.8433258,20.2939567 18.9562247,20.3364571 19.0691236,20.3364571 C19.1863371,20.3364571 19.3035506,20.2907152 19.3916404,20.1999515 C19.9953258,19.5772121 20.419236,18.7945558 20.6177079,17.9369835 C20.6737978,17.6942268 20.5231461,17.4525506 20.2815281,17.3963636 L20.2815281,17.3963636 Z"></path>\n          <path d="M26.3838202,9.30867532 L25.5493034,8.07003983 C25.4101573,7.86402078 25.1311461,7.80999481 24.9254831,7.94866147 C24.7198202,8.08768831 24.6655281,8.36754286 24.8043146,8.5735619 L25.6388315,9.8121974 C25.8459326,10.1197853 25.7646742,10.539387 25.4572584,10.7472069 C25.1502022,10.9550268 24.7316854,10.8736277 24.5238652,10.5653195 L24.3814831,10.3546182 C24.3688989,10.3358892 24.3491236,10.325084 24.334382,10.3088762 L23.9521798,9.79274805 C23.8040449,9.59321212 23.5228764,9.55143203 23.3233258,9.6994632 C23.1241348,9.84785455 23.082427,10.1298701 23.2302022,10.3294061 L23.3855281,10.539387 L22.2346067,11.4942061 C22.1314157,11.5799273 22.0717303,11.7070684 22.0717303,11.8410528 L22.0717303,12.8081177 C22.0717303,13.0566372 22.2730787,13.2583342 22.5211685,13.2583342 C22.7692584,13.2583342 22.9706067,13.0566372 22.9706067,12.8081177 L22.9706067,12.0528346 L23.9284494,11.2582926 C24.4454831,11.8180017 25.3094831,11.932897 25.9599101,11.4938459 C26.6782921,11.0083325 26.8684944,10.0283013 26.3838202,9.30867532 L26.3838202,9.30867532 Z"></path>\n          <path d="M24.0075506,29.4891775 L20.8643596,29.4891775 C20.8650787,29.4776519 20.871191,29.4672069 20.871191,29.4553212 L20.871191,22.2558199 C20.871191,22.1780225 20.846382,22.1088693 20.8118652,22.0451186 C22.1479551,20.7855931 22.9562247,18.9735619 22.9562247,16.9947706 L22.9562247,14.3024762 C22.9562247,14.0539567 22.7548764,13.8522597 22.5067865,13.8522597 C22.2586966,13.8522597 22.0573483,14.0539567 22.0573483,14.3024762 L22.0573483,16.9947706 C22.0573483,19.5815342 20.4850337,21.8437818 18.1443596,22.6235567 C17.9088539,22.7024346 17.781573,22.9570771 17.8595955,23.1929905 C17.9221573,23.3817212 18.097618,23.5009385 18.2860225,23.5009385 C18.332764,23.5009385 18.3809438,23.4933749 18.4280449,23.4782476 C18.6844045,23.3928866 18.9299775,23.287716 19.1694382,23.1724606 C19.4171685,23.2819532 19.8000899,23.5117437 19.9719551,23.9266632 L19.9719551,29.4556814 C19.9719551,29.4675671 19.9780674,29.4780121 19.9787865,29.4895377 L13.4248989,29.4895377 C13.425618,29.4780121 13.4317303,29.4675671 13.4317303,29.4556814 L13.4317303,23.0229887 C13.6140225,23.1231169 13.8013483,23.2153212 13.9926292,23.2970805 C14.0501573,23.3212121 14.1098427,23.3330978 14.168809,23.3330978 C14.3435506,23.3330978 14.5096629,23.2304485 14.5822921,23.0593662 C14.6797303,22.8302961 14.5733034,22.5662892 14.3449888,22.4683221 C13.0056629,21.8967273 11.9025618,20.7704658 11.3179326,19.3787567 C11.221573,19.1493264 10.958382,19.0412745 10.7293483,19.138161 C10.5006742,19.2346874 10.3931685,19.4986944 10.4895281,19.7277645 C10.9364494,20.7920762 11.6519551,21.7170009 12.5328539,22.4164571 L12.5328539,29.4560416 C12.5328539,29.4679273 12.5389663,29.4783723 12.5396854,29.4898978 L4.24701124,29.4898978 C4.04853933,29.4898978 3.88746067,29.6508952 3.88746067,29.850071 C3.88746067,30.0492468 4.04853933,30.2102442 4.24701124,30.2102442 L24.007191,30.2102442 C24.2056629,30.2102442 24.3667416,30.0492468 24.3667416,29.850071 C24.3667416,29.6508952 24.2060225,29.4891775 24.0075506,29.4891775 L24.0075506,29.4891775 Z"></path>\n          <path d="M28.9287191,29.4891775 L25.7326742,29.4891775 C25.5342022,29.4891775 25.3731236,29.6501749 25.3731236,29.8493506 C25.3731236,30.0485264 25.5342022,30.2095238 25.7326742,30.2095238 L28.9287191,30.2095238 C29.127191,30.2095238 29.2882697,30.0485264 29.2882697,29.8493506 C29.2882697,29.6501749 29.127191,29.4891775 28.9287191,29.4891775 L28.9287191,29.4891775 Z"></path>\n          <path d="M31.3869663,29.4891775 L30.3543371,29.4891775 C30.1558652,29.4891775 29.9947865,29.6501749 29.9947865,29.8493506 C29.9947865,30.0485264 30.1558652,30.2095238 30.3543371,30.2095238 L31.3869663,30.2095238 C31.5854382,30.2095238 31.7465169,30.0485264 31.7465169,29.8493506 C31.7465169,29.6501749 31.5854382,29.4891775 31.3869663,29.4891775 L31.3869663,29.4891775 Z"></path>\n          <path d="M2.03469663,29.4891775 L0.657977528,29.4891775 C0.459505618,29.4891775 0.298426966,29.6501749 0.298426966,29.8493506 C0.298426966,30.0485264 0.459505618,30.2095238 0.657977528,30.2095238 L2.03469663,30.2095238 C2.23316854,30.2095238 2.39424719,30.0485264 2.39424719,29.8493506 C2.39424719,29.6501749 2.23316854,29.4891775 2.03469663,29.4891775 L2.03469663,29.4891775 Z"></path>\n          <path d="M12.7528989,5.77213506 C13.0009888,5.77213506 13.2023371,5.5704381 13.2023371,5.32191861 L13.2023371,1.71046234 C13.9843596,1.72234805 14.663191,2.13222511 14.663191,2.60045022 L14.663191,11.7902684 C14.663191,12.0387879 14.8645393,12.2404848 15.1126292,12.2404848 C15.3607191,12.2404848 15.5620674,12.0387879 15.5620674,11.7902684 L15.5620674,7.69401905 C15.6008989,7.65800173 15.6357753,7.61694199 15.6605843,7.56651775 L17.9462472,2.94261472 C18.0282247,2.7510026 18.1867865,2.6033316 18.3834607,2.53633939 C18.5797753,2.46862684 18.7958652,2.48699567 18.9774382,2.58748398 L20.0334382,3.16988398 C20.3246742,3.77029264 20.2257978,4.44813853 19.808,4.66172121 C19.7925393,4.66964502 19.783191,4.68369177 19.768809,4.6926961 C19.7522697,4.68693333 19.736809,4.67864935 19.7206292,4.67180606 L19.5182022,4.56879654 L19.413573,4.51116883 C19.4060225,4.50720693 19.3977528,4.50720693 19.3898427,4.50360519 L18.7081348,4.15711861 C18.4866517,4.04474459 18.2162697,4.13298701 18.1037303,4.35485368 C17.991191,4.57672035 18.08,4.84757056 18.3011236,4.96030476 L18.581573,5.10293333 L17.2598652,7.57768312 C17.2249888,7.64287446 17.2066517,7.71562944 17.2066517,7.78982511 L17.2037753,11.8136797 C17.2037753,12.0621991 17.404764,12.2638961 17.6528539,12.2642563 L17.6532135,12.2642563 C17.9013034,12.2642563 18.1026517,12.0629195 18.1026517,11.8144 L18.1062472,7.90291948 L19.3840899,5.51028918 C19.4053034,5.51893333 19.427236,5.52289524 19.4484494,5.53081905 C19.4549213,5.53225974 19.4606742,5.53514113 19.4667865,5.53658182 C19.7849888,5.64859567 20.1283596,5.66372294 20.4591461,5.56755671 C20.8787416,5.44581818 21.2253483,5.16740433 21.4360449,4.78418009 C21.6467416,4.40131602 21.696,3.9586632 21.5744719,3.5387013 C21.4529438,3.11837922 21.1753708,2.77117229 20.792809,2.56011082 L19.4117753,1.79834459 C19.008,1.57575758 18.5272809,1.53433766 18.0933034,1.6841697 C17.6575281,1.83184069 17.3030112,2.16139913 17.1307865,2.56515325 L15.5620674,5.73755844 L15.5620674,1.67552554 C15.5620674,0.775452814 14.8311011,0.0432207792 13.9325843,0.0432207792 C13.0340674,0.0432207792 12.3031011,0.775452814 12.3031011,1.67552554 L12.3031011,5.32191861 C12.3034607,5.5704381 12.504809,5.77213506 12.7528989,5.77213506 L12.7528989,5.77213506 Z"></path>\n          <path d="M23.1424719,7.59209004 C22.9324944,7.57083983 22.7322247,7.46350823 22.6053034,7.27477749 C22.5945169,7.2585697 22.5826517,7.24344242 22.5697079,7.22867532 L22.0260674,6.6116987 C22.0174382,6.60197403 22.0052135,6.59765195 21.9962247,6.58864762 L21.6079101,6.06495584 C21.4597753,5.86505974 21.1778876,5.82363983 20.9790562,5.97203117 C20.7798652,6.12042251 20.7381573,6.40207792 20.8862921,6.60197403 L21.0649888,6.84292987 L19.8299326,7.86762251 C19.7267416,7.95334372 19.6670562,8.08048485 19.6670562,8.21446926 L19.6670562,11.9001212 C19.6670562,12.1486407 19.8684045,12.3503377 20.1164944,12.3503377 C20.3645843,12.3503377 20.5659326,12.1486407 20.5659326,11.9001212 L20.5659326,11.1855377 C20.6666067,11.150961 20.7564944,11.0836087 20.8129438,10.9834805 C20.8542921,10.9103654 20.9075056,10.8466147 20.970427,10.7940294 L22.5416629,9.4902026 C22.7329438,9.33172641 22.759191,9.04754978 22.6013483,8.85629784 C22.4427865,8.66468571 22.1594607,8.63839307 21.9685393,8.79650909 L20.5662921,9.96022857 L20.5662921,8.42553074 L21.639191,7.53518268 C21.6402697,7.53554286 21.6413483,7.53590303 21.642427,7.53662338 L21.8779326,7.80387186 C22.2029663,8.26741472 22.7282697,8.50909091 23.2578876,8.49612468 C23.2625618,8.49612468 23.2665169,8.49792554 23.271191,8.49792554 C23.3075056,8.49792554 23.3438202,8.49288312 23.3801348,8.48351861 C23.6404494,8.45758615 23.8978876,8.37618701 24.1294382,8.21951169 C24.4915056,7.97495411 24.7370787,7.60361558 24.8201348,7.17428918 C24.903191,6.74496277 24.8147416,6.3084329 24.5573034,5.92772987 L23.2952809,4.24247965 C23.2035955,4.10669437 23.0921348,3.98567619 22.9641348,3.88230649 C22.7703371,3.72599134 22.4877303,3.75768658 22.3324045,3.95145974 C22.1770787,4.1452329 22.208,4.42868918 22.4014382,4.58428398 C22.4593258,4.63074632 22.5096629,4.68549264 22.5639551,4.76473074 L23.3132584,5.76565195 C23.6692135,6.48599827 23.5857978,7.28450216 23.1424719,7.59209004 L23.1424719,7.59209004 Z"></path>\n          <ellipse cx="23.7587416" cy="26.3445056" rx="0.936988764" ry="0.938611255"></ellipse>\n          <path d="M9.63092135,25.1897905 C10.2989663,25.1897905 10.8422472,24.6452087 10.8422472,23.9763671 C10.8422472,23.3075255 10.2989663,22.7629437 9.63092135,22.7629437 C8.9628764,22.7629437 8.41959551,23.3075255 8.41959551,23.9763671 C8.41959551,24.6452087 8.9628764,25.1897905 9.63092135,25.1897905 L9.63092135,25.1897905 Z M9.63092135,23.6630165 C9.80314607,23.6630165 9.94337079,23.803484 9.94337079,23.9760069 C9.94337079,24.1485299 9.80314607,24.2889974 9.63092135,24.2889974 C9.45869663,24.2889974 9.31847191,24.1485299 9.31847191,23.9760069 C9.31847191,23.803484 9.45869663,23.6630165 9.63092135,23.6630165 L9.63092135,23.6630165 Z"></path>\n          <path d="M9.43820225,27.1631792 C9.43820225,27.5935861 9.78768539,27.9436745 10.2173483,27.9436745 C10.6470112,27.9436745 10.9964944,27.5935861 10.9964944,27.1631792 C10.9964944,26.7327723 10.6470112,26.382684 10.2173483,26.382684 C9.78768539,26.382684 9.43820225,26.7327723 9.43820225,27.1631792 L9.43820225,27.1631792 Z M10.3370787,27.1631792 C10.3370787,27.2294511 10.2835056,27.2831169 10.2173483,27.2831169 C10.151191,27.2831169 10.097618,27.2294511 10.097618,27.1631792 C10.097618,27.0969074 10.151191,27.0432416 10.2173483,27.0432416 C10.2835056,27.0432416 10.3370787,27.0969074 10.3370787,27.1631792 L10.3370787,27.1631792 Z"></path>\n          <path d="M17.048809,25.2121212 C17.048809,25.5766165 17.3443596,25.8726788 17.7078652,25.8726788 C18.0713708,25.8726788 18.3669213,25.5766165 18.3669213,25.2121212 C18.3669213,24.8479861 18.0713708,24.5519238 17.7078652,24.5519238 C17.3443596,24.5519238 17.048809,24.8479861 17.048809,25.2121212 L17.048809,25.2121212 Z M17.7078652,24.9722459 C17.8401798,24.9722459 17.9476854,25.0799377 17.9476854,25.2121212 C17.9476854,25.3446649 17.8401798,25.4523567 17.7078652,25.4523567 C17.5755506,25.4523567 17.4684045,25.3446649 17.4684045,25.2121212 C17.4684045,25.0799377 17.5759101,24.9722459 17.7078652,24.9722459 L17.7078652,24.9722459 Z"></path>\n          <path d="M5.21348315,23.9522355 C5.57698876,23.9522355 5.87253933,23.6561732 5.87253933,23.2916779 C5.87253933,22.9275429 5.57698876,22.6314805 5.21348315,22.6314805 C4.84997753,22.6314805 4.55442697,22.9275429 4.55442697,23.2916779 C4.55442697,23.6561732 4.84997753,23.9522355 5.21348315,23.9522355 L5.21348315,23.9522355 Z M5.21348315,23.0518026 C5.34579775,23.0518026 5.45330337,23.1594944 5.45330337,23.2916779 C5.45330337,23.4242216 5.34579775,23.5319134 5.21348315,23.5319134 C5.08116854,23.5319134 4.97366292,23.4242216 4.97366292,23.2916779 C4.97366292,23.1594944 5.08116854,23.0518026 5.21348315,23.0518026 L5.21348315,23.0518026 Z"></path>\n          <path d="M24.3717753,22.1809039 C24.0550112,22.1809039 23.7968539,22.4391481 23.7968539,22.7568208 C23.7968539,23.0744935 24.0546517,23.3327377 24.3717753,23.3327377 C24.6888989,23.3327377 24.9466966,23.0744935 24.9466966,22.7568208 C24.9466966,22.4391481 24.6888989,22.1809039 24.3717753,22.1809039 L24.3717753,22.1809039 Z M24.3717753,23.0813368 C24.1930787,23.0813368 24.0478202,22.9358268 24.0478202,22.7568208 C24.0478202,22.5778147 24.1930787,22.4323048 24.3717753,22.4323048 C24.5504719,22.4323048 24.6957303,22.5778147 24.6957303,22.7568208 C24.6957303,22.9358268 24.5504719,23.0813368 24.3717753,23.0813368 L24.3717753,23.0813368 Z"></path>\n          <path d="M27.5980225,23.7422545 C27.9931685,23.7422545 28.3146067,23.4198996 28.3146067,23.0244294 C28.3146067,22.6289593 27.9931685,22.3066043 27.5980225,22.3066043 C27.2028764,22.3066043 26.8814382,22.6289593 26.8814382,23.0244294 C26.8814382,23.4198996 27.2028764,23.7422545 27.5980225,23.7422545 L27.5980225,23.7422545 Z M27.5980225,22.8418216 C27.6983371,22.8418216 27.7803146,22.9239411 27.7803146,23.0244294 C27.7803146,23.1249177 27.6983371,23.2070372 27.5980225,23.2070372 C27.4977079,23.2070372 27.4157303,23.1249177 27.4157303,23.0244294 C27.4157303,22.9239411 27.4977079,22.8418216 27.5980225,22.8418216 L27.5980225,22.8418216 Z"></path>\n        </g>\n      </g>\n      <g id="broom-shape">\n        <path d="M0.581818182,0.638271605 C0.232727273,1.04444444 0,1.50864198 0,2.0308642 C0,2.55308642 0.232727273,3.07530864 0.581818182,3.42345679 L15.0690909,17.8716049 L14.8945455,18.045679 C14.3709091,18.5679012 14.6618182,19.4962963 15.36,19.6703704 L15.5345455,19.7283951 L16.7563636,19.9604938 L16.7563636,19.9604938 C16.4654545,20.6567901 16.3490909,21.3530864 16.3490909,22.1074074 C16.3490909,22.8617284 16.4654545,23.5580247 16.7563636,24.254321 C17.0472727,24.9506173 17.4545455,25.5888889 18.0363636,26.1691358 L22.8654545,30.9851852 L22.8654545,30.9851852 C23.2727273,31.391358 23.9709091,31.391358 24.3781818,30.9851852 L24.3781818,30.9851852 L25.2509091,30.1148148 L25.2509091,30.1148148 C25.6,29.7666667 25.6581818,29.3024691 25.4254545,28.8962963 L25.4254545,28.8962963 L24.6690909,27.5037037 L26.0654545,28.2580247 L26.0654545,28.2580247 C26.4727273,28.4901235 26.9963636,28.4320988 27.2872727,28.0839506 L27.2872727,28.0839506 L31.1272727,24.254321 C31.5345455,23.8481481 31.5345455,23.1518519 31.1272727,22.745679 L31.1272727,22.745679 L26.2981818,17.9296296 C25.7745455,17.4074074 25.0763636,16.9432099 24.3781818,16.6530864 C23.68,16.362963 22.9818182,16.2469136 22.2254545,16.2469136 C21.4690909,16.2469136 20.7709091,16.362963 20.0727273,16.6530864 L20.0727273,16.6530864 L19.84,15.4345679 L19.7818182,15.2604938 C19.6072727,14.5061728 18.6763636,14.2160494 18.1527273,14.7962963 L17.8618182,15.0864198 L3.37454545,0.638271605 C3.02545455,0.290123457 2.50181818,0.0580246914 1.97818182,0.0580246914 C1.45454545,0.0580246914 0.989090909,0.290123457 0.581818182,0.638271605 L0.581818182,0.638271605 L0.581818182,0.638271605 L0.581818182,0.638271605 Z M18.7345455,25.4728395 C18.1527273,24.8925926 17.7454545,24.1382716 17.5127273,23.3839506 L23.3890909,17.5234568 C24.1454545,17.7555556 24.9018182,18.1617284 25.4836364,18.7419753 L30.3127273,23.5580247 L26.4727273,27.3876543 L23.9709091,25.9950617 C23.3890909,25.6469136 22.6909091,26.3432099 23.04,26.9234568 L24.4363636,29.4185185 L23.5636364,30.2888889 L18.7345455,25.4728395 L18.7345455,25.4728395 L18.7345455,25.4728395 Z M17.3963636,22.0493827 C17.3963636,21.4111111 17.5709091,20.7728395 17.8036364,20.1925926 C17.8618182,20.0185185 17.9781818,19.8444444 18.0363636,19.7283951 C18.1527273,19.554321 18.2690909,19.4382716 18.3854545,19.2641975 C18.5018182,19.1481481 18.6181818,18.9740741 18.7345455,18.8580247 L18.7927273,18.8 C18.9090909,18.6839506 19.0836364,18.5679012 19.2,18.4518519 C19.3745455,18.3358025 19.4909091,18.2197531 19.6654545,18.1037037 C19.84,17.9876543 19.9563636,17.9296296 20.1309091,17.8716049 C20.7127273,17.5814815 21.3527273,17.4654321 21.9927273,17.4654321 L20.3636364,19.0901235 L18.9672727,20.482716 L17.3963636,22.0493827 L17.3963636,22.0493827 Z M15.7672727,18.7419753 L16.5818182,17.9296296 L17.92,16.5950617 L18.6763636,15.8407407 L18.7345455,15.782716 L18.7927273,16.0148148 L19.0254545,17.3493827 C18.6763636,17.5814815 18.3854545,17.8135802 18.0945455,18.1037037 L18.0363636,18.1037037 C17.7454545,18.3938272 17.5127273,18.6839506 17.28,19.0320988 L15.9418182,18.8 L15.7672727,18.7419753 L15.7672727,18.7419753 Z M1.33818182,2.72716049 C0.989090909,2.32098765 0.989090909,1.74074074 1.33818182,1.39259259 L1.33818182,1.39259259 C1.51272727,1.21851852 1.74545455,1.10246914 1.97818182,1.10246914 C2.21090909,1.10246914 2.44363636,1.21851852 2.61818182,1.39259259 L17.1054545,15.8407407 L15.7672727,17.1753086 L1.33818182,2.72716049 L1.33818182,2.72716049 L1.33818182,2.72716049 Z"></path>\n        <path d="M21.4690909,24.4283951 C21.2363636,24.6024691 21.2363636,24.9506173 21.4109091,25.1246914 L21.8763636,25.5888889 C22.0509091,25.762963 22.4,25.762963 22.5745455,25.5888889 C22.8072727,25.4148148 22.8072727,25.0666667 22.6327273,24.8925926 L22.1672727,24.4283951 C21.9927273,24.1962963 21.7018182,24.254321 21.4690909,24.4283951 L21.4690909,24.4283951 L21.4690909,24.4283951 Z"></path>\n        <path d="M26.88,22.5135802 C26.7636364,22.5135802 26.6472727,22.4555556 26.5309091,22.3975309 L24.4363636,20.2506173 C24.2618182,20.0765432 24.2618182,19.7283951 24.4363636,19.554321 C24.6109091,19.3802469 24.96,19.3802469 25.1345455,19.554321 L27.2290909,21.6432099 C27.4036364,21.817284 27.4036364,22.1654321 27.2290909,22.3395062 C27.1709091,22.4555556 27.0545455,22.5135802 26.88,22.5135802 L26.88,22.5135802 Z"></path>\n        <path d="M28.5672727,24.0222222 C28.4509091,24.0222222 28.3345455,23.9641975 28.2181818,23.9061728 L27.9272727,23.5580247 C27.7527273,23.3839506 27.7527273,23.0358025 27.9272727,22.8617284 C28.1018182,22.6876543 28.4509091,22.6876543 28.6254545,22.8617284 L28.9163636,23.1518519 C29.0909091,23.3259259 29.0909091,23.6740741 28.9163636,23.8481481 C28.8,23.9641975 28.6836364,24.0222222 28.5672727,24.0222222 L28.5672727,24.0222222 Z"></path>\n      </g>\n      <g id="ghost-shape">\n          <path d="M5.99851163,18.6781481 C6.25525581,18.6781481 6.46362791,18.4707407 6.46362791,18.2151852 L6.46362791,11.6711111 C6.46362791,6.43703704 10.7415814,2.17888889 16,2.17888889 C17.6357209,2.17888889 19.2483721,2.59777778 20.6653023,3.39037037 C20.887814,3.51518519 21.1724651,3.43666667 21.2986047,3.21333333 C21.4243721,2.99037037 21.3447442,2.70814815 21.1207442,2.58296296 C19.5650233,1.71296296 17.7946047,1.25296296 15.9996279,1.25296296 C10.228093,1.25296296 5.53302326,5.92666667 5.53302326,11.6711111 L5.53302326,18.2151852 C5.53339535,18.4711111 5.74176744,18.6781481 5.99851163,18.6781481 L5.99851163,18.6781481 Z"></path>\n          <path d="M11.2230698,5.16444444 C11.0630698,4.96481481 10.7702326,4.93222222 10.5693023,5.09148148 C9.63386047,5.83481481 8.85767442,6.73592593 8.26269767,7.76925926 C8.13506977,7.99111111 8.21209302,8.27407407 8.43534884,8.40111111 C8.50790698,8.44259259 8.58753488,8.46259259 8.66604651,8.46259259 C8.82753488,8.46259259 8.98381395,8.37888889 9.07013953,8.23 C9.60632558,7.29814815 10.3062326,6.48592593 11.1501395,5.81518519 C11.3506977,5.65555556 11.3834419,5.36407407 11.2230698,5.16444444 L11.2230698,5.16444444 Z"></path>\n          <path d="M12.6623256,4.8037037 C12.728186,4.8037037 12.7947907,4.78962963 12.8584186,4.76 C13.4786977,4.47185185 14.1335814,4.25962963 14.804093,4.12888889 C15.056,4.08 15.2204651,3.83666667 15.1709767,3.58592593 C15.1218605,3.33518519 14.8785116,3.17111111 14.6251163,3.22037037 C13.8805581,3.36518519 13.1534884,3.60074074 12.4647442,3.92074074 C12.231814,4.02888889 12.1313488,4.30444444 12.24,4.53592593 C12.3192558,4.70444444 12.4874419,4.8037037 12.6623256,4.8037037 L12.6623256,4.8037037 Z"></path>\n          <path d="M12.6842791,15.1914815 C13.6792558,15.1914815 14.4889302,14.3855556 14.4889302,13.3951852 C14.4889302,12.4048148 13.6792558,11.5988889 12.6842791,11.5988889 C11.6889302,11.5988889 10.8792558,12.4048148 10.8792558,13.3951852 C10.8792558,14.3855556 11.6889302,15.1914815 12.6842791,15.1914815 L12.6842791,15.1914815 Z M12.6842791,12.5248148 C13.1665116,12.5248148 13.5586977,12.9151852 13.5586977,13.3951852 C13.5586977,13.7740741 13.3127442,14.0940741 12.9726512,14.212963 C12.411907,13.7925926 12.16,13.217037 12.0476279,12.8022222 C12.2072558,12.6325926 12.4323721,12.5248148 12.6842791,12.5248148 L12.6842791,12.5248148 Z"></path>\n          <path d="M19.3023256,15.1914815 C20.2973023,15.1914815 21.1069767,14.3855556 21.1069767,13.3951852 C21.1069767,12.4048148 20.2973023,11.5988889 19.3023256,11.5988889 C18.3069767,11.5988889 17.4973023,12.4048148 17.4973023,13.3951852 C17.4973023,14.3855556 18.3069767,15.1914815 19.3023256,15.1914815 L19.3023256,15.1914815 Z M19.3023256,12.5248148 C19.7845581,12.5248148 20.1767442,12.9151852 20.1767442,13.3951852 C20.1767442,13.7733333 19.9315349,14.092963 19.592186,14.2125926 C19.0310698,13.7914815 18.779907,13.2148148 18.667907,12.8003704 C18.8271628,12.6318519 19.0515349,12.5248148 19.3023256,12.5248148 L19.3023256,12.5248148 Z"></path>\n          <path d="M31.1106977,17.51 C30.2452093,16.8711111 29.019907,17.0518519 28.3776744,17.912963 C27.8779535,18.5833333 27.2234419,19.0744444 26.4662326,19.3622222 L26.4662326,11.6711111 C26.4662326,8.83592593 25.3421395,6.18518519 23.3012093,4.20703704 C23.1170233,4.02851852 22.8226977,4.03222222 22.6433488,4.21555556 C22.4643721,4.39888889 22.468093,4.69185185 22.651907,4.87037037 C24.5116279,6.67259259 25.5356279,9.08777778 25.5356279,11.6711111 L25.5356279,20.4444444 C25.5356279,20.7 25.744,20.9074074 26.0007442,20.9074074 C26.2574884,20.9074074 26.4658605,20.7 26.4658605,20.4444444 L26.4658605,20.3403704 C27.52,20.0162963 28.455814,19.3614815 29.1244651,18.4648148 C29.4612093,18.012963 30.1034419,17.9188889 30.555907,18.2537037 C31.0091163,18.5881481 31.1043721,19.2274074 30.7683721,19.6785185 C29.7242791,21.0788889 28.1767442,22.0603704 26.4662326,22.4362963 L26.4662326,22.0803704 C26.4662326,21.8248148 26.2578605,21.6174074 26.0011163,21.6174074 C25.7443721,21.6174074 25.536,21.8248148 25.536,22.0803704 L25.536,28.7951852 L25.536,29.0774074 C25.536,29.3625926 25.4076279,29.6162963 25.208186,29.7922222 C24.4096744,29.63 23.8779535,28.95 23.5706047,28.3981481 C23.4042791,27.527037 22.6381395,26.8648148 21.7153488,26.8648148 C20.6708837,26.8648148 19.8210233,27.7103704 19.8210233,28.7496296 L19.8210233,28.7948148 L19.8210233,29.077037 C19.8210233,29.3688889 19.6866977,29.6274074 19.4790698,29.8033333 C18.7259535,29.6803704 18.2035349,29.0988889 17.876093,28.5696296 C17.783814,27.6151852 16.9826977,26.8644444 16,26.8644444 C14.9555349,26.8644444 14.1060465,27.71 14.1060465,28.7492593 L14.1060465,28.7944444 L14.1060465,29.0766667 C14.1060465,29.3681481 13.972093,29.6262963 13.7652093,29.8022222 C13.0065116,29.6748148 12.4837209,29.0818519 12.1585116,28.5492593 C12.0569302,27.6048148 11.259907,26.8644444 10.2846512,26.8644444 C9.24055814,26.8644444 8.39106977,27.71 8.39106977,28.7492593 L8.39106977,28.7944444 L8.39106977,29.0766667 C8.39106977,29.3692593 8.256,29.6281481 8.048,29.8040741 C7.312,29.6888889 6.79404651,29.137037 6.46325581,28.6188889 L6.46325581,21.897037 C6.46325581,21.6414815 6.25488372,21.4340741 5.99813953,21.4340741 C5.74139535,21.4340741 5.53302326,21.6414815 5.53302326,21.897037 L5.53302326,22.4366667 C3.82213953,22.0603704 2.27460465,21.0792593 1.23088372,19.6788889 C0.895255814,19.2277778 0.990511628,18.5885185 1.44334884,18.2540741 C1.89544186,17.92 2.53767442,18.0137037 2.8747907,18.4651852 C3.61227907,19.4548148 4.67386047,20.1544444 5.86269767,20.4340741 C6.11460465,20.4948148 6.36353488,20.3388889 6.42269767,20.09 C6.48148837,19.8411111 6.32706977,19.5918519 6.07702326,19.532963 C5.08688372,19.3 4.23776744,18.7396296 3.6215814,17.912963 C2.97934884,17.0518519 1.75367442,16.8711111 0.88855814,17.51 C0.0238139535,18.1488889 -0.157767442,19.3688889 0.483348837,20.23 C1.70083721,21.8633333 3.5255814,22.9888889 5.53265116,23.3781481 L5.53265116,28.8314815 L5.53265116,29.0774074 L5.53265116,29.2577778 C5.53265116,29.3218519 5.54567442,29.3825926 5.56948837,29.4381481 C5.73916279,30.3051852 6.5067907,30.9625926 7.42660465,30.9625926 C8.47106977,30.9625926 9.32093023,30.117037 9.32093023,29.0777778 L9.32093023,28.7955556 L9.32093023,28.7503704 C9.32093023,28.2214815 9.75293023,27.7914815 10.2842791,27.7914815 C10.8156279,27.7914815 11.248,28.2218519 11.248,28.7503704 C11.248,28.7648148 11.2550698,28.777037 11.256186,28.7911111 C11.2546977,28.8055556 11.248,28.8174074 11.248,28.8318519 L11.248,29.0777778 C11.248,30.117037 12.0974884,30.9625926 13.1419535,30.9625926 C14.1864186,30.9625926 15.0362791,30.117037 15.0362791,29.0777778 L15.0362791,28.7955556 L15.0362791,28.7503704 C15.0362791,28.2214815 15.4686512,27.7914815 16,27.7914815 C16.5313488,27.7914815 16.9633488,28.2218519 16.9633488,28.7503704 C16.9633488,28.7648148 16.9704186,28.777037 16.9715349,28.7911111 C16.9700465,28.8055556 16.9633488,28.8174074 16.9633488,28.8318519 L16.9633488,29.0777778 C16.9633488,30.117037 17.8128372,30.9625926 18.8573023,30.9625926 C19.9017674,30.9625926 20.7512558,30.117037 20.7512558,29.0777778 L20.7512558,28.7955556 L20.7512558,28.7503704 C20.7512558,28.2214815 21.1836279,27.7914815 21.7153488,27.7914815 C22.2466977,27.7914815 22.6786977,28.2218519 22.6786977,28.7503704 C22.6786977,28.7648148 22.6857674,28.777037 22.6868837,28.7911111 C22.6853953,28.8055556 22.6786977,28.8174074 22.6786977,28.8318519 L22.6786977,29.0777778 C22.6786977,30.117037 23.528186,30.9625926 24.5726512,30.9625926 C25.4928372,30.9625926 26.260093,30.3055556 26.4297674,29.4381481 C26.4532093,29.382963 26.4666047,29.3218519 26.4666047,29.2577778 L26.4666047,29.0777778 L26.4666047,28.7955556 L26.4666047,23.3785185 C28.4740465,22.9892593 30.2984186,21.8637037 31.515907,20.2303704 C32.1573953,19.3688889 31.975814,18.1488889 31.1106977,17.51 L31.1106977,17.51 Z"></path>\n          <path d="M16,18.0833333 C17.0444651,18.0833333 17.8939535,17.2377778 17.8939535,16.1985185 C17.8939535,15.942963 17.6855814,15.7355556 17.4288372,15.7355556 C17.172093,15.7355556 16.9637209,15.942963 16.9637209,16.1985185 C16.9637209,16.7274074 16.5313488,17.1574074 16,17.1574074 C15.4686512,17.1574074 15.0366512,16.727037 15.0366512,16.1985185 C15.0366512,15.942963 14.8282791,15.7355556 14.5715349,15.7355556 C14.3147907,15.7355556 14.1064186,15.942963 14.1064186,16.1985185 C14.1064186,17.2377778 14.955907,18.0833333 16,18.0833333 L16,18.0833333 Z"></path>\n      </g>\n      <path id="undo-shape" d="M14.6993508,0.00163566024 C14.46916,0.0197701308 14.2473829,0.096244986 14.0549393,0.223846524 L8.11079875,4.14586826 C7.73066752,4.3976285 7.50207739,4.82320183 7.50207739,5.27914367 C7.50207739,5.73508551 7.73066752,6.16065884 8.11079875,6.41241907 L14.0549393,10.3233303 C14.4723093,10.6003633 15.0082243,10.6253824 15.4495891,10.3884391 C15.8909539,10.1514959 16.1662234,9.6909989 16.1659425,9.19005486 L16.1659425,6.91239351 C22.223336,6.92907497 27.0876065,11.8059421 27.0876065,17.8673891 C27.0876065,23.9392195 22.2044424,28.8334952 16.1326109,28.8334952 C10.0607787,28.8334952 5.17761535,23.9392195 5.17761535,17.8673891 C5.17761536,17.2997628 4.87479033,16.7752544 4.38321152,16.4914412 C3.89163271,16.2076281 3.28598264,16.2076281 2.79440383,16.4914412 C2.30282502,16.7752544 1.99999999,17.2997628 2,17.8673891 C2,25.6529079 8.34709067,32 16.1326109,32 C23.9181305,32 30.2652218,25.6529079 30.2652218,17.8673891 C30.2652218,10.0922359 23.9372559,3.7516445 16.1659425,3.73477817 L16.1659425,1.35712193 C16.1640108,0.617933262 15.5717331,0.0157843502 14.8326774,0.00163566024 C14.7882619,-0.000545220081 14.7437663,-0.000545220081 14.6993508,0.00163566024 L14.6993508,0.00163566024 Z"></path>\n      <path id="redo-shape" d="M17.565871,0.00163566024 C17.7960618,0.0197701308 18.0178389,0.096244986 18.2102825,0.223846524 L24.1544231,4.14586826 C24.5345543,4.3976285 24.7631444,4.82320183 24.7631444,5.27914367 C24.7631444,5.73508551 24.5345543,6.16065884 24.1544231,6.41241907 L18.2102825,10.3233303 C17.7929125,10.6003633 17.2569976,10.6253824 16.8156327,10.3884391 C16.3742679,10.1514959 16.0989984,9.6909989 16.0992793,9.19005486 L16.0992793,6.91239351 C10.0418858,6.92907497 5.17761535,11.8059421 5.17761535,17.8673891 C5.17761535,23.9392195 10.0607794,28.8334952 16.1326109,28.8334952 C22.2044431,28.8334952 27.0876065,23.9392195 27.0876065,17.8673891 C27.0876065,17.2997628 27.3904315,16.7752544 27.8820103,16.4914412 C28.3735891,16.2076281 28.9792392,16.2076281 29.470818,16.4914412 C29.9623968,16.7752544 30.2652218,17.2997628 30.2652218,17.8673891 C30.2652218,25.6529079 23.9181312,32 16.1326109,32 C8.34709138,32 2,25.6529079 2,17.8673891 C2,10.0922359 8.32796596,3.7516445 16.0992793,3.73477817 L16.0992793,1.35712193 C16.1012111,0.617933262 16.6934887,0.0157843502 17.4325445,0.00163566024 C17.4769599,-0.000545220081 17.5214556,-0.000545220081 17.565871,0.00163566024 L17.565871,0.00163566024 L17.565871,0.00163566024 Z"></path>\n    </svg>'}});};exports.default=Icons;
 
 /***/ },
-/* 121 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4786,57 +4767,57 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
 	var _preact = __webpack_require__(3);
 	
-	var _hammerjs = __webpack_require__(122);
+	var _hammerjs = __webpack_require__(128);
 	
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 	
-	var _moJs = __webpack_require__(123);
+	var _moJs = __webpack_require__(129);
 	
 	var _moJs2 = _interopRequireDefault(_moJs);
 	
-	var _constants = __webpack_require__(124);
+	var _constants = __webpack_require__(130);
 	
 	var _constants2 = _interopRequireDefault(_constants);
 	
-	var _icon = __webpack_require__(125);
+	var _icon = __webpack_require__(131);
 	
 	var _icon2 = _interopRequireDefault(_icon);
 	
-	var _cardStagger = __webpack_require__(131);
+	var _cardStagger = __webpack_require__(137);
 	
 	var _cardStagger2 = _interopRequireDefault(_cardStagger);
 	
-	var _checkOpenCards = __webpack_require__(133);
+	var _checkOpenCards = __webpack_require__(139);
 	
 	var _checkOpenCards2 = _interopRequireDefault(_checkOpenCards);
 	
-	var _cardLockAnimation = __webpack_require__(134);
+	var _cardLockAnimation = __webpack_require__(140);
 	
 	var _cardLockAnimation2 = _interopRequireDefault(_cardLockAnimation);
 	
-	var _isIe = __webpack_require__(135);
+	var _isIe = __webpack_require__(141);
 	
 	var _isIe2 = _interopRequireDefault(_isIe);
 	
@@ -4844,15 +4825,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var postfix = (0, _isIe2.default)() ? '-ie' : '';
 	
-	var CLASSES = __webpack_require__(136);
-	__webpack_require__(137);
+	var CLASSES = __webpack_require__(142);
+	__webpack_require__(143);
 	
 	var Card = function (_Component) {
 	  (0, _inherits3.default)(Card, _Component);
 	
 	  function Card() {
 	    (0, _classCallCheck3.default)(this, Card);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Card).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (Card.__proto__ || (0, _getPrototypeOf2.default)(Card)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(Card, [{
@@ -4920,7 +4901,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Card;
 
 /***/ },
-/* 122 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*! Hammer.JS - v2.0.7 - 2016-04-22
@@ -7569,7 +7550,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 123 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function webpackUniversalModuleDefinition(root, factory) {
@@ -19196,7 +19177,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 
 /***/ },
-/* 124 */
+/* 130 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -19216,7 +19197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 125 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19225,23 +19206,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
@@ -19249,15 +19230,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var CLASSES = __webpack_require__(126);
-	__webpack_require__(127);
+	var CLASSES = __webpack_require__(132);
+	__webpack_require__(133);
 	
 	var Icon = function (_Component) {
 	  (0, _inherits3.default)(Icon, _Component);
 	
 	  function Icon() {
 	    (0, _classCallCheck3.default)(this, Icon);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Icon).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (Icon.__proto__ || (0, _getPrototypeOf2.default)(Icon)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(Icon, [{
@@ -19280,7 +19261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Icon;
 
 /***/ },
-/* 126 */
+/* 132 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -19288,16 +19269,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 127 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(128);
+	var content = __webpack_require__(134);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(130)(content, {});
+	var update = __webpack_require__(136)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -19314,10 +19295,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 128 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(129)();
+	exports = module.exports = __webpack_require__(135)();
 	// imports
 	
 	
@@ -19328,7 +19309,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 129 */
+/* 135 */
 /***/ function(module, exports) {
 
 	/*
@@ -19384,7 +19365,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 130 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -19636,7 +19617,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 131 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19645,33 +19626,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
 	var _preact = __webpack_require__(3);
 	
-	var _moJs = __webpack_require__(123);
+	var _moJs = __webpack_require__(129);
 	
 	var _moJs2 = _interopRequireDefault(_moJs);
 	
-	var _howler = __webpack_require__(132);
+	var _howler = __webpack_require__(138);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -19680,7 +19661,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  function CardStagger() {
 	    (0, _classCallCheck3.default)(this, CardStagger);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(CardStagger).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (CardStagger.__proto__ || (0, _getPrototypeOf2.default)(CardStagger)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(CardStagger, [{
@@ -19739,7 +19720,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = CardStagger;
 
 /***/ },
-/* 132 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -22502,7 +22483,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 133 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22511,7 +22492,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _constants = __webpack_require__(124);
+	var _constants = __webpack_require__(130);
 	
 	var _constants2 = _interopRequireDefault(_constants);
 	
@@ -22524,9 +22505,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	var timeoutID = null;
 	var asyncCheck = function asyncCheck(dispatch, getState) {
-	  var _getState = getState();
-	
-	  var cards = _getState.cards;
+	  var _getState = getState(),
+	      cards = _getState.cards;
 	
 	  var count = cards.present.open.length;
 	
@@ -22541,7 +22521,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = asyncCheck;
 
 /***/ },
-/* 134 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22550,7 +22530,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _constants = __webpack_require__(124);
+	var _constants = __webpack_require__(130);
 	
 	var _constants2 = _interopRequireDefault(_constants);
 	
@@ -22576,7 +22556,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = lock;
 
 /***/ },
-/* 135 */
+/* 141 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22603,7 +22583,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 136 */
+/* 142 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -22616,16 +22596,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 137 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(138);
+	var content = __webpack_require__(144);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(130)(content, {});
+	var update = __webpack_require__(136)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -22642,10 +22622,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 138 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(129)();
+	exports = module.exports = __webpack_require__(135)();
 	// imports
 	
 	
@@ -22656,7 +22636,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 139 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22665,47 +22645,47 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
 	var _preact = __webpack_require__(3);
 	
-	var _tryStagger = __webpack_require__(140);
+	var _tryStagger = __webpack_require__(146);
 	
 	var _tryStagger2 = _interopRequireDefault(_tryStagger);
 	
-	var _ghost = __webpack_require__(143);
+	var _ghost = __webpack_require__(149);
 	
 	var _ghost2 = _interopRequireDefault(_ghost);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var CLASSES = __webpack_require__(147);
-	__webpack_require__(148);
+	var CLASSES = __webpack_require__(153);
+	__webpack_require__(154);
 	
 	var Scores = function (_Component) {
 	  (0, _inherits3.default)(Scores, _Component);
 	
 	  function Scores() {
 	    (0, _classCallCheck3.default)(this, Scores);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Scores).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (Scores.__proto__ || (0, _getPrototypeOf2.default)(Scores)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(Scores, [{
@@ -22756,7 +22736,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Scores;
 
 /***/ },
-/* 140 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22765,41 +22745,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _defineProperty2 = __webpack_require__(141);
+	var _defineProperty2 = __webpack_require__(147);
 	
 	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
 	var _preact = __webpack_require__(3);
 	
-	var _moJs = __webpack_require__(123);
+	var _moJs = __webpack_require__(129);
 	
 	var _moJs2 = _interopRequireDefault(_moJs);
 	
-	var _mojsAddThunder = __webpack_require__(142);
+	var _mojsAddThunder = __webpack_require__(148);
 	
 	var _mojsAddThunder2 = _interopRequireDefault(_mojsAddThunder);
 	
-	var _howler = __webpack_require__(132);
+	var _howler = __webpack_require__(138);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -22808,7 +22788,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  function TryStagger() {
 	    (0, _classCallCheck3.default)(this, TryStagger);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(TryStagger).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (TryStagger.__proto__ || (0, _getPrototypeOf2.default)(TryStagger)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(TryStagger, [{
@@ -22825,10 +22805,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function shouldComponentUpdate() {
 	      var store = this.context.store;
 	
-	      var _store$getState = store.getState();
-	
-	      var cards = _store$getState.cards;
-	
+	      var _store$getState = store.getState(),
+	          cards = _store$getState.cards;
 	
 	      if (cards.present.tries === 0) {
 	        this._tries = 0;
@@ -22873,10 +22851,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var store = this.context.store;
 	
-	      var _store$getState2 = store.getState();
-	
-	      var cards = _store$getState2.cards;
-	
+	      var _store$getState2 = store.getState(),
+	          cards = _store$getState2.cards;
 	
 	      this._tries = cards.present.tries;
 	    }
@@ -22887,14 +22863,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = TryStagger;
 
 /***/ },
-/* 141 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _defineProperty = __webpack_require__(69);
+	var _defineProperty = __webpack_require__(75);
 	
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
 	
@@ -22916,32 +22892,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 142 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
-	var _moJs = __webpack_require__(123);
+	var _moJs = __webpack_require__(129);
 	
 	var _moJs2 = _interopRequireDefault(_moJs);
 	
@@ -22952,7 +22928,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  function Thunder() {
 	    (0, _classCallCheck3.default)(this, Thunder);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Thunder).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (Thunder.__proto__ || (0, _getPrototypeOf2.default)(Thunder)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(Thunder, [{
@@ -22969,7 +22945,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	_moJs2.default.addShape('thunder', Thunder);
 
 /***/ },
-/* 143 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22978,43 +22954,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
 	var _preact = __webpack_require__(3);
 	
-	var _icon = __webpack_require__(125);
+	var _icon = __webpack_require__(131);
 	
 	var _icon2 = _interopRequireDefault(_icon);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var CLASSES = __webpack_require__(144);
-	__webpack_require__(145);
+	var CLASSES = __webpack_require__(150);
+	__webpack_require__(151);
 	
 	var Scores = function (_Component) {
 	  (0, _inherits3.default)(Scores, _Component);
 	
 	  function Scores() {
 	    (0, _classCallCheck3.default)(this, Scores);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Scores).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (Scores.__proto__ || (0, _getPrototypeOf2.default)(Scores)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(Scores, [{
@@ -23040,7 +23016,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Scores;
 
 /***/ },
-/* 144 */
+/* 150 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -23054,16 +23030,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 145 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(146);
+	var content = __webpack_require__(152);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(130)(content, {});
+	var update = __webpack_require__(136)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -23080,10 +23056,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 146 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(129)();
+	exports = module.exports = __webpack_require__(135)();
 	// imports
 	
 	
@@ -23094,7 +23070,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 147 */
+/* 153 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -23103,16 +23079,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 148 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(149);
+	var content = __webpack_require__(155);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(130)(content, {});
+	var update = __webpack_require__(136)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -23129,10 +23105,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 149 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(129)();
+	exports = module.exports = __webpack_require__(135)();
 	// imports
 	
 	
@@ -23143,7 +23119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 150 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23152,61 +23128,61 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
 	var _preact = __webpack_require__(3);
 	
-	var _hammerjs = __webpack_require__(122);
+	var _hammerjs = __webpack_require__(128);
 	
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 	
-	var _reduxUndo = __webpack_require__(114);
+	var _reduxUndo = __webpack_require__(120);
 	
-	var _constants = __webpack_require__(124);
+	var _constants = __webpack_require__(130);
 	
 	var _constants2 = _interopRequireDefault(_constants);
 	
-	var _button = __webpack_require__(151);
+	var _button = __webpack_require__(157);
 	
 	var _button2 = _interopRequireDefault(_button);
 	
-	var _icon = __webpack_require__(125);
+	var _icon = __webpack_require__(131);
 	
 	var _icon2 = _interopRequireDefault(_icon);
 	
-	var _konamiBurst = __webpack_require__(155);
+	var _konamiBurst = __webpack_require__(161);
 	
 	var _konamiBurst2 = _interopRequireDefault(_konamiBurst);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var CLS = __webpack_require__(156);
-	__webpack_require__(157);
+	var CLS = __webpack_require__(162);
+	__webpack_require__(163);
 	
 	var ResetButton = function (_Component) {
 	  (0, _inherits3.default)(ResetButton, _Component);
 	
 	  function ResetButton() {
 	    (0, _classCallCheck3.default)(this, ResetButton);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ResetButton).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (ResetButton.__proto__ || (0, _getPrototypeOf2.default)(ResetButton)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(ResetButton, [{
@@ -23214,8 +23190,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function render() {
 	      var p = this.props;
 	      var state = this.props.state;
-	      var controls = state.controls;
-	      var cards = state.cards;
+	      var controls = state.controls,
+	          cards = state.cards;
 	
 	
 	      var openClass = controls.isConfirm ? CLS['is-confirm'] : '';
@@ -23274,8 +23250,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function _renderMomento(state) {
 	      var _this3 = this;
 	
-	      var controls = state.controls;
-	      var cards = state.cards;
+	      var controls = state.controls,
+	          cards = state.cards;
 	
 	
 	      var cheatClass = controls.isCheat ? CLS['is-cheat'] : '';
@@ -23336,7 +23312,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = ResetButton;
 
 /***/ },
-/* 151 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23345,43 +23321,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
 	var _preact = __webpack_require__(3);
 	
-	var _hammerjs = __webpack_require__(122);
+	var _hammerjs = __webpack_require__(128);
 	
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var CLASSES = __webpack_require__(152);
-	__webpack_require__(153);
+	var CLASSES = __webpack_require__(158);
+	__webpack_require__(159);
 	
 	var Button = function (_Component) {
 	  (0, _inherits3.default)(Button, _Component);
 	
 	  function Button() {
 	    (0, _classCallCheck3.default)(this, Button);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Button).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (Button.__proto__ || (0, _getPrototypeOf2.default)(Button)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(Button, [{
@@ -23419,7 +23395,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Button;
 
 /***/ },
-/* 152 */
+/* 158 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -23427,16 +23403,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 153 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(154);
+	var content = __webpack_require__(160);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(130)(content, {});
+	var update = __webpack_require__(136)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -23453,10 +23429,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 154 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(129)();
+	exports = module.exports = __webpack_require__(135)();
 	// imports
 	
 	
@@ -23467,7 +23443,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 155 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23476,31 +23452,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
 	var _preact = __webpack_require__(3);
 	
-	var _howler = __webpack_require__(132);
+	var _howler = __webpack_require__(138);
 	
-	var _moJs = __webpack_require__(123);
+	var _moJs = __webpack_require__(129);
 	
 	var _moJs2 = _interopRequireDefault(_moJs);
 	
@@ -23511,7 +23487,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  function KonamiBurst() {
 	    (0, _classCallCheck3.default)(this, KonamiBurst);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(KonamiBurst).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (KonamiBurst.__proto__ || (0, _getPrototypeOf2.default)(KonamiBurst)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(KonamiBurst, [{
@@ -23528,10 +23504,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function shouldComponentUpdate() {
 	      var store = this.context.store;
 	
-	      var _store$getState = store.getState();
-	
-	      var controls = _store$getState.controls;
-	
+	      var _store$getState = store.getState(),
+	          controls = _store$getState.controls;
 	
 	      if (controls.isCheatPlay) {
 	        this._burst.replay();
@@ -23583,7 +23557,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = KonamiBurst;
 
 /***/ },
-/* 156 */
+/* 162 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -23598,16 +23572,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 157 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(158);
+	var content = __webpack_require__(164);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(130)(content, {});
+	var update = __webpack_require__(136)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -23624,10 +23598,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 158 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(129)();
+	exports = module.exports = __webpack_require__(135)();
 	// imports
 	
 	
@@ -23638,7 +23612,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 159 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23647,61 +23621,61 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
 	var _preact = __webpack_require__(3);
 	
-	var _moJs = __webpack_require__(123);
+	var _moJs = __webpack_require__(129);
 	
 	var _moJs2 = _interopRequireDefault(_moJs);
 	
-	var _howler = __webpack_require__(132);
+	var _howler = __webpack_require__(138);
 	
-	var _congratsCounter = __webpack_require__(160);
+	var _congratsCounter = __webpack_require__(166);
 	
 	var _congratsCounter2 = _interopRequireDefault(_congratsCounter);
 	
-	var _congratsButton = __webpack_require__(164);
+	var _congratsButton = __webpack_require__(170);
 	
 	var _congratsButton2 = _interopRequireDefault(_congratsButton);
 	
-	var _congratsTexts = __webpack_require__(165);
+	var _congratsTexts = __webpack_require__(171);
 	
 	var _congratsTexts2 = _interopRequireDefault(_congratsTexts);
 	
-	var _congratsBg = __webpack_require__(166);
+	var _congratsBg = __webpack_require__(172);
 	
 	var _congratsBg2 = _interopRequireDefault(_congratsBg);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(161);
-	var CLS = __webpack_require__(163);
+	__webpack_require__(167);
+	var CLS = __webpack_require__(169);
 	
 	var Congrats = function (_Component) {
 	  (0, _inherits3.default)(Congrats, _Component);
 	
 	  function Congrats() {
 	    (0, _classCallCheck3.default)(this, Congrats);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Congrats).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (Congrats.__proto__ || (0, _getPrototypeOf2.default)(Congrats)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(Congrats, [{
@@ -23797,7 +23771,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Congrats;
 
 /***/ },
-/* 160 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23806,43 +23780,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
 	var _preact = __webpack_require__(3);
 	
-	var _moJs = __webpack_require__(123);
+	var _moJs = __webpack_require__(129);
 	
 	var _moJs2 = _interopRequireDefault(_moJs);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(161);
-	var CLS = __webpack_require__(163);
+	__webpack_require__(167);
+	var CLS = __webpack_require__(169);
 	
 	var CongratsCounter = function (_Component) {
 	  (0, _inherits3.default)(CongratsCounter, _Component);
 	
 	  function CongratsCounter() {
 	    (0, _classCallCheck3.default)(this, CongratsCounter);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(CongratsCounter).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (CongratsCounter.__proto__ || (0, _getPrototypeOf2.default)(CongratsCounter)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(CongratsCounter, [{
@@ -23906,16 +23880,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = CongratsCounter;
 
 /***/ },
-/* 161 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(162);
+	var content = __webpack_require__(168);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(130)(content, {});
+	var update = __webpack_require__(136)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -23932,10 +23906,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 162 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(129)();
+	exports = module.exports = __webpack_require__(135)();
 	// imports
 	
 	
@@ -23946,7 +23920,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 163 */
+/* 169 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -23965,7 +23939,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 164 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23974,31 +23948,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _getOwnPropertyDescriptor = __webpack_require__(20);
+	var _getOwnPropertyDescriptor = __webpack_require__(26);
 	
 	var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
 	
-	var _defineProperty2 = __webpack_require__(141);
+	var _defineProperty2 = __webpack_require__(147);
 	
 	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
@@ -24006,11 +23980,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _preact = __webpack_require__(3);
 	
-	var _reduxUndo = __webpack_require__(114);
+	var _reduxUndo = __webpack_require__(120);
 	
-	var _decko = __webpack_require__(119);
+	var _decko = __webpack_require__(125);
 	
-	var _moJs = __webpack_require__(123);
+	var _moJs = __webpack_require__(129);
 	
 	var _moJs2 = _interopRequireDefault(_moJs);
 	
@@ -24045,15 +24019,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return desc;
 	}
 	
-	__webpack_require__(161);
-	var CLS = __webpack_require__(163);
+	__webpack_require__(167);
+	var CLS = __webpack_require__(169);
 	
 	var CongratsButton = (_class = function (_Component) {
 	  (0, _inherits3.default)(CongratsButton, _Component);
 	
 	  function CongratsButton() {
 	    (0, _classCallCheck3.default)(this, CongratsButton);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(CongratsButton).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (CongratsButton.__proto__ || (0, _getPrototypeOf2.default)(CongratsButton)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(CongratsButton, [{
@@ -24130,7 +24104,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = CongratsButton;
 
 /***/ },
-/* 165 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24139,43 +24113,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
 	var _preact = __webpack_require__(3);
 	
-	var _moJs = __webpack_require__(123);
+	var _moJs = __webpack_require__(129);
 	
 	var _moJs2 = _interopRequireDefault(_moJs);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(161);
-	var CLS = __webpack_require__(163);
+	__webpack_require__(167);
+	var CLS = __webpack_require__(169);
 	
 	var Congrats = function (_Component) {
 	  (0, _inherits3.default)(Congrats, _Component);
 	
 	  function Congrats() {
 	    (0, _classCallCheck3.default)(this, Congrats);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Congrats).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (Congrats.__proto__ || (0, _getPrototypeOf2.default)(Congrats)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(Congrats, [{
@@ -24243,7 +24217,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_createTextBurst',
 	    value: function _createTextBurst(parent, delay) {
-	      var i = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+	      var i = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
 	
 	      var timeline = new _moJs2.default.Timeline({ delay: delay });
 	      var colors = ['#FF4B83', '#2AC1CB', '#344D6D'];
@@ -24282,7 +24256,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Congrats;
 
 /***/ },
-/* 166 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24291,47 +24265,47 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _extends2 = __webpack_require__(46);
+	var _extends2 = __webpack_require__(52);
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
-	var _getPrototypeOf = __webpack_require__(63);
+	var _getPrototypeOf = __webpack_require__(69);
 	
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 	
-	var _classCallCheck2 = __webpack_require__(67);
+	var _classCallCheck2 = __webpack_require__(73);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(68);
+	var _createClass2 = __webpack_require__(74);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(72);
+	var _possibleConstructorReturn2 = __webpack_require__(78);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(106);
+	var _inherits2 = __webpack_require__(112);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
 	var _preact = __webpack_require__(3);
 	
-	var _moJs = __webpack_require__(123);
+	var _moJs = __webpack_require__(129);
 	
 	var _moJs2 = _interopRequireDefault(_moJs);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(161);
-	var CLS = __webpack_require__(163);
+	__webpack_require__(167);
+	var CLS = __webpack_require__(169);
 	
 	var Congrats = function (_Component) {
 	  (0, _inherits3.default)(Congrats, _Component);
 	
 	  function Congrats() {
 	    (0, _classCallCheck3.default)(this, Congrats);
-	    return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Congrats).apply(this, arguments));
+	    return (0, _possibleConstructorReturn3.default)(this, (Congrats.__proto__ || (0, _getPrototypeOf2.default)(Congrats)).apply(this, arguments));
 	  }
 	
 	  (0, _createClass3.default)(Congrats, [{
@@ -24384,7 +24358,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Congrats;
 
 /***/ },
-/* 167 */
+/* 173 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -24396,16 +24370,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 168 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(169);
+	var content = __webpack_require__(175);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(130)(content, {});
+	var update = __webpack_require__(136)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -24422,10 +24396,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 169 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(129)();
+	exports = module.exports = __webpack_require__(135)();
 	// imports
 	
 	
@@ -24436,7 +24410,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 170 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24447,11 +24421,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _redux = __webpack_require__(4);
 	
-	var _indexReducer = __webpack_require__(171);
+	var _indexReducer = __webpack_require__(177);
 	
 	var _indexReducer2 = _interopRequireDefault(_indexReducer);
 	
-	var _reduxThunk = __webpack_require__(197);
+	var _reduxThunk = __webpack_require__(203);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
@@ -24470,7 +24444,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = initStore;
 
 /***/ },
-/* 171 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24479,25 +24453,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _extends2 = __webpack_require__(46);
+	var _extends2 = __webpack_require__(52);
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
 	var _redux = __webpack_require__(4);
 	
-	var _reduxUndo = __webpack_require__(114);
+	var _reduxUndo = __webpack_require__(120);
 	
 	var _reduxUndo2 = _interopRequireDefault(_reduxUndo);
 	
-	var _reduxRecycle = __webpack_require__(172);
+	var _reduxRecycle = __webpack_require__(178);
 	
 	var _reduxRecycle2 = _interopRequireDefault(_reduxRecycle);
 	
-	var _cardsReducer = __webpack_require__(173);
+	var _cardsReducer = __webpack_require__(179);
 	
 	var _cardsReducer2 = _interopRequireDefault(_cardsReducer);
 	
-	var _controlsReducer = __webpack_require__(196);
+	var _controlsReducer = __webpack_require__(202);
 	
 	var _controlsReducer2 = _interopRequireDefault(_controlsReducer);
 	
@@ -24520,7 +24494,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = reducer;
 
 /***/ },
-/* 172 */
+/* 178 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -24548,7 +24522,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// /redux-recycle
 
 /***/ },
-/* 173 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24557,27 +24531,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _slicedToArray2 = __webpack_require__(174);
+	var _slicedToArray2 = __webpack_require__(180);
 	
 	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 	
-	var _extends2 = __webpack_require__(46);
+	var _extends2 = __webpack_require__(52);
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
-	var _toConsumableArray2 = __webpack_require__(183);
+	var _toConsumableArray2 = __webpack_require__(189);
 	
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 	
-	var _makeCards = __webpack_require__(191);
+	var _makeCards = __webpack_require__(197);
 	
 	var _makeCards2 = _interopRequireDefault(_makeCards);
 	
-	var _checkOpen = __webpack_require__(195);
+	var _checkEqual = __webpack_require__(201);
 	
-	var _checkOpen2 = _interopRequireDefault(_checkOpen);
+	var _checkEqual2 = _interopRequireDefault(_checkEqual);
 	
-	var _constants = __webpack_require__(124);
+	var _constants = __webpack_require__(130);
 	
 	var _constants2 = _interopRequireDefault(_constants);
 	
@@ -24593,15 +24567,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	var cardsReducer = function cardsReducer() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
 	  var action = arguments[1];
 	
 	  switch (action.type) {
 	    case 'OPEN_CARD':
 	      {
 	        var id = action.data;
-	        var cards = state.cards;
-	        var open = state.open;
+	        var cards = state.cards,
+	            open = state.open;
 	
 	        if (cards[id].isOpen || open.length >= 2) {
 	          return state;
@@ -24611,22 +24585,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        newCards[id] = (0, _extends3.default)({}, cards[id], { isOpen: true });
 	        var newState = (0, _extends3.default)({}, state, { cards: newCards, open: [].concat((0, _toConsumableArray3.default)(open), [id]) });
 	
-	        return (0, _checkOpen2.default)(newState, action);
+	        return (0, _checkEqual2.default)(newState, action);
 	      }
 	
 	    case 'CHECK_OPEN_CARDS':
 	      {
-	        var _cards = state.cards;
-	        var _open = state.open;
+	        var _cards = state.cards,
+	            _open = state.open;
 	
 	        if (_open.length < 2) {
 	          return state;
 	        }
 	
-	        var _open2 = (0, _slicedToArray3.default)(_open, 2);
-	
-	        var id1 = _open2[0];
-	        var id2 = _open2[1];
+	        var _open2 = (0, _slicedToArray3.default)(_open, 2),
+	            id1 = _open2[0],
+	            id2 = _open2[1];
 	
 	        var first = _cards[id1];
 	        var second = _cards[id2];
@@ -24661,11 +24634,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    case 'CARDS_RESET_PLAY':
 	      {
-	        var _action$data = (0, _slicedToArray3.default)(action.data, 2);
-	
-	        var _id = _action$data[0];
-	        var _id2 = _action$data[1];
-	
+	        var _action$data = (0, _slicedToArray3.default)(action.data, 2),
+	            _id = _action$data[0],
+	            _id2 = _action$data[1];
 	
 	        var _newState = (0, _extends3.default)({}, state);
 	        _newState.cards = [].concat((0, _toConsumableArray3.default)(_newState.cards));
@@ -24705,18 +24676,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = cardsReducer;
 
 /***/ },
-/* 174 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _isIterable2 = __webpack_require__(175);
+	var _isIterable2 = __webpack_require__(181);
 	
 	var _isIterable3 = _interopRequireDefault(_isIterable2);
 	
-	var _getIterator2 = __webpack_require__(179);
+	var _getIterator2 = __webpack_require__(185);
 	
 	var _getIterator3 = _interopRequireDefault(_getIterator2);
 	
@@ -24761,27 +24732,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 175 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(176), __esModule: true };
+	module.exports = { "default": __webpack_require__(182), __esModule: true };
 
 /***/ },
-/* 176 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(88);
-	__webpack_require__(76);
-	module.exports = __webpack_require__(177);
+	__webpack_require__(94);
+	__webpack_require__(82);
+	module.exports = __webpack_require__(183);
 
 /***/ },
-/* 177 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var classof   = __webpack_require__(178)
-	  , ITERATOR  = __webpack_require__(87)('iterator')
-	  , Iterators = __webpack_require__(81);
-	module.exports = __webpack_require__(40).isIterable = function(it){
+	var classof   = __webpack_require__(184)
+	  , ITERATOR  = __webpack_require__(93)('iterator')
+	  , Iterators = __webpack_require__(87);
+	module.exports = __webpack_require__(46).isIterable = function(it){
 	  var O = Object(it);
 	  return O[ITERATOR] !== undefined
 	    || '@@iterator' in O
@@ -24789,12 +24760,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 178 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// getting tag from 19.1.3.6 Object.prototype.toString()
-	var cof = __webpack_require__(25)
-	  , TAG = __webpack_require__(87)('toStringTag')
+	var cof = __webpack_require__(31)
+	  , TAG = __webpack_require__(93)('toStringTag')
 	  // ES3 wrong here
 	  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
 	
@@ -24817,53 +24788,53 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 179 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(180), __esModule: true };
+	module.exports = { "default": __webpack_require__(186), __esModule: true };
 
 /***/ },
-/* 180 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(88);
-	__webpack_require__(76);
-	module.exports = __webpack_require__(181);
+	__webpack_require__(94);
+	__webpack_require__(82);
+	module.exports = __webpack_require__(187);
 
 /***/ },
-/* 181 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var anObject = __webpack_require__(45)
-	  , get      = __webpack_require__(182);
-	module.exports = __webpack_require__(40).getIterator = function(it){
+	var anObject = __webpack_require__(51)
+	  , get      = __webpack_require__(188);
+	module.exports = __webpack_require__(46).getIterator = function(it){
 	  var iterFn = get(it);
 	  if(typeof iterFn != 'function')throw TypeError(it + ' is not iterable!');
 	  return anObject(iterFn.call(it));
 	};
 
 /***/ },
-/* 182 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var classof   = __webpack_require__(178)
-	  , ITERATOR  = __webpack_require__(87)('iterator')
-	  , Iterators = __webpack_require__(81);
-	module.exports = __webpack_require__(40).getIteratorMethod = function(it){
+	var classof   = __webpack_require__(184)
+	  , ITERATOR  = __webpack_require__(93)('iterator')
+	  , Iterators = __webpack_require__(87);
+	module.exports = __webpack_require__(46).getIteratorMethod = function(it){
 	  if(it != undefined)return it[ITERATOR]
 	    || it['@@iterator']
 	    || Iterators[classof(it)];
 	};
 
 /***/ },
-/* 183 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _from = __webpack_require__(184);
+	var _from = __webpack_require__(190);
 	
 	var _from2 = _interopRequireDefault(_from);
 	
@@ -24882,34 +24853,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 184 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(185), __esModule: true };
+	module.exports = { "default": __webpack_require__(191), __esModule: true };
 
 /***/ },
-/* 185 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(76);
-	__webpack_require__(186);
-	module.exports = __webpack_require__(40).Array.from;
+	__webpack_require__(82);
+	__webpack_require__(192);
+	module.exports = __webpack_require__(46).Array.from;
 
 /***/ },
-/* 186 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var ctx            = __webpack_require__(41)
-	  , $export        = __webpack_require__(39)
-	  , toObject       = __webpack_require__(62)
-	  , call           = __webpack_require__(187)
-	  , isArrayIter    = __webpack_require__(188)
-	  , toLength       = __webpack_require__(54)
-	  , createProperty = __webpack_require__(189)
-	  , getIterFn      = __webpack_require__(182);
+	var ctx            = __webpack_require__(47)
+	  , $export        = __webpack_require__(45)
+	  , toObject       = __webpack_require__(68)
+	  , call           = __webpack_require__(193)
+	  , isArrayIter    = __webpack_require__(194)
+	  , toLength       = __webpack_require__(60)
+	  , createProperty = __webpack_require__(195)
+	  , getIterFn      = __webpack_require__(188);
 	
-	$export($export.S + $export.F * !__webpack_require__(190)(function(iter){ Array.from(iter); }), 'Array', {
+	$export($export.S + $export.F * !__webpack_require__(196)(function(iter){ Array.from(iter); }), 'Array', {
 	  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
 	  from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
 	    var O       = toObject(arrayLike)
@@ -24939,11 +24910,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 187 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// call something on iterator step with safe closing on error
-	var anObject = __webpack_require__(45);
+	var anObject = __webpack_require__(51);
 	module.exports = function(iterator, fn, value, entries){
 	  try {
 	    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
@@ -24956,12 +24927,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 188 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// check on default Array iterator
-	var Iterators  = __webpack_require__(81)
-	  , ITERATOR   = __webpack_require__(87)('iterator')
+	var Iterators  = __webpack_require__(87)
+	  , ITERATOR   = __webpack_require__(93)('iterator')
 	  , ArrayProto = Array.prototype;
 	
 	module.exports = function(it){
@@ -24969,12 +24940,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 189 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var $defineProperty = __webpack_require__(44)
-	  , createDesc      = __webpack_require__(29);
+	var $defineProperty = __webpack_require__(50)
+	  , createDesc      = __webpack_require__(35);
 	
 	module.exports = function(object, index, value){
 	  if(index in object)$defineProperty.f(object, index, createDesc(0, value));
@@ -24982,10 +24953,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 190 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ITERATOR     = __webpack_require__(87)('iterator')
+	var ITERATOR     = __webpack_require__(93)('iterator')
 	  , SAFE_CLOSING = false;
 	
 	try {
@@ -25008,7 +24979,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 191 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25017,19 +24988,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _constants = __webpack_require__(124);
+	var _constants = __webpack_require__(130);
 	
 	var _constants2 = _interopRequireDefault(_constants);
 	
-	var _arrayShuffle = __webpack_require__(192);
+	var _arrayShuffle = __webpack_require__(198);
 	
 	var _arrayShuffle2 = _interopRequireDefault(_arrayShuffle);
 	
-	var _makeCard = __webpack_require__(193);
+	var _makeCard = __webpack_require__(199);
 	
 	var _makeCard2 = _interopRequireDefault(_makeCard);
 	
-	var _clamp = __webpack_require__(194);
+	var _clamp = __webpack_require__(200);
 	
 	var _clamp2 = _interopRequireDefault(_clamp);
 	
@@ -25054,7 +25025,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 192 */
+/* 198 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -25079,7 +25050,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 193 */
+/* 199 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25094,7 +25065,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  @returns {Object} Created card object.
 	*/
 	exports.default = function () {
-	  var o = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var o = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	
 	  return {
 	    type: o.type || 'pan',
@@ -25104,7 +25075,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 194 */
+/* 200 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -25128,20 +25099,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 195 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _extends2 = __webpack_require__(46);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends2 = __webpack_require__(52);
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
-	var _toConsumableArray2 = __webpack_require__(183);
+	var _toConsumableArray2 = __webpack_require__(189);
 	
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 	
-	var _slicedToArray2 = __webpack_require__(174);
+	var _slicedToArray2 = __webpack_require__(180);
 	
 	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 	
@@ -25153,17 +25128,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  @param {Object} New state.
 	*/
 	var checkEqual = function checkEqual(state) {
-	  var cards = state.cards;
-	  var open = state.open;
+	  var cards = state.cards,
+	      open = state.open;
 	
 	  if (open.length < 2) {
 	    return state;
 	  }
 	
-	  var _open = (0, _slicedToArray3.default)(open, 2);
-	
-	  var id1 = _open[0];
-	  var id2 = _open[1];
+	  var _open = (0, _slicedToArray3.default)(open, 2),
+	      id1 = _open[0],
+	      id2 = _open[1];
 	
 	  var first = cards[id1];
 	  var second = cards[id2];
@@ -25177,9 +25151,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	  return state;
 	};
+	
+	exports.default = checkEqual;
 
 /***/ },
-/* 196 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25188,7 +25164,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _extends2 = __webpack_require__(46);
+	var _extends2 = __webpack_require__(52);
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
@@ -25202,7 +25178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	var controls = function controls() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
 	  var action = arguments[1];
 	
 	  switch (action.type) {
@@ -25233,7 +25209,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = controls;
 
 /***/ },
-/* 197 */
+/* 203 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25261,7 +25237,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = thunk;
 
 /***/ },
-/* 198 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25270,15 +25246,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _stringify = __webpack_require__(199);
+	var _stringify = __webpack_require__(205);
 	
 	var _stringify2 = _interopRequireDefault(_stringify);
 	
-	var _constants = __webpack_require__(124);
+	var _constants = __webpack_require__(130);
 	
 	var _constants2 = _interopRequireDefault(_constants);
 	
-	var _addUnload = __webpack_require__(201);
+	var _addUnload = __webpack_require__(207);
 	
 	var _addUnload2 = _interopRequireDefault(_addUnload);
 	
@@ -25321,23 +25297,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 199 */
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(200), __esModule: true };
+	module.exports = { "default": __webpack_require__(206), __esModule: true };
 
 /***/ },
-/* 200 */
+/* 206 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var core  = __webpack_require__(40)
+	var core  = __webpack_require__(46)
 	  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
 	module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
 	  return $JSON.stringify.apply($JSON, arguments);
 	};
 
 /***/ },
-/* 201 */
+/* 207 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25356,7 +25332,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 202 */
+/* 208 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25365,7 +25341,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _konamiKomando = __webpack_require__(203);
+	var _konamiKomando = __webpack_require__(209);
 	
 	var _konamiKomando2 = _interopRequireDefault(_konamiKomando);
 	
@@ -25392,7 +25368,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 203 */
+/* 209 */
 /***/ function(module, exports) {
 
 	var konami = function(opts) {

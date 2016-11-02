@@ -1,5 +1,5 @@
 import makeCards from '../helpers/make-cards';
-import checkEqual from '../helpers/check-open';
+import checkEqual from '../helpers/check-equal';
 import C from '../constants';
 
 const INITIAL_STATE = {

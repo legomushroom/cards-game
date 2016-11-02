@@ -1,6 +1,6 @@
 {
   "name": "guarantee-rate-game",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "test work for Oleg Solomka",
   "keywords": [
     "mojs",
@@ -33,6 +33,7 @@
   },
   "homepage": "",
   "dependencies": {
+    "decko": "^1.1.3",
     "hammerjs": "^2.0.8",
     "howler": "^2.0.1",
     "konami-komando": "^1.0.1",
@@ -85,6 +86,7 @@
     "tag-loader": "^0.3.0",
     "unminified-webpack-plugin": "^1.1.0",
     "webpack": "^1.13.1",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "yargs": "^6.3.0"
   }
 }
