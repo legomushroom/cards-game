@@ -26,14 +26,6 @@ class Congrats extends Component {
     return false;
   }
 
-  _checkPlay() {
-    const {store} = this.context;
-    const state = store.getState();
-    const isPlay = state.cards.present.pairsLeft === 0;
-    isPlay && this._play();
-    isPlay || this._hide();
-  }
-
   componentWillMount() {
     const sound = new Howl({
       src: ['./sounds/applause.mp3', './sounds/applause.wav'],
@@ -44,6 +36,20 @@ class Congrats extends Component {
   }
   componentDidMount() { setTimeout( this._checkPlay.bind(this), 100 ); }
 
+  /*
+    Method to check if it is a good time to play animation.
+  */
+  _checkPlay() {
+    const {store} = this.context;
+    const state = store.getState();
+    const isPlay = state.cards.present.pairsLeft === 0;
+    isPlay && this._play();
+    isPlay || this._hide();
+  }
+
+  /*
+    Method to play animation.
+  */
   _play() {
     if (this._isPlay === true) { return; }
     this.base.style.display = 'block';
@@ -51,6 +57,9 @@ class Congrats extends Component {
     this._isPlay = true;
   }
 
+  /*
+    Method to hide the component.
+  */
   _hide() {
     if (!this._isPlay) { return; }
     if ( this._timeline.progress > 0 ) {

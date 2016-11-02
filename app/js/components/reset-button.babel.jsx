@@ -24,6 +24,11 @@ class ResetButton extends Component {
             </div>;
   }
 
+  /*
+    Method to render a part of the markup - reset + confirm buttons.
+    @param {Object} State.
+    @returns {Object} Renderred markup.
+  */
   _renderReset(state) {
     return  <span className={CLS['reset-button__reset']}>
               <button className={CLS['reset-button__main']}
@@ -36,6 +41,11 @@ class ResetButton extends Component {
             </span>;
   }
 
+  /*
+    Method to render a part of the markup - undo button.
+    @param {Object} State.
+    @returns {Object} Renderred markup.
+  */
   _renderMomento(state) {
     const {controls, cards} = state;
 

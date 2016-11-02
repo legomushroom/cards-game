@@ -1,6 +1,11 @@
 import C from '../constants';
 import addUnload from './add-unload';
 
+/*
+  Function to store state into localStorage on page `unload`
+  and restore it on page `load`.
+  @param {Object} Redux store.
+*/
 export default (store) => {
   if (C.IS_PERSIST_STATE) {
     // save to localstorage

@@ -37,6 +37,13 @@ class Congrats extends Component {
     this.props.timeline.add( timeline );
   }
 
+  /*
+    Method to bootstrap text animations.
+    @param {Object} HTMLElement that the animation
+                    will be added inside.
+    @param {Number} Delay for the animation to start after.
+    @param {Number} Index of the text block.
+  */
   _createTextBurst ( parent, delay, i = 0 ) {
     const timeline = new mojs.Timeline({ delay });
     const colors = [ '#FF4B83', '#2AC1CB', '#344D6D' ];

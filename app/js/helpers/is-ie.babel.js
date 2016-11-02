@@ -1,4 +1,3 @@
-
 /*
   Method to check whether the browser is IE.
   @returns {Boolean} If browser is IE.

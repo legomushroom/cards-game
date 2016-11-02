@@ -1,5 +1,9 @@
 import C from '../constants';
 
+/*
+  Function to fire the action on two cards simultaneously.
+  @param {Number} Id of the card.
+*/
 const IDs = [];
 const lock = (id) => {
   return (dispatch, getState) => {

@@ -75,24 +75,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _store2 = _interopRequireDefault(_store);
 	
-	var _persist = __webpack_require__(197);
+	var _persist = __webpack_require__(198);
 	
 	var _persist2 = _interopRequireDefault(_persist);
 	
-	var _addKonamiCheat = __webpack_require__(201);
+	var _addKonamiCheat = __webpack_require__(202);
 	
 	var _addKonamiCheat2 = _interopRequireDefault(_addKonamiCheat);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	/*
-	  TODO:
-	    - sounds
-	    - comments
-	    - fix IE
-	*/
-	
-	// import Icon from './components/icon';
 	var store = (0, _store2.default)();
 	(0, _preact.render)((0, _preact.h)(
 	  _preactRedux.Provider,
@@ -2511,6 +2503,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      );
 	    }
 	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var store = this.context.store;
+	
+	
+	      store.subscribe(this.forceUpdate.bind(this));
+	    }
+	  }, {
 	    key: '_undo',
 	    value: function _undo() {
 	      var store = this.context.store;
@@ -2524,6 +2524,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      store.dispatch(_reduxUndo.ActionCreators.redo());
 	    }
+	
+	    /*
+	      Method to render a part of the markup - cards.
+	      @param {Array} Cards collection.
+	      @returns {Object} Renderred markup.
+	    */
+	
 	  }, {
 	    key: '_renderCards',
 	    value: function _renderCards() {
@@ -2536,14 +2543,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        cardComponents.push((0, _preact.h)(_card2.default, (0, _extends3.default)({}, card, { id: i })));
 	      }
 	      return cardComponents;
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var store = this.context.store;
-	
-	
-	      store.subscribe(this.forceUpdate.bind(this));
 	    }
 	  }]);
 	  return Game;
@@ -22518,6 +22517,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	/*
+	  Function to check open cards with some delay.
+	  @param {Function} Redux `dispatch` function.
+	  @param {Function} Redux `getState` function.
+	*/
 	var timeoutID = null;
 	var asyncCheck = function asyncCheck(dispatch, getState) {
 	  var _getState = getState();
@@ -22552,6 +22556,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	/*
+	  Function to fire the action on two cards simultaneously.
+	  @param {Number} Id of the card.
+	*/
 	var IDs = [];
 	var lock = function lock(id) {
 	  return function (dispatch, getState) {
@@ -22954,7 +22962,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }]);
 	  return Thunder;
-	}(_moJs2.default.CustomShape);
+	}(_moJs2.default.CustomShape); /*
+	                                 Module to add custom shapes into `mojs`.
+	                               */
 	
 	_moJs2.default.addShape('thunder', Thunder);
 
@@ -23010,9 +23020,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  (0, _createClass3.default)(Scores, [{
 	    key: 'render',
 	    value: function render() {
-	      // const {state} = this.props;
-	      // const {cards} = state;
-	
 	      return (0, _preact.h)(
 	        'div',
 	        { className: CLASSES.ghost, 'data-component': 'ghost' },
@@ -23220,6 +23227,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._renderMomento(state)
 	      );
 	    }
+	
+	    /*
+	      Method to render a part of the markup - reset + confirm buttons.
+	      @param {Object} State.
+	      @returns {Object} Renderred markup.
+	    */
+	
 	  }, {
 	    key: '_renderReset',
 	    value: function _renderReset(state) {
@@ -23248,6 +23262,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        )
 	      );
 	    }
+	
+	    /*
+	      Method to render a part of the markup - undo button.
+	      @param {Object} State.
+	      @returns {Object} Renderred markup.
+	    */
+	
 	  }, {
 	    key: '_renderMomento',
 	    value: function _renderMomento(state) {
@@ -23704,16 +23725,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return false;
 	    }
 	  }, {
-	    key: '_checkPlay',
-	    value: function _checkPlay() {
-	      var store = this.context.store;
-	
-	      var state = store.getState();
-	      var isPlay = state.cards.present.pairsLeft === 0;
-	      isPlay && this._play();
-	      isPlay || this._hide();
-	    }
-	  }, {
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
 	      var sound = new _howler.Howl({
@@ -23732,6 +23743,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function componentDidMount() {
 	      setTimeout(this._checkPlay.bind(this), 100);
 	    }
+	
+	    /*
+	      Method to check if it is a good time to play animation.
+	    */
+	
+	  }, {
+	    key: '_checkPlay',
+	    value: function _checkPlay() {
+	      var store = this.context.store;
+	
+	      var state = store.getState();
+	      var isPlay = state.cards.present.pairsLeft === 0;
+	      isPlay && this._play();
+	      isPlay || this._hide();
+	    }
+	
+	    /*
+	      Method to play animation.
+	    */
+	
 	  }, {
 	    key: '_play',
 	    value: function _play() {
@@ -23742,6 +23773,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._timeline.play();
 	      this._isPlay = true;
 	    }
+	
+	    /*
+	      Method to hide the component.
+	    */
+	
 	  }, {
 	    key: '_hide',
 	    value: function _hide() {
@@ -24195,6 +24231,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      this.props.timeline.add(timeline);
 	    }
+	
+	    /*
+	      Method to bootstrap text animations.
+	      @param {Object} HTMLElement that the animation
+	                      will be added inside.
+	      @param {Number} Delay for the animation to start after.
+	      @param {Number} Index of the text block.
+	    */
+	
 	  }, {
 	    key: '_createTextBurst',
 	    value: function _createTextBurst(parent, delay) {
@@ -24406,7 +24451,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _indexReducer2 = _interopRequireDefault(_indexReducer);
 	
-	var _reduxThunk = __webpack_require__(196);
+	var _reduxThunk = __webpack_require__(197);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
@@ -24452,7 +24497,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _cardsReducer2 = _interopRequireDefault(_cardsReducer);
 	
-	var _controlsReducer = __webpack_require__(195);
+	var _controlsReducer = __webpack_require__(196);
 	
 	var _controlsReducer2 = _interopRequireDefault(_controlsReducer);
 	
@@ -24512,21 +24557,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
+	var _slicedToArray2 = __webpack_require__(174);
+	
+	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+	
 	var _extends2 = __webpack_require__(46);
 	
 	var _extends3 = _interopRequireDefault(_extends2);
 	
-	var _toConsumableArray2 = __webpack_require__(174);
+	var _toConsumableArray2 = __webpack_require__(183);
 	
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-	
-	var _slicedToArray2 = __webpack_require__(184);
-	
-	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 	
 	var _makeCards = __webpack_require__(191);
 	
 	var _makeCards2 = _interopRequireDefault(_makeCards);
+	
+	var _checkOpen = __webpack_require__(195);
+	
+	var _checkOpen2 = _interopRequireDefault(_checkOpen);
 	
 	var _constants = __webpack_require__(124);
 	
@@ -24541,32 +24590,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  pairsLeft: _constants2.default.CARDS_AMOUNT / 2,
 	  prevID: null,
 	  open: []
-	};
-	
-	var checkEqual = function checkEqual(state, action) {
-	  var cards = state.cards;
-	  var open = state.open;
-	
-	  if (open.length < 2) {
-	    return state;
-	  }
-	
-	  var _open = (0, _slicedToArray3.default)(open, 2);
-	
-	  var id1 = _open[0];
-	  var id2 = _open[1];
-	
-	  var first = cards[id1];
-	  var second = cards[id2];
-	
-	  if (first.type === second.type) {
-	    var newCards = [].concat((0, _toConsumableArray3.default)(cards));
-	    var pairsLeft = state.pairsLeft - 1;
-	    newCards[id1] = (0, _extends3.default)({}, first, { isPlay: pairsLeft > 0 ? true : false });
-	    newCards[id2] = (0, _extends3.default)({}, second, { isPlay: pairsLeft > 0 ? true : false });
-	    return (0, _extends3.default)({}, state, { open: [], cards: newCards, pairsLeft: pairsLeft });
-	  }
-	  return state;
 	};
 	
 	var cardsReducer = function cardsReducer() {
@@ -24588,22 +24611,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        newCards[id] = (0, _extends3.default)({}, cards[id], { isOpen: true });
 	        var newState = (0, _extends3.default)({}, state, { cards: newCards, open: [].concat((0, _toConsumableArray3.default)(open), [id]) });
 	
-	        return checkEqual(newState, action);
+	        return (0, _checkOpen2.default)(newState, action);
 	      }
 	
 	    case 'CHECK_OPEN_CARDS':
 	      {
 	        var _cards = state.cards;
-	        var _open2 = state.open;
+	        var _open = state.open;
 	
-	        if (_open2.length < 2) {
+	        if (_open.length < 2) {
 	          return state;
 	        }
 	
-	        var _open3 = (0, _slicedToArray3.default)(_open2, 2);
+	        var _open2 = (0, _slicedToArray3.default)(_open, 2);
 	
-	        var id1 = _open3[0];
-	        var id2 = _open3[1];
+	        var id1 = _open2[0];
+	        var id2 = _open2[1];
 	
 	        var first = _cards[id1];
 	        var second = _cards[id2];
@@ -24689,204 +24712,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	exports.__esModule = true;
 	
-	var _from = __webpack_require__(175);
-	
-	var _from2 = _interopRequireDefault(_from);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	exports.default = function (arr) {
-	  if (Array.isArray(arr)) {
-	    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-	      arr2[i] = arr[i];
-	    }
-	
-	    return arr2;
-	  } else {
-	    return (0, _from2.default)(arr);
-	  }
-	};
-
-/***/ },
-/* 175 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(176), __esModule: true };
-
-/***/ },
-/* 176 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(76);
-	__webpack_require__(177);
-	module.exports = __webpack_require__(40).Array.from;
-
-/***/ },
-/* 177 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	var ctx            = __webpack_require__(41)
-	  , $export        = __webpack_require__(39)
-	  , toObject       = __webpack_require__(62)
-	  , call           = __webpack_require__(178)
-	  , isArrayIter    = __webpack_require__(179)
-	  , toLength       = __webpack_require__(54)
-	  , createProperty = __webpack_require__(180)
-	  , getIterFn      = __webpack_require__(181);
-	
-	$export($export.S + $export.F * !__webpack_require__(183)(function(iter){ Array.from(iter); }), 'Array', {
-	  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
-	  from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
-	    var O       = toObject(arrayLike)
-	      , C       = typeof this == 'function' ? this : Array
-	      , aLen    = arguments.length
-	      , mapfn   = aLen > 1 ? arguments[1] : undefined
-	      , mapping = mapfn !== undefined
-	      , index   = 0
-	      , iterFn  = getIterFn(O)
-	      , length, result, step, iterator;
-	    if(mapping)mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
-	    // if object isn't iterable or it's array with default iterator - use simple case
-	    if(iterFn != undefined && !(C == Array && isArrayIter(iterFn))){
-	      for(iterator = iterFn.call(O), result = new C; !(step = iterator.next()).done; index++){
-	        createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
-	      }
-	    } else {
-	      length = toLength(O.length);
-	      for(result = new C(length); length > index; index++){
-	        createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
-	      }
-	    }
-	    result.length = index;
-	    return result;
-	  }
-	});
-
-
-/***/ },
-/* 178 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// call something on iterator step with safe closing on error
-	var anObject = __webpack_require__(45);
-	module.exports = function(iterator, fn, value, entries){
-	  try {
-	    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
-	  // 7.4.6 IteratorClose(iterator, completion)
-	  } catch(e){
-	    var ret = iterator['return'];
-	    if(ret !== undefined)anObject(ret.call(iterator));
-	    throw e;
-	  }
-	};
-
-/***/ },
-/* 179 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// check on default Array iterator
-	var Iterators  = __webpack_require__(81)
-	  , ITERATOR   = __webpack_require__(87)('iterator')
-	  , ArrayProto = Array.prototype;
-	
-	module.exports = function(it){
-	  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
-	};
-
-/***/ },
-/* 180 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	var $defineProperty = __webpack_require__(44)
-	  , createDesc      = __webpack_require__(29);
-	
-	module.exports = function(object, index, value){
-	  if(index in object)$defineProperty.f(object, index, createDesc(0, value));
-	  else object[index] = value;
-	};
-
-/***/ },
-/* 181 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var classof   = __webpack_require__(182)
-	  , ITERATOR  = __webpack_require__(87)('iterator')
-	  , Iterators = __webpack_require__(81);
-	module.exports = __webpack_require__(40).getIteratorMethod = function(it){
-	  if(it != undefined)return it[ITERATOR]
-	    || it['@@iterator']
-	    || Iterators[classof(it)];
-	};
-
-/***/ },
-/* 182 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// getting tag from 19.1.3.6 Object.prototype.toString()
-	var cof = __webpack_require__(25)
-	  , TAG = __webpack_require__(87)('toStringTag')
-	  // ES3 wrong here
-	  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
-	
-	// fallback for IE11 Script Access Denied error
-	var tryGet = function(it, key){
-	  try {
-	    return it[key];
-	  } catch(e){ /* empty */ }
-	};
-	
-	module.exports = function(it){
-	  var O, T, B;
-	  return it === undefined ? 'Undefined' : it === null ? 'Null'
-	    // @@toStringTag case
-	    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
-	    // builtinTag case
-	    : ARG ? cof(O)
-	    // ES3 arguments fallback
-	    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
-	};
-
-/***/ },
-/* 183 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ITERATOR     = __webpack_require__(87)('iterator')
-	  , SAFE_CLOSING = false;
-	
-	try {
-	  var riter = [7][ITERATOR]();
-	  riter['return'] = function(){ SAFE_CLOSING = true; };
-	  Array.from(riter, function(){ throw 2; });
-	} catch(e){ /* empty */ }
-	
-	module.exports = function(exec, skipClosing){
-	  if(!skipClosing && !SAFE_CLOSING)return false;
-	  var safe = false;
-	  try {
-	    var arr  = [7]
-	      , iter = arr[ITERATOR]();
-	    iter.next = function(){ return {done: safe = true}; };
-	    arr[ITERATOR] = function(){ return iter; };
-	    exec(arr);
-	  } catch(e){ /* empty */ }
-	  return safe;
-	};
-
-/***/ },
-/* 184 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	exports.__esModule = true;
-	
-	var _isIterable2 = __webpack_require__(185);
+	var _isIterable2 = __webpack_require__(175);
 	
 	var _isIterable3 = _interopRequireDefault(_isIterable2);
 	
-	var _getIterator2 = __webpack_require__(188);
+	var _getIterator2 = __webpack_require__(179);
 	
 	var _getIterator3 = _interopRequireDefault(_getIterator2);
 	
@@ -24931,24 +24761,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 185 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(186), __esModule: true };
+	module.exports = { "default": __webpack_require__(176), __esModule: true };
 
 /***/ },
-/* 186 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(88);
 	__webpack_require__(76);
-	module.exports = __webpack_require__(187);
+	module.exports = __webpack_require__(177);
 
 /***/ },
-/* 187 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var classof   = __webpack_require__(182)
+	var classof   = __webpack_require__(178)
 	  , ITERATOR  = __webpack_require__(87)('iterator')
 	  , Iterators = __webpack_require__(81);
 	module.exports = __webpack_require__(40).isIterable = function(it){
@@ -24959,29 +24789,222 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
+/* 178 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// getting tag from 19.1.3.6 Object.prototype.toString()
+	var cof = __webpack_require__(25)
+	  , TAG = __webpack_require__(87)('toStringTag')
+	  // ES3 wrong here
+	  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
+	
+	// fallback for IE11 Script Access Denied error
+	var tryGet = function(it, key){
+	  try {
+	    return it[key];
+	  } catch(e){ /* empty */ }
+	};
+	
+	module.exports = function(it){
+	  var O, T, B;
+	  return it === undefined ? 'Undefined' : it === null ? 'Null'
+	    // @@toStringTag case
+	    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
+	    // builtinTag case
+	    : ARG ? cof(O)
+	    // ES3 arguments fallback
+	    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+	};
+
+/***/ },
+/* 179 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(180), __esModule: true };
+
+/***/ },
+/* 180 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(88);
+	__webpack_require__(76);
+	module.exports = __webpack_require__(181);
+
+/***/ },
+/* 181 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var anObject = __webpack_require__(45)
+	  , get      = __webpack_require__(182);
+	module.exports = __webpack_require__(40).getIterator = function(it){
+	  var iterFn = get(it);
+	  if(typeof iterFn != 'function')throw TypeError(it + ' is not iterable!');
+	  return anObject(iterFn.call(it));
+	};
+
+/***/ },
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var classof   = __webpack_require__(178)
+	  , ITERATOR  = __webpack_require__(87)('iterator')
+	  , Iterators = __webpack_require__(81);
+	module.exports = __webpack_require__(40).getIteratorMethod = function(it){
+	  if(it != undefined)return it[ITERATOR]
+	    || it['@@iterator']
+	    || Iterators[classof(it)];
+	};
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	exports.__esModule = true;
+	
+	var _from = __webpack_require__(184);
+	
+	var _from2 = _interopRequireDefault(_from);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = function (arr) {
+	  if (Array.isArray(arr)) {
+	    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+	      arr2[i] = arr[i];
+	    }
+	
+	    return arr2;
+	  } else {
+	    return (0, _from2.default)(arr);
+	  }
+	};
+
+/***/ },
+/* 184 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(185), __esModule: true };
+
+/***/ },
+/* 185 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(76);
+	__webpack_require__(186);
+	module.exports = __webpack_require__(40).Array.from;
+
+/***/ },
+/* 186 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var ctx            = __webpack_require__(41)
+	  , $export        = __webpack_require__(39)
+	  , toObject       = __webpack_require__(62)
+	  , call           = __webpack_require__(187)
+	  , isArrayIter    = __webpack_require__(188)
+	  , toLength       = __webpack_require__(54)
+	  , createProperty = __webpack_require__(189)
+	  , getIterFn      = __webpack_require__(182);
+	
+	$export($export.S + $export.F * !__webpack_require__(190)(function(iter){ Array.from(iter); }), 'Array', {
+	  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
+	  from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
+	    var O       = toObject(arrayLike)
+	      , C       = typeof this == 'function' ? this : Array
+	      , aLen    = arguments.length
+	      , mapfn   = aLen > 1 ? arguments[1] : undefined
+	      , mapping = mapfn !== undefined
+	      , index   = 0
+	      , iterFn  = getIterFn(O)
+	      , length, result, step, iterator;
+	    if(mapping)mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
+	    // if object isn't iterable or it's array with default iterator - use simple case
+	    if(iterFn != undefined && !(C == Array && isArrayIter(iterFn))){
+	      for(iterator = iterFn.call(O), result = new C; !(step = iterator.next()).done; index++){
+	        createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
+	      }
+	    } else {
+	      length = toLength(O.length);
+	      for(result = new C(length); length > index; index++){
+	        createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
+	      }
+	    }
+	    result.length = index;
+	    return result;
+	  }
+	});
+
+
+/***/ },
+/* 187 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// call something on iterator step with safe closing on error
+	var anObject = __webpack_require__(45);
+	module.exports = function(iterator, fn, value, entries){
+	  try {
+	    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
+	  // 7.4.6 IteratorClose(iterator, completion)
+	  } catch(e){
+	    var ret = iterator['return'];
+	    if(ret !== undefined)anObject(ret.call(iterator));
+	    throw e;
+	  }
+	};
+
+/***/ },
 /* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(189), __esModule: true };
+	// check on default Array iterator
+	var Iterators  = __webpack_require__(81)
+	  , ITERATOR   = __webpack_require__(87)('iterator')
+	  , ArrayProto = Array.prototype;
+	
+	module.exports = function(it){
+	  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
+	};
 
 /***/ },
 /* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(88);
-	__webpack_require__(76);
-	module.exports = __webpack_require__(190);
+	'use strict';
+	var $defineProperty = __webpack_require__(44)
+	  , createDesc      = __webpack_require__(29);
+	
+	module.exports = function(object, index, value){
+	  if(index in object)$defineProperty.f(object, index, createDesc(0, value));
+	  else object[index] = value;
+	};
 
 /***/ },
 /* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var anObject = __webpack_require__(45)
-	  , get      = __webpack_require__(181);
-	module.exports = __webpack_require__(40).getIterator = function(it){
-	  var iterFn = get(it);
-	  if(typeof iterFn != 'function')throw TypeError(it + ' is not iterable!');
-	  return anObject(iterFn.call(it));
+	var ITERATOR     = __webpack_require__(87)('iterator')
+	  , SAFE_CLOSING = false;
+	
+	try {
+	  var riter = [7][ITERATOR]();
+	  riter['return'] = function(){ SAFE_CLOSING = true; };
+	  Array.from(riter, function(){ throw 2; });
+	} catch(e){ /* empty */ }
+	
+	module.exports = function(exec, skipClosing){
+	  if(!skipClosing && !SAFE_CLOSING)return false;
+	  var safe = false;
+	  try {
+	    var arr  = [7]
+	      , iter = arr[ITERATOR]();
+	    iter.next = function(){ return {done: safe = true}; };
+	    arr[ITERATOR] = function(){ return iter; };
+	    exec(arr);
+	  } catch(e){ /* empty */ }
+	  return safe;
 	};
 
 /***/ },
@@ -25012,13 +25035,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	/*
+	  Factory function to create a collection of card objects.
+	  @returns {Array} Created collection of card objects.
+	*/
 	exports.default = function () {
-	  var difficulty = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-	
-	
-	  difficulty = _constants2.default.DIFFICULTY;
-	
-	  difficulty += 2;
+	  var difficulty = _constants2.default.DIFFICULTY + 2;
 	  difficulty = (0, _clamp2.default)(difficulty, 2, _constants2.default.CARD_TYPES.length - 1);
 	
 	  var cards = [];
@@ -25041,6 +25063,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
+	/*
+	  Function to suffle an array.
+	  @param {Array} Array to shuffle items in.
+	  @returns {Array} The same mutated array with items shuffled items.
+	*/
 	exports.default = function (a) {
 	  for (var i = a.length; i; i--) {
 	    var j = Math.floor(Math.random() * i);
@@ -25061,6 +25088,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
+	/*
+	  Factory function to create a card object.
+	  @param {Object} Options object with card properties.
+	  @returns {Object} Created card object.
+	*/
 	exports.default = function () {
 	  var o = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
@@ -25097,6 +25129,57 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 195 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _extends2 = __webpack_require__(46);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _toConsumableArray2 = __webpack_require__(183);
+	
+	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+	
+	var _slicedToArray2 = __webpack_require__(174);
+	
+	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/*
+	  Function check if two cards have equal types.
+	  @param {Object} State of the cards branch.
+	  @param {Object} New state.
+	*/
+	var checkEqual = function checkEqual(state) {
+	  var cards = state.cards;
+	  var open = state.open;
+	
+	  if (open.length < 2) {
+	    return state;
+	  }
+	
+	  var _open = (0, _slicedToArray3.default)(open, 2);
+	
+	  var id1 = _open[0];
+	  var id2 = _open[1];
+	
+	  var first = cards[id1];
+	  var second = cards[id2];
+	
+	  if (first.type === second.type) {
+	    var newCards = [].concat((0, _toConsumableArray3.default)(cards));
+	    var pairsLeft = state.pairsLeft - 1;
+	    newCards[id1] = (0, _extends3.default)({}, first, { isPlay: pairsLeft > 0 ? true : false });
+	    newCards[id2] = (0, _extends3.default)({}, second, { isPlay: pairsLeft > 0 ? true : false });
+	    return (0, _extends3.default)({}, state, { open: [], cards: newCards, pairsLeft: pairsLeft });
+	  }
+	  return state;
+	};
+
+/***/ },
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25150,7 +25233,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = controls;
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25178,7 +25261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = thunk;
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25187,7 +25270,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _stringify = __webpack_require__(198);
+	var _stringify = __webpack_require__(199);
 	
 	var _stringify2 = _interopRequireDefault(_stringify);
 	
@@ -25195,12 +25278,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _constants2 = _interopRequireDefault(_constants);
 	
-	var _addUnload = __webpack_require__(200);
+	var _addUnload = __webpack_require__(201);
 	
 	var _addUnload2 = _interopRequireDefault(_addUnload);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	/*
+	  Function to store state into localStorage on page `unload`
+	  and restore it on page `load`.
+	  @param {Object} Redux store.
+	*/
 	exports.default = function (store) {
 	  if (_constants2.default.IS_PERSIST_STATE) {
 	    // save to localstorage
@@ -25233,13 +25321,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(199), __esModule: true };
+	module.exports = { "default": __webpack_require__(200), __esModule: true };
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var core  = __webpack_require__(40)
@@ -25249,7 +25337,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25258,13 +25346,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
+	/*
+	  Function to add cross-browser `unload` event.
+	  @param {Function} Callback for the event.
+	*/
 	exports.default = function (fn) {
 	  var unloadEvent = 'onpagehide' in window ? 'pagehide' : 'beforeunload';
 	  window.addEventListener(unloadEvent, fn);
 	};
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25273,12 +25365,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _konamiKomando = __webpack_require__(202);
+	var _konamiKomando = __webpack_require__(203);
 	
 	var _konamiKomando2 = _interopRequireDefault(_konamiKomando);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	/*
+	  Function to add Konami code that will turn on time travel cheat.
+	  @param {Object} Store to dispatch on.
+	*/
 	exports.default = function (store) {
 	  (0, _konamiKomando2.default)({
 	    once: true,
@@ -25296,7 +25392,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports) {
 
 	var konami = function(opts) {

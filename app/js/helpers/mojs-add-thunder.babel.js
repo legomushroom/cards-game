@@ -1,3 +1,7 @@
+/*
+  Module to add custom shapes into `mojs`.
+*/
+
 import mojs from 'mo-js';
 
 class Thunder extends mojs.CustomShape {

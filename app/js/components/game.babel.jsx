@@ -35,6 +35,12 @@ class Game extends Component {
             </div>;
   }
 
+  componentDidMount () {
+    const {store} = this.context;
+
+    store.subscribe(this.forceUpdate.bind(this));
+  }
+
   @bind
   _undo() {
     const {store} = this.context;
@@ -47,6 +53,11 @@ class Game extends Component {
     store.dispatch(ActionCreators.redo());
   }
 
+  /*
+    Method to render a part of the markup - cards.
+    @param {Array} Cards collection.
+    @returns {Object} Renderred markup.
+  */
   _renderCards (cards=[]) {
     const cardComponents = [];
 
@@ -55,12 +66,6 @@ class Game extends Component {
       cardComponents.push( <Card {...card} id={i} /> );
     }
     return cardComponents;
-  }
-
-  componentDidMount () {
-    const {store} = this.context;
-
-    store.subscribe(this.forceUpdate.bind(this));
   }
 }
 

@@ -1,5 +1,10 @@
 import C from '../constants';
 
+/*
+  Function to check open cards with some delay.
+  @param {Function} Redux `dispatch` function.
+  @param {Function} Redux `getState` function.
+*/
 let timeoutID = null;
 const asyncCheck = (dispatch, getState) => {
   const {cards} = getState();

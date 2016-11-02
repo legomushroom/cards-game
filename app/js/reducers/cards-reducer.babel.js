@@ -1,4 +1,5 @@
 import makeCards from '../helpers/make-cards';
+import checkEqual from '../helpers/check-open';
 import C from '../constants';
 
 const INITIAL_STATE = {
@@ -8,24 +9,6 @@ const INITIAL_STATE = {
   pairsLeft:  C.CARDS_AMOUNT/2,
   prevID:     null,
   open:       []
-};
-
-const checkEqual = (state, action) => {
-  const {cards, open} = state;
-  if (open.length < 2) { return state; }
-
-  const [id1, id2] = open;
-  const first  = cards[id1];
-  const second = cards[id2];
-
-  if (first.type === second.type) {
-    const newCards = [...cards];
-    const pairsLeft = state.pairsLeft-1;
-    newCards[id1] = { ...first, isPlay: (pairsLeft > 0) ? true : false };
-    newCards[id2] = { ...second, isPlay: (pairsLeft > 0) ? true : false };
-    return {...state, open: [], cards: newCards, pairsLeft };
-  }
-  return state;
 };
 
 const cardsReducer = (state = INITIAL_STATE, action) => {

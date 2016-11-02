@@ -4,11 +4,12 @@ import shuffle  from './array-shuffle';
 import makeCard from './make-card';
 import clamp from '../helpers/clamp';
 
-export default (difficulty=0) => {
-
-  difficulty = C.DIFFICULTY;
-
-  difficulty += 2;
+/*
+  Factory function to create a collection of card objects.
+  @returns {Array} Created collection of card objects.
+*/
+export default () => {
+  let difficulty = C.DIFFICULTY + 2;
   difficulty = clamp(difficulty, 2, C.CARD_TYPES.length-1);
 
   const cards = [];
