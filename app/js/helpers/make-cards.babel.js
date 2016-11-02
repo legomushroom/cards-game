@@ -6,9 +6,10 @@ import clamp from '../helpers/clamp';
 
 export default (difficulty=0) => {
 
+  difficulty = C.DIFFICULTY;
+
   difficulty += 2;
   difficulty = clamp(difficulty, 2, C.CARD_TYPES.length-1);
-  difficulty = 2;
 
   const cards = [];
   const TYPES = C.CARD_TYPES;

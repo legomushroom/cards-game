@@ -42,17 +42,17 @@ class ResetButton extends Component {
     const cheatClass = (controls.isCheat) ? CLS['is-cheat'] : '';
     const momentoClass = `${CLS['reset-button__momento']} ${cheatClass}`;
     const undoClass = `${momentoClass} ${(cards.past.length) ? '' : CLS['is-disable']}`;
-    const redoClass = `${momentoClass} ${(cards.future.length) ? '' : CLS['is-disable']}`;
+    // const redoClass = `${momentoClass} ${(cards.future.length) ? '' : CLS['is-disable']}`;
+    // <button className={redoClass}
+    //         role="redo"
+    //         ref={(el)=> { this._redo = el; }}>
+    //   <Icon shape="redo" />
+    // </button>
     return  <span style={{position: 'relative'}}>
               <button className={undoClass}
                       role="undo"
                       ref={(el)=> { this._undo = el; }}>
                 <Icon shape="undo" />
-              </button>
-              <button className={redoClass}
-                      role="redo"
-                      ref={(el)=> { this._redo = el; }}>
-                <Icon shape="redo" />
               </button>
               <KonamiBurst state={state} />
             </span>;
@@ -63,11 +63,11 @@ class ResetButton extends Component {
     const mainMC = new Hammer.Manager(this._main);
     const confirmMC = new Hammer.Manager(this._confirm);
     const undoMC = new Hammer.Manager(this._undo);
-    const redoMC = new Hammer.Manager(this._redo);
+    // const redoMC = new Hammer.Manager(this._redo);
     mainMC.add(new Hammer.Tap);
     confirmMC.add(new Hammer.Tap);
     undoMC.add(new Hammer.Tap);
-    redoMC.add(new Hammer.Tap);
+    // redoMC.add(new Hammer.Tap);
 
     mainMC.on('tap', (e) => { store.dispatch({ type: 'SET_CONFIRM' }); });
     confirmMC.on('tap', (e) => {
@@ -76,7 +76,7 @@ class ResetButton extends Component {
     });
 
     undoMC.on('tap', (e) => { store.dispatch(ActionCreators.undo()); });
-    redoMC.on('tap', (e) => { store.dispatch(ActionCreators.redo()); });
+    // redoMC.on('tap', (e) => { store.dispatch(ActionCreators.redo()); });
   }
 }
 

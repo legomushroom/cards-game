@@ -10,6 +10,7 @@ import addKonamiCheat from './helpers/add-konami-cheat';
   TODO:
     - sounds
     - comments
+    - fix IE
 */
 
 const store = initStore();

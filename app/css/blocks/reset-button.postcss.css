@@ -4,16 +4,17 @@
 .reset-button {
   position:       relative;
   display:        inline-block;
+  color:          white;
   
   &__reset {
     position:     relative;
     display:      inline-block;
     float:        left;
+    height:       30*$PX;
   }
   
   button {
     border:       none;
-    color:        white;
     cursor:       pointer;
     &:focus {
       outline:    0;
@@ -65,7 +66,7 @@
   
   &__confirm  {
     background:   $c-yellow;
-    color:        $c-blue !important;
+    color:        $c-blue;
     position:     absolute;
     top:          100%;
     left:         50%;

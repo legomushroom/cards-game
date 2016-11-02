@@ -1,4 +1,5 @@
 import Konami from 'konami-komando';
+
 export default (store) => {
   Konami({
     once: true,

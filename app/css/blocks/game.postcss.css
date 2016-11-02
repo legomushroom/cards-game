@@ -3,7 +3,6 @@
 
 $rightSize: 200;
 .game {
-  /*margin-top:       30*$PX;*/
   font-family:      Arial, sans-serif;
   text-align:       center;
   perspective:      800*$PX;
@@ -12,7 +11,6 @@ $rightSize: 200;
   position:         absolute;
   left:             50%;
   top:              50%;
-  /*transform:        translate(-50%, -50%);*/
   margin-top:       -(470/2)*$PX;
   margin-left:      -(750/2)*$PX;
   animation:        fadeIn .5s ease-in;
@@ -24,12 +22,14 @@ $rightSize: 200;
   }
 
   &__left {
-    /*max-width:      550*$PX;*/
     width:          550*$PX;
-    display:        flex;
-    flex-wrap:      wrap;
-    align-content:  center;
+    /*display:        flex;*/
+    /*flex-wrap:      wrap;*/
+    /*align-content:  center;*/
     margin-left:    -$CARD_GUTTER*$PX;
+    [data-component="card"] {
+      float:        left;
+    }
   }
   &__right {
     position:       absolute;
@@ -38,13 +38,6 @@ $rightSize: 200;
     bottom:         0;
     width:          $rightSize*$PX;
     padding-top:    140*$PX;
-    
-    /*[data-component="scores"] {
-      position:     absolute;
-      left:         50%;
-      top:          50%;
-      transform:    translate(-50%, -50%);
-    }*/
   }
   
   @media (--BREAKING_POINT_W1) {

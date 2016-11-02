@@ -2,25 +2,25 @@
 
 ## Launch
 
-Point your `HttpServer` to `app/`. Alternitavely, just open `app/index.html` in your browser.
+Point your `HttpServer` to the `app/` folder. Alternatively, just open `app/index.html` in your browser.
 
 ## Notes
 
-App persists it's state in `localStorage` so you won't loose progress on page reload. You can reset the `current cards` by clicking on the red `reset` button. It won't reset anything besides `cards`. The `highScore` will show up after the first game session finished.
+App persists its state in `localStorage` so you won't loose progress on page reload. You can reset the `current cards` by clicking on the red `reset` button. It won't reset anything besides `cards`. The `highScore` will show up after the first game session completed. The game can make some pa, so be prepared to that.
 
 ## Difficulty
 
-To adjust dificulty, change `DIFFICULTY` constant in `app/js/constants`. Could be in range of `[0...10]`.
+To adjust difficulty, change `DIFFICULTY` constant in `app/js/constants` - it could be in the range of `[0...10]`. By default, the difficulty is `0` - only two types of cards is available, otherwise the game could become really hard and not very pleasant. Might be easily tuned to `unique card pairs` as stated in the task by setting the `DIFFICULTY` constant to `10`.
 
 ## Cheats
 
-The app implements `momento` design pattern which mean you can have `undo`/`redo` functionality. To get the `god mode cheat`, type the next `Konami` code:
+The app implements `momento` design pattern which means you can have `undo`/`redo` functionality. To get `the god mode cheat`, type the next `Konami` code:
 
 ```
 up up down down left right left right b a
 ```
 
-The appropriate buttons will show up on the right of the `red reset button`.
+You should hear `evil laugh` sound and the appropriate buttons will show up on the right of the `red reset button`. You ca travel in back time now with limit of `10` hops.
 
 ## Development
 
@@ -44,7 +44,9 @@ If you want to use [LiveReload](https://github.com/livereload/LiveReload) instea
 gulp
 ```
 
-Note that you need [LiveReload Browser Extention](http://livereload.com/extensions/) for autoreloads on code changes.
+Note that you need [LiveReload Browser Extention](http://livereload.com/extensions/) for auto reloads on code changes.
+
+Point your `HttpServer` to the `app/` folder and open the specific `url` in your browser.
 
 ## License
 

@@ -1,5 +1,6 @@
 import {h, Component} from 'preact';
 import mojs from 'mo-js';
+import {Howl} from 'howler';
 
 class CardStagger extends Component {
   render () { return  <div ref={ (el) => { this._el = el; } } />; }
@@ -7,6 +8,11 @@ class CardStagger extends Component {
   shouldComponentUpdate () { return false; }
 
   componentDidMount () {
+    const sound = new Howl({
+      src: ['./sounds/good.wav'],
+      volume: .5
+    });
+
     const ShapeStagger = mojs.stagger( mojs.Shape );
     const stagger = new ShapeStagger({
       parent:     this._el,
@@ -24,6 +30,7 @@ class CardStagger extends Component {
       duration:   350,
       delay:      'stagger(200, 100)',
       easing:     'quad.out',
+      timeline:   { onStart() { sound.play(); } },
       isShowEnd:  false
     });
 

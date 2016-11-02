@@ -48,8 +48,8 @@ class Card extends Component {
     return  <div className={className} data-component="card">
               <div className={CLASSES.card__inner}>
                 <Icon shape={type} />
-                <CardStagger timeline={this._timeline} />
               </div>
+              <CardStagger timeline={this._timeline} />
             </div>;
   }
 }

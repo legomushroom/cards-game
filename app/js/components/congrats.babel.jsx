@@ -1,5 +1,6 @@
 import {h, Component} from 'preact';
 import mojs from 'mo-js';
+import {Howl} from 'howler';
 
 import CongratsCounter from './congrats-counter';
 import CongratsButton from './congrats-button';
@@ -33,7 +34,14 @@ class Congrats extends Component {
     isPlay || this._hide();
   }
 
-  componentWillMount() { this._timeline = new mojs.Timeline; }
+  componentWillMount() {
+    const sound = new Howl({
+      src: ['./sounds/applause.wav'],
+      volume: .5
+    });
+
+    this._timeline = new mojs.Timeline({ onStart() { sound.play(); } });
+  }
   componentDidMount() { setTimeout( this._checkPlay.bind(this), 100 ); }
 
   _play() {

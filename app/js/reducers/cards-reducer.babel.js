@@ -98,7 +98,7 @@ const cardsReducer = (state = INITIAL_STATE, action) => {
   }
 
   case 'RESET_CARDS': {
-    const cards = makeCards(13);
+    const cards = makeCards();
     const highScore = state.highScore;
     const newState = { ...INITIAL_STATE, cards, highScore };
     return newState;
