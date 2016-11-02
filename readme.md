@@ -6,7 +6,7 @@ Point your `HttpServer` to the `app/` folder. Alternatively, just open `app/inde
 
 ## Notes
 
-App persists its state in `localStorage` so you won't loose progress on page reload. You can reset the `current cards` by clicking on the red `reset` button. It won't reset anything besides `cards`. The `highScore` will show up after the first game session completed. The game can make some pa, so be prepared to that.
+App persists its state in `localStorage` so you won't loose progress on page reload. You can reset the `current cards` by clicking on the red `reset` button. It won't reset anything besides `cards`. The `highScore` will show up after the first game session completed. The game can make some sound so be prepared to that.
 
 ## Difficulty
 
@@ -20,7 +20,7 @@ The app implements `momento` design pattern which means you can have `undo`/`red
 up up down down left right left right b a
 ```
 
-You should hear `evil laugh` sound and the appropriate buttons will show up on the right of the `red reset button`. You ca travel in back time now with limit of `10` hops.
+You should hear `evil laugh` sound and the appropriate buttons will show up on the right of the `red reset button`. You can travel back in time now with limit of `10` hops.
 
 ## Development
 
@@ -44,7 +44,7 @@ If you want to use [LiveReload](https://github.com/livereload/LiveReload) instea
 gulp
 ```
 
-Note that you need [LiveReload Browser Extention](http://livereload.com/extensions/) for auto reloads on code changes.
+Note that you need [LiveReload Browser Extention](http://livereload.com/extensions/) for auto reloads in your browser.
 
 Point your `HttpServer` to the `app/` folder and open the specific `url` in your browser.
 
