@@ -1,4 +1,4 @@
-# Guarantee Rate Game
+# Cards Game
 
 ## Launch
 
